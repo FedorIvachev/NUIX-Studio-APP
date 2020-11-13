@@ -71,7 +71,7 @@ Other parts of IoT VR Platform are: resources, prefabs, Thirdparty and scenes.
 ### VR (Client) part
 1. Intall MRTK [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Installation.html), configure it for Oculus [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
 OR use [this project](https://github.com/provencher/MRTK-Quest)
-2. Download / Clone the repository and copy it to your project's Assets folder
+2. Import IoThingsLab.unitypackage from the latest release
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)

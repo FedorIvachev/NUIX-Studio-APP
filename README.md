@@ -1,6 +1,6 @@
 # IoThingsLab
 
-Sorry everyone, your stars have dissapeared as well as releases. But to make the repository standalone I had to recreate it.
+Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone I had to recreate it.
 
 ## Table of contents
 * [General info](#general-info)

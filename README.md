@@ -46,6 +46,7 @@ Available items (the list is frequently updated):
 ### Gesture recognizer
 
 GestureRecognizerItem.cs item class enables usage of user-defined gestures. In the example, the Lamp toggles when Index finger tips pushed together.
+
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/Gesture.gif)
 
 
@@ -69,8 +70,8 @@ Other parts of IoT VR Platform are: resources, prefabs, Thirdparty and scenes.
 ## Setup
 
 ### VR (Client) part
-1. Intall MRTK [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Installation.html), configure it for Oculus [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
-OR use [this project](https://github.com/provencher/MRTK-Quest)
+1. Intall MRTK [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Installation.html) and configure it for Oculus [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
+OR just use [this project](https://github.com/provencher/MRTK-Quest-Sample) to save time.
 2. Import IoThingsLab.unitypackage from the latest release
 
 ### Input simulation

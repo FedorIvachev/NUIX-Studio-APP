@@ -2,7 +2,7 @@
 
 namespace Tsinghua.HCI.IoTVRP
 {
-    public class Camera0Thing : BasicThing
+    public class Camera0Thing : MonoBehaviour
     {
         [SerializeField] GameObject _sightItem;
         [SerializeField] GameObject _textItem;

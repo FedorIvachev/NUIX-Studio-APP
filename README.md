@@ -23,9 +23,6 @@ By using VRSimulator platform researchers can connect real and virtual IoT devic
 ## Technologies
 Same features are supported on VR IoT Platform as on Mixed Reality Toolkit (https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. In addition to that, some extra interaction methods were added into IoT VR Platform.
 
-<img align="right" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_175856.jpg">
-<img align="right" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_180612.jpg">
-
 Connection to real-world IoT devices is performed by REST API calls to [openHAB](https://www.openhab.org/download/) server, which runs either locally on user machine, or remotely on [myopenhab server](http://myopenhab.org/).
 ## Required software and hardware:
 1. Unity Version 2019.4.13+
@@ -53,9 +50,6 @@ GestureRecognizerItem.cs item class enables usage of user-defined gestures. In t
 ### Thing constructor 
 
 In the Client scene you can find a GameObject called ThingContrustructor. Add up 6 item prefabs into it, and then create your own thing using the Control panel GameObject. You can instantiate new items, move them around the scene and even edit them (in the next update). Save the newly created thing as a prefab using Unity Editor (in Play Mode).  
-
-<img align="left" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_181421.jpg">
-<img align="left" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_182148.jpg">
 
 ### IoT VR Package Structure 
 The main part of the package is Server, where classes for the items and things are defined.

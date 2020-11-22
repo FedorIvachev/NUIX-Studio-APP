@@ -21,7 +21,7 @@ By using VRSimulator platform researchers can connect real and virtual IoT devic
 [:VRSimulator Webpage:](https://vrsimulator.github.io/)
 	
 ## Technologies
-Same features are supported on VR IoT Platform as on Mixed Reality Toolkit (https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. In addition to that, some extra interaction methods were added into IoT VR Platform.
+IoThingsLab uses the features of [Microsoft's Mixed Reality Toolkit](https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. 
 
 Connection to real-world IoT devices is performed by REST API calls to [openHAB](https://www.openhab.org/download/) server, which runs either locally on user machine, or remotely on [myopenhab server](http://myopenhab.org/).
 ## Required software and hardware:

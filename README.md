@@ -1,6 +1,7 @@
 # IoThingsLab
 
-Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone and super-lightweight I had to recreate it. The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab
+Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone and super-lightweight I had to recreate it. The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab.
+
 Please see the [Setup](#setup) procedure, cloning the repo is not necessary. ~~~~
 Text 费杰 on WeChat to know how to adapt the platform for your projects and also explain how it works.
 

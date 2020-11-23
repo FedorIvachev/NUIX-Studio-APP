@@ -1,6 +1,6 @@
 # IoThingsLab
 
-Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone I had to recreate it.
+Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone and super-lightweight I had to recreate it. The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab
 
 ## Table of contents
 * [General info](#general-info)
@@ -21,7 +21,7 @@ By using VRSimulator platform researchers can connect real and virtual IoT devic
 [:VRSimulator Webpage:](https://vrsimulator.github.io/)
 	
 ## Technologies
-Same features are supported on VR IoT Platform as on Mixed Reality Toolkit (https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. In addition to that, some extra interaction methods were added into IoT VR Platform.
+IoThingsLab uses the features of [Microsoft's Mixed Reality Toolkit](https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. 
 
 Connection to real-world IoT devices is performed by REST API calls to [openHAB](https://www.openhab.org/download/) server, which runs either locally on user machine, or remotely on [myopenhab server](http://myopenhab.org/).
 ## Required software and hardware:

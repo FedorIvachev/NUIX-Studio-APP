@@ -1,26 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-// TODO: refactor code to get; set 
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
-    public class SpeakerItem :MonoBehaviour
+    public class AudioItem : MonoBehaviour
     {
+        GenericItem _audio;
+
         private AudioSource _audioSource;
-
-
+        
         void Start()
         {
             _audioSource = GetComponent<AudioSource>();
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
-
-
+        
         public void PauseAudioSource()
         {
             if (IsAudioSourcePlaying()) _audioSource.Pause();
@@ -28,7 +20,7 @@ namespace Tsinghua.HCI.IoTVRP
 
         public void PlayAudioSource()
         {
-            if (!IsAudioSourcePlaying())_audioSource.Play();
+            if (!IsAudioSourcePlaying()) _audioSource.Play();
         }
 
         public bool IsAudioSourcePlaying()
@@ -65,6 +57,17 @@ namespace Tsinghua.HCI.IoTVRP
         public void ChangeAudioSource(AudioClip newAudioClip)
         {
             _audioSource.clip = newAudioClip;
+        }
+
+        /// <summary>
+        /// Saving the state of the audio Source (the name)
+        /// </summary>
+        /// <param name="name"></param>
+        void SerializeValue(string name = "")
+        {
+            _audio.name = name + "_audio";
+            _audio.state = _audioSource.ToString();
+            _audio.type = "Audio";
         }
     }
 }

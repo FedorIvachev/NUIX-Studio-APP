@@ -1,25 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-// TODO: refactor code to get; set 
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
     public class LightItem : MonoBehaviour
     {
+        GenericItem _lightItem;
+        GenericItem _lightState;
+        GenericItem _color;
+        GenericItem _intensity;
+
         private Light _light;
         // Start is called before the first frame update
         void Start()
         {
             _light = GetComponent<Light>();
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
-
+        
         public void SetColor(Color newColor)
         {
             _light.color = newColor;
@@ -58,6 +54,25 @@ namespace Tsinghua.HCI.IoTVRP
         public Light GetLight()
         {
             return _light;
+        }
+
+        public void SerializeValue(string name = "")
+        {
+            _lightState.state = (_light.enabled ? "ON" : "OFF");
+            _lightState.type = "Toggle";
+            _lightState.name = name + "_lightState";
+
+            _color.state = _light.color.ToString();
+            _color.type = "Color";
+            _color.name = name + "_color";
+
+            _intensity.state = _light.intensity.ToString();
+            _intensity.type = "FloatNumber";
+            _intensity.name = name + "_intensity";
+
+            _lightItem.state = _light.ToString(); // TODO: check if the return value has any sense
+            _lightItem.type = "Light";
+            _lightItem.name = name + "_lightItem";
         }
     }
 }

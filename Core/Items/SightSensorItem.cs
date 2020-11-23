@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
-
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
-    public class SightItem : BasicSensorItem
+    public class SightSensorItem : SensorItem
     {
         [SerializeField] Transform _target;
         [SerializeField] Camera _camera;
         [SerializeField] bool _enableMotionSensor = false;
-
-
-        void Start()
-        {
-        }
-
+        
         void Update()
         {
             if (_enableMotionSensor) CheckForTargetInCameraView();
@@ -26,13 +16,7 @@ namespace Tsinghua.HCI.IoTVRP
         public void CheckForTargetInCameraView()
         {
             Vector3 viewPos = _camera.WorldToViewportPoint(_target.position);
-            // example:
-            //if (viewPos.x > 0.5F)
-            //    print("target is on the right side!");
-            //else
-            //    print("target is on the left side!");
-
-            // Also need to check for the speed of this object
+            // Checking if the target object is inside the defined camera view
             if ((viewPos.z > 0.0F) && (viewPos.x < 1.0F) && (viewPos.x > 0.0F))
             {
                 SensorTrigger();
@@ -48,6 +32,9 @@ namespace Tsinghua.HCI.IoTVRP
             return _camera.WorldToViewportPoint(_target.position);
         }
 
-
+        void SerializeValue(string name = "")
+        {
+            base.SerializeValue(name + "_motionSensorTrigger");
+        }
     }
 }

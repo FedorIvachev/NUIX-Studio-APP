@@ -1,21 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
-
-// TODO: refactor code to get; set 
-// TODO: add UnityEvent that triggers at specific distance
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
-    public class LocationItem : BasicSensorItem
+    public class LocationSensorItem : SensorItem
     {
         private Transform _transform;
         [SerializeField] Transform _connectedItemTransform;
         [SerializeField]
         [Tooltip("The available distance to the connected item. If the distance is higher than defined, the sensor triggers.")]
         private float _availableDistanceToConnectedItem = 0.0f;
-        
+        private float _calculatedDistanceToConnectedItem;
+
+        GenericItem _distanceToConnectedItem;
+
 
         // Start is called before the first frame update
         void Start()
@@ -29,7 +26,7 @@ namespace Tsinghua.HCI.IoTVRP
             _transform.parent = _transform; // ???? maybe wrong
             CalculateDictanceToConnectedItem();
         }
-        
+
         public Transform GetTransform()
         {
             return _transform;
@@ -45,14 +42,15 @@ namespace Tsinghua.HCI.IoTVRP
             _connectedItemTransform = newConnectedItemTransform;
         }
 
-        public float ConnectedItemDistance()
+        public void GetConnectedItemDistance()
         {
-            return Vector3.Distance(_transform.position, _connectedItemTransform.position);
+            _calculatedDistanceToConnectedItem = Vector3.Distance(_transform.position, _connectedItemTransform.position);
         }
 
         public void CalculateDictanceToConnectedItem()
         {
-            if (ConnectedItemDistance() >= _availableDistanceToConnectedItem)
+            GetConnectedItemDistance();
+            if (_calculatedDistanceToConnectedItem >= _availableDistanceToConnectedItem)
             {
                 SensorTrigger(); // Sensor triggers if the distance is too big
             }
@@ -61,6 +59,13 @@ namespace Tsinghua.HCI.IoTVRP
                 SensorUntrigger(); // Otherwise untriggers
             }
         }
-        
+
+        public void SerializeValue(string name = "")
+        {
+            base.SerializeValue(name + "_availableDistanceToConnectedItemTrigger");
+            _distanceToConnectedItem.name = name + "_distanceToConnectedItem";
+            _distanceToConnectedItem.state = _calculatedDistanceToConnectedItem.ToString();
+            _distanceToConnectedItem.type = "Float";
+        }
     }
 }

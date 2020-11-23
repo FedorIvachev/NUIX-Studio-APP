@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
-    public class BasicSensorItem : MonoBehaviour
+    public class SensorItem : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("Action performed after sensor is triggered")]
@@ -14,29 +13,24 @@ namespace Tsinghua.HCI.IoTVRP
         [Tooltip("Action performed after sensor is triggered")]
         private UnityEvent m_OnSensorUntriggered;
 
-
+        GenericItem _sensorTriggerItem;
         bool _isSensorTriggered = false;
+
+        
 
         // Start is called before the first frame update
         void Start()
         {
-
             if (m_OnSensorTriggered == null)
                 m_OnSensorTriggered = new UnityEvent();
             if (m_OnSensorUntriggered == null)
                 m_OnSensorUntriggered = new UnityEvent();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         void SensorTriggered()
         {
             _isSensorTriggered = true;
-             m_OnSensorTriggered?.Invoke();
+            m_OnSensorTriggered?.Invoke();
         }
 
         void SensorUntriggered()
@@ -55,5 +49,17 @@ namespace Tsinghua.HCI.IoTVRP
             if (_isSensorTriggered) SensorUntriggered();
         }
 
+
+        /// <summary>
+        /// save the parameters inside the generic item
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        public void SerializeValue(string name = "sensorItem", string type = "Trigger")
+        {
+            _sensorTriggerItem.state = (_isSensorTriggered ? "ON" : "OFF");
+            _sensorTriggerItem.type = type;
+            _sensorTriggerItem.name = name;
+        }
     }
 }

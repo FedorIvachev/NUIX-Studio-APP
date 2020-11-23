@@ -6,9 +6,9 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 
 // TODO: refactor code to get; set 
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
-    public class GestureRecognizerItem : BasicSensorItem
+    public class GestureRecognizerItem : SensorItem
     {
         private float EPS = 0.005f;
         // Start is called before the first frame update

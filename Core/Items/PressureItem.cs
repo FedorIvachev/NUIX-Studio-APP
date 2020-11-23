@@ -1,42 +1,38 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-
-// TODO: refactor code to get; set 
-// Change to OnStateChange, so the Trigger / Untrigger functions work only once
-namespace Tsinghua.HCI.IoTVRP
+namespace Tsinghua.HCI.IoThingsLab
 {
-    public class WeightScalerItem : BasicSensorItem
+    /// <summary>
+    /// Get the total mass of the colliding objects, trigger if it exceeds the required value
+    /// </summary>
+    public class PressureItem : SensorItem
     {
+        GenericItem _weight;
+
         [SerializeField] float _requiredWeight = 0.0f;
         private ArrayList _colliders = new ArrayList(); // A list of object currently colliding with the scaler
-
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
-
-        // Update is called once per frame
+        float _totalWeight;
+        
         void Update()
         {
-            float totalWeight = 0f;
+            _totalWeight = 0f;
 
-            // add up the weight of all objects on the button
+            // add up the weight of all objects
             for (int i = 0; i < _colliders.Count; i++)
             {
                 Rigidbody rigidbody = (_colliders[i] as GameObject).GetComponent<Rigidbody>();
 
                 if (rigidbody)
-                    totalWeight += rigidbody.mass;
+                    _totalWeight += rigidbody.mass;
             }
 
             // press the switch if total weight meets requirement
-            if (totalWeight > _requiredWeight)
+            if (_totalWeight > _requiredWeight)
             {
                 SensorTrigger();
-            } else
+            }
+            else
             {
                 SensorUntrigger();
             }
@@ -44,14 +40,20 @@ namespace Tsinghua.HCI.IoTVRP
 
         void OnCollisionEnter(Collision col)
         {
-            // keep track of all objects colliding with button
             _colliders.Add(col.gameObject);
         }
 
         void OnCollisionExit(Collision col)
         {
-            // remove objects when no longer colliding with button
             _colliders.Remove(col.gameObject);
+        }
+
+        public void SerializeValue(string name = "")
+        {
+            base.SerializeValue(name + "_requiredWeightTrigger");
+            _weight.name = name + "_totalWeight";
+            _weight.state = _totalWeight.ToString();
+            _weight.type = "Float";
         }
     }
 }

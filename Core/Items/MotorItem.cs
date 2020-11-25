@@ -5,7 +5,7 @@ namespace Tsinghua.HCI.IoThingsLab
     // Need to change into sensor item
     public class MotorItem : MonoBehaviour
     {
-        [SerializeField] bool _moveToDestination;
+        [SerializeField] bool _moveToDestination = false;
         [SerializeField] Vector3 _destinationPosition;
 
         // Update is called once per frame
@@ -21,6 +21,11 @@ namespace Tsinghua.HCI.IoThingsLab
             {
                 _moveToDestination = false;
             }
+        }
+
+        public void Toggle()
+        {
+            _moveToDestination = !_moveToDestination;
         }
     }
 }

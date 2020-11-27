@@ -4,7 +4,7 @@ Sorry everyone, your stars have disappeared as well as releases of the platform.
 
 Please see the [Setup](#setup) procedure, cloning the repo is not necessary, because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
 
-Text 费杰 on WeChat to know how to adapt the platform for your projects and also explain how it works.
+Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects and also explain how it works.
 
 ## Table of contents
 * [General info](#general-info)

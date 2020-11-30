@@ -1,6 +1,10 @@
 # IoThingsLab
 
-Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone and super-lightweight I had to recreate it. The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab
+Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone and super-lightweight I had to recreate it. The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab.
+
+Please see the [Setup](#setup) procedure, cloning the repo is not necessary, because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
+
+Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects and also explain how it works.
 
 ## Table of contents
 * [General info](#general-info)
@@ -49,9 +53,9 @@ GestureRecognizerItem.cs item class enables usage of user-defined gestures. In t
 
 ### Thing constructor 
 
-In the Client scene you can find a GameObject called ThingContrustructor. Add up 6 item prefabs into it, and then create your own thing using the Control panel GameObject. You can instantiate new items, move them around the scene and even edit them (in the next update). Save the newly created thing as a prefab using Unity Editor (in Play Mode).  
+In the Client scene you can find a GameObject called ThingContrustructor. Add item prefabs to it and then create your own thing using the Control panel GameObject. You can instantiate new items, move them around the scene and even edit them (in the next update). Save the newly created thing as a prefab using Unity Editor (in Play Mode - input simulation mode).  
 
-### IoT VR Package Structure 
+### IoThingsLab Package Structure 
 The main part of the package is Server, where classes for the items and things are defined.
 
 Things are Gameobjects added into Unity project which represent either a digital twin of a real IoT device or a purely virtual IoT device. Things potentially provide many functionalities in one.

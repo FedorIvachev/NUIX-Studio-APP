@@ -48,7 +48,7 @@ Available items (the list is frequently updated):
 
 GestureRecognizerItem.cs item class enables usage of user-defined gestures. In the example, the Lamp toggles when Index finger tips pushed together.
 
-![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/Gesture.gif)
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ThumbsUp.gif)
 
 
 ### Thing constructor 

@@ -55,6 +55,8 @@ GestureRecognizerItem.cs item class enables usage of user-defined gestures. In t
 
 In the Client scene you can find a GameObject called ThingDesigner. Add item prefabs to ThingDesignerItemCollection. You can instantiate new items, move them around the scene and even edit them (in the future update). Save the newly created thing as a prefab using Unity Editor (in Play Mode - input simulation mode).  
 
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ThingDesignerEditor.gif)
+
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ThingDesignerRuntime.gif)
 
 ### IoThingsLab Package Structure 

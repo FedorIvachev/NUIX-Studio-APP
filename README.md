@@ -1,8 +1,7 @@
 # IoThingsLab
+The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab.
 
-Sorry everyone, your stars have disappeared as well as releases of the platform. But to make the repository standalone and super-lightweight I had to recreate it. The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab.
-
-Please see the [Setup](#setup) procedure, cloning the repo is not necessary, because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
+Please see the **[Setup](#setup) procedure**, cloning the repo is not necessary because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
 
 Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects and also explain how it works.
 
@@ -20,7 +19,7 @@ Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects 
 <img align="left" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_173803.jpg">
 <img align="left" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_175023.jpg">
 
-By using VRSimulator platform researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
+By using IoThingsLab platform researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
 
 [:VRSimulator Webpage:](https://vrsimulator.github.io/)
 	
@@ -59,22 +58,22 @@ In the Client scene you can find a GameObject called ThingDesigner. Add item pre
 
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ThingDesignerRuntime.gif)
 
-### IoThingsLab Package Structure 
+### Package Structure 
 The main part of the package is Server, where classes for the items and things are defined.
 
-Things are Gameobjects added into Unity project which represent either a digital twin of a real IoT device or a purely virtual IoT device. Things potentially provide many functionalities in one.
+*Things are Gameobjects added into Unity project which represent either a digital twin of a real IoT device or a purely virtual IoT device. Things potentially provide many functionalities in one.*
 
-Items are the parts things consist of: for example, smart light in the room can consist of several lamps and a receiver – each of them as an item.
+*Items are the parts things consist of: for example, smart light in the room can consist of several lamps and a receiver – each of them as an item.*
 	
-Other parts of IoT VR Platform are: resources, prefabs, Thirdparty and scenes.	
+Other parts of IoT VR Platform are: Resources, Thirdparty and Scenes.	
 	
 	
 ## Setup
 
 ### VR (Client) part
-1. [VIDEO TUTORIAL](https://www.bilibili.com/video/BV1vr4y1F7Jg) Intall MRTK [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Installation.html) and configure it for Oculus [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
-OR just use [this project](https://github.com/provencher/MRTK-Quest-Sample) to save time.
-2. [VIDEO TUTORIAL](https://www.bilibili.com/video/BV17z4y1y7Bb) Import IoThingsLab.unitypackage from the [latest release](https://github.com/VRSimulator/IoThingsLab/releases).
+1. **[VIDEO TUTORIAL](https://www.bilibili.com/video/BV1vr4y1F7Jg)** Intall MRTK [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Installation.html) and configure it for Oculus [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
+**OR** just use [this project](https://github.com/provencher/MRTK-Quest-Sample) to save time *(but it is not guaranteed to work properly).*
+2. **[VIDEO TUTORIAL](https://www.bilibili.com/video/BV17z4y1y7Bb)** Import IoThingsLab.unitypackage from the [latest release](https://github.com/VRSimulator/IoThingsLab/releases).
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)
@@ -92,4 +91,3 @@ Then you need to do step 5 of the setup process: On the top of Unity Editor, sel
 
 ## Contributing to the platform
 请分享新想法, 谢谢！
-You can copy the Client Scene and test your ideas before merging the changes:) Thank you!

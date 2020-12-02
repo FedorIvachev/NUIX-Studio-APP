@@ -2,10 +2,13 @@
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// Basic Item for operating with the attached Audio Source
+    /// </summary>
     public class AudioItem : MonoBehaviour
     {
         GenericItem _audio;
-
+        
         private AudioSource _audioSource;
         
         void Start()
@@ -28,6 +31,9 @@ namespace Tsinghua.HCI.IoThingsLab
             return _audioSource.isPlaying;
         }
 
+        /// <summary>
+        /// Play/Pause Audio
+        /// </summary>
         public void ToggleAudioSource()
         {
             if (IsAudioSourcePlaying()) PauseAudioSource();
@@ -54,6 +60,10 @@ namespace Tsinghua.HCI.IoThingsLab
             _audioSource.volume += value;
         }
 
+        /// <summary>
+        /// Change the clip to a new one
+        /// </summary>
+        /// <param name="newAudioClip"></param>
         public void ChangeAudioSource(AudioClip newAudioClip)
         {
             _audioSource.clip = newAudioClip;

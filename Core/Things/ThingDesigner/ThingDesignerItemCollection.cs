@@ -7,17 +7,19 @@ using Microsoft.MixedReality.Toolkit.UI;
 namespace Tsinghua.HCI.IoThingsLab
 {
     /// <summary>
-    /// Operates with connected children as items
-    /// Requires GridObjectCollection
+    /// Requires GridObjectCollection;
+    /// Adds buttons used for instantiating the defined items
     /// </summary>
     /// 
     [ExecuteAlways]
     public class ThingDesignerItemCollection : MonoBehaviour
     {
+        [Tooltip("Button for adding items. Use ThingItem.prefab by default")]
         [SerializeField] public GameObject _buttonPrefab;
 
         GridObjectCollection gridObjectCollection;
 
+        [Tooltip("The items to be used in the Thing Designer")]
         [SerializeField] public GameObject[] items;
 
         public void Start()
@@ -26,6 +28,9 @@ namespace Tsinghua.HCI.IoThingsLab
 
         }
 
+        /// <summary>
+        /// Adds buttons into collection, responsible for instantiating a corresponding item
+        /// </summary>
         public void AddItemsToCollection()
         {
             foreach (GameObject item in items)
@@ -33,7 +38,7 @@ namespace Tsinghua.HCI.IoThingsLab
                 GameObject button = _buttonPrefab;
                 GameObject cloned_button = Instantiate(button);
                 cloned_button.transform.SetParent(gameObject.transform);
-                cloned_button.name = "ThingItem" + transform.childCount;
+                cloned_button.name = "Button for " + item.name;
                 cloned_button.GetComponent<ButtonConfigHelper>().MainLabelText = item.name;
                 cloned_button.GetComponent<ItemCreator>().itemPrefab = item;
             }

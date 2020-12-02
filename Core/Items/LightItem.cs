@@ -2,6 +2,10 @@
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// Item to operate with Light Component
+    /// Attach it to the GameObject with Light Component
+    /// </summary>
     public class LightItem : MonoBehaviour
     {
         GenericItem _lightItem;
@@ -21,6 +25,9 @@ namespace Tsinghua.HCI.IoThingsLab
             _light.color = newColor;
         }
 
+        /// <summary>
+        /// Toggle the light ON/OFF
+        /// </summary>
         public void Toggle()
         {
             _light.enabled = !_light.enabled;

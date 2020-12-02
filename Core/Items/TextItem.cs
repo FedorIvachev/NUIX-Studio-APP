@@ -3,6 +3,10 @@ using TMPro;
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// An item to be attached to a GameObject with TextMeshPro
+    /// Provides functionality to change and serialize the connected text
+    /// </summary>
     public class TextItem : MonoBehaviour
     {
         GenericItem _text;

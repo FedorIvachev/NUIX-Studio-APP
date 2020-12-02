@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Tsinghua.HCI.IoThingsLab
 {
-
+    /// <summary>
+    /// Uses for storing the state of the item and serialization
+    /// </summary>
     public class GenericItem : IItem
     {
         public GenericItem(string type, string name)
@@ -44,6 +46,10 @@ namespace Tsinghua.HCI.IoThingsLab
             return type;
         }
 
+        /// <summary>
+        /// Returns the hashcode for the name
+        /// </summary>
+        /// <returns></returns>
         public int HashCode()
         {
             int n = 31;

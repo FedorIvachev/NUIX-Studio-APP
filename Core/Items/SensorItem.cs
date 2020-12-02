@@ -4,6 +4,10 @@ using UnityEngine.Events;
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// Basic item, operates with two events:
+    /// Sensor trigger and untrigger
+    /// </summary>
     public class SensorItem : MonoBehaviour
     {
         [SerializeField]
@@ -15,8 +19,6 @@ namespace Tsinghua.HCI.IoThingsLab
 
         GenericItem _sensorTriggerItem;
         bool _isSensorTriggered = false;
-
-        
 
         // Start is called before the first frame update
         void Start()

@@ -15,19 +15,16 @@ using static OVRSkeleton;
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// Provides an example gesture to be recognized, 
+    /// and trigger an event as result of successful recognition
+    /// </summary>
     public class GestureRecognizerItem : SensorItem
-    {
-        protected readonly Dictionary<TrackedHandJoint, MixedRealityPose> jointPoses = new Dictionary<TrackedHandJoint, MixedRealityPose>();
-
-        [SerializeField] public GameObject _logger;
-        
-        private float EPS = 0.005f;
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
-        
-
+    {      
+        /// <summary>
+        /// Thumbs Up gesture for the right hand;
+        /// Triggers as sensor when, you are right, thumbs up is performed
+        /// </summary>
         protected bool IsInThumbsUpPose
         {
             get
@@ -49,12 +46,16 @@ namespace Tsinghua.HCI.IoThingsLab
                 {
                     palmPose = palmpose;
                 }
-                // We check if the palm up is roughly in line with the camera up
+
+                // We check if the palm up is roughly in line with the camera right
+                // From all fingers only thumb should not be grabbing
                 return Vector3.Dot(palmPose.Up, cameraTransform.right) > 0.6f
                        && !HandPoseUtils.IsThumbGrabbing(handedness) && HandPoseUtils.IsMiddleGrabbing(handedness) && HandPoseUtils.IsIndexGrabbing(handedness);
             }
         }
 
+        // TODO: Just checking the gesture every frame causes false sensor triggers
+        // Add an extra statement, check function
         public void Update()
         {
             if (IsInThumbsUpPose)

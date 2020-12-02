@@ -7,6 +7,12 @@ using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// This class is used to handle the operation with CustomEditor
+    /// used for ThingDesigner and making it possible to create new buttons 
+    /// inside Unity editor
+    /// </summary>
+
     [CustomEditor(typeof(ThingDesignerItemCollection), true)]
     public class ThingDesignerItemCollectionInspector : Editor
     {

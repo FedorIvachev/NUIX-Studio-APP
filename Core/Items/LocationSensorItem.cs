@@ -2,10 +2,15 @@
 
 namespace Tsinghua.HCI.IoThingsLab
 {
+    /// <summary>
+    /// Provides a sensor trigger functionality 
+    /// based on the distance to the connected Gameobject
+    /// </summary>
     public class LocationSensorItem : SensorItem
     {
         private Transform _transform;
-        [SerializeField] Transform _connectedItemTransform;
+        [SerializeField]
+        [Tooltip("Connect a Gameobject transform to calculate distance to it")] Transform _connectedItemTransform;
         [SerializeField]
         [Tooltip("The available distance to the connected item. If the distance is higher than defined, the sensor triggers.")]
         private float _availableDistanceToConnectedItem = 0.0f;
@@ -47,6 +52,9 @@ namespace Tsinghua.HCI.IoThingsLab
             _calculatedDistanceToConnectedItem = Vector3.Distance(_transform.position, _connectedItemTransform.position);
         }
 
+        /// <summary>
+        /// Calculate the distance to the connected item. If the distance is higher than defined, the sensor triggers.
+        /// </summary>
         public void CalculateDictanceToConnectedItem()
         {
             GetConnectedItemDistance();

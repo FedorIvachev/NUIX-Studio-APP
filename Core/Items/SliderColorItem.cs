@@ -3,7 +3,10 @@ using UnityEngine;
 
 namespace Tsinghua.HCI.IoThingsLab
 {
-    public class SliderColorItem : MRTKBasedItem
+    /// <summary>
+    /// A helper class for the slider (change green color)
+    /// </summary>
+    public class SliderColorItem : MonoBehaviour
     {
         public void OnSliderGreenUpdated(SliderEventData eventData)
         {

@@ -30,4 +30,5 @@ namespace Tsinghua.HCI.IoThingsLab
             _text.name = name + "_text";
         }
     }
+
 }

@@ -48,8 +48,7 @@ namespace Tsinghua.HCI.IoThingsLab
         {
             if (_hasConnectedLightItem)
             {
-                if (Math.Abs(_connectedLightItem.GetLight().intensity - _intensityTemp) < 0.2) Debug.Log("Intensity did not quite change");
-                else
+                if (Math.Abs(_connectedLightItem.GetLight().intensity - _intensityTemp) > 0.2)
                 {
                     _intensityTemp = _connectedLightItem.GetLight().intensity;
                     SetBrightness((uint) _intensityTemp * 20); // assuming max intensity = 5.0

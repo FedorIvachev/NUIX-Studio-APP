@@ -21,7 +21,6 @@ Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects 
 
 By using IoThingsLab platform researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
 
-[:VRSimulator Webpage:](https://vrsimulator.github.io/)
 	
 ## Technologies
 IoThingsLab uses the features of [Microsoft's Mixed Reality Toolkit](https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. 

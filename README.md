@@ -87,10 +87,8 @@ Example: control the lamp brightness by gesture (angle of ThumbsUp)
 
 
 ## Known Issues
-1. If when running the platform on PC (Unity Editor) you get the following error:
-![](/Readme/Files/ErrorXRSDK.png)
-Then you need to do step 5 of the setup process: On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
-![](/Readme/Files/Screenshot(33).png)
+1. If the camera is sticked to your head and is not moving:
+On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
 
 ## Contributing to the platform
 请分享新想法, 谢谢！

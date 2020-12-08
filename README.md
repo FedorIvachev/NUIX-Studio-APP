@@ -74,7 +74,9 @@ Other parts of IoT VR Platform are: Resources, Thirdparty and Scenes.
 **OR** just use [this project](https://github.com/provencher/MRTK-Quest-Sample) to save time *(but it is not guaranteed to work properly).*
 2. **[VIDEO TUTORIAL](https://www.bilibili.com/video/BV17z4y1y7Bb)** Import IoThingsLab.unitypackage from the [latest release](https://github.com/VRSimulator/IoThingsLab/releases).
 
-**Tutorial For Steam VR** https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/SteamVRSetupTutorial/SteamVRSetup.md
+### If you want to use other VR Headsets than Oculus or use Oculus connected to PC/Mac/Linux
+
+[**Tutorial For Steam VR**](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/SteamVRSetupTutorial/SteamVRSetup.md)
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)

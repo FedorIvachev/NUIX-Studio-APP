@@ -82,7 +82,8 @@ Other parts of IoT VR Platform are: Resources, Thirdparty and Scenes.
 1. Install [openHAB](https://www.openhab.org/download/) and run the server.;
 2. Add [REST API](https://www.openhab.org/docs/configuration/restdocs.html) binding;
 3. Follow the instructions for binding your IoT device;
-Example: control the lamp brightness by gesture (angle of ThumbsUp) - will be available with the next update
+Example: control the lamp brightness by gesture (angle of ThumbsUp)
+
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/openHABGestureControl.gif)
 
 

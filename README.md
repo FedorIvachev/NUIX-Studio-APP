@@ -21,7 +21,6 @@ Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects 
 
 By using IoThingsLab platform researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
 
-[:VRSimulator Webpage:](https://vrsimulator.github.io/)
 	
 ## Technologies
 IoThingsLab uses the features of [Microsoft's Mixed Reality Toolkit](https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. 
@@ -75,6 +74,10 @@ Other parts of IoT VR Platform are: Resources, Thirdparty and Scenes.
 **OR** just use [this project](https://github.com/provencher/MRTK-Quest-Sample) to save time *(but it is not guaranteed to work properly).*
 2. **[VIDEO TUTORIAL](https://www.bilibili.com/video/BV17z4y1y7Bb)** Import IoThingsLab.unitypackage from the [latest release](https://github.com/VRSimulator/IoThingsLab/releases).
 
+### If you want to use other VR Headsets than Oculus or use Oculus connected to PC/Mac/Linux
+
+[**Tutorial For Steam VR**](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/SteamVRSetupTutorial/SteamVRSetup.md)
+
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)
 
@@ -88,10 +91,8 @@ Example: control the lamp brightness by gesture (angle of ThumbsUp)
 
 
 ## Known Issues
-1. If when running the platform on PC (Unity Editor) you get the following error:
-![](/Readme/Files/ErrorXRSDK.png)
-Then you need to do step 5 of the setup process: On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
-![](/Readme/Files/Screenshot(33).png)
+1. If the camera is sticked to your head and is not moving:
+On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
 
 ## Contributing to the platform
 请分享新想法, 谢谢！

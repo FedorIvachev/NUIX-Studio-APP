@@ -10,35 +10,68 @@ namespace Tsinghua.HCI.IoThingsLab
     /// </summary>
     public class ExternalVideoStreaming : MonoBehaviour
     {
-        public GameObject _textureApplyPlane;
+        private string url;
+
+        public float GetRate = 0.15f;
+        private float nextGet = 0;
 
 
-        // Use this for initialization
-        void Start()
-        {
-            InvokeRepeating("SetTexture", 2.0f, 0.1f);
-        }
-
-        void SetTexture()
-        {
-            StartCoroutine(GetTexture());
-        }
         IEnumerator GetTexture()
         {
             UnityWebRequest www = UnityWebRequestTexture.GetTexture("http://192.168.3.2:8080/shot.jpg");
             yield return www.SendWebRequest();
+            MeshRenderer renderer = GetComponent<MeshRenderer>();
+            renderer.material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+        }
 
-            if (www.isNetworkError || www.isHttpError)
+        void Update()
+        {
+            if (Time.time > nextGet)
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-
-                _textureApplyPlane.GetComponent<MeshRenderer>().material.mainTexture = myTexture;
-
+                StartCoroutine(GetTexture());
+                nextGet = Time.time + GetRate;
             }
         }
+
+
+
+
+
+        /*
+        public GameObject _textureApplyPlane;
+        private Texture2D IpCameraTexture;
+        UnityWebRequest VideoRequest;
+        //private string sourceURL = "http://192.168.100.107/axis-cgi/mjpg/video.cgi";
+        private string sourceURL = "http://192.168.3.2:8080/video";
+
+        void Start()
+        {
+            IpCameraTexture = new Texture2D(1, 1, TextureFormat.RGB24, false);
+            //_textureApplyPlane.GetComponent<MeshRenderer>().material.mainTexture = IpCameraTexture;
+            StartCoroutine(GetFrame());
+        }
+
+        public IEnumerator GetFrame()
+        {
+            //string authorization = "Basic " + System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes("admin:admin"));
+            VideoRequest = new UnityWebRequest(sourceURL, UnityWebRequest.kHttpVerbGET);
+            //VideoRequest.SetRequestHeader("AUTHORIZATION", authorization);
+            VideoRequest.downloadHandler = new DownloadHandlerBuffer();
+            //VideoRequest.Send();
+            VideoRequest.SendWebRequest();
+            while (true)
+            {
+                yield return null;
+                if (!string.IsNullOrEmpty(VideoRequest.error))
+                    throw new UnityException(VideoRequest.error);
+                if (VideoRequest.downloadHandler.data != null)
+                {
+                    print(VideoRequest.downloadHandler.data.Length);
+                    IpCameraTexture.LoadRawTextureData(VideoRequest.downloadHandler.data);
+                    IpCameraTexture.Apply();
+                }
+            }
+
+        }*/
     }
 }

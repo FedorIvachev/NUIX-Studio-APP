@@ -7,10 +7,13 @@ namespace Tsinghua.HCI.IoThingsLab
     /// <summary>
     /// Very basic class I created for the needs of teams who need to get the camera or video value
     /// If you want to stream live video better not use this class but use Video Player Component instead
+    /// Similar to ExternalVideoPerFrameStreaming, although I found out that 
+    /// Unity cleans garbage (causing memory leak) without Invokerepeating more often
+    /// Suggest you to use video resolution 320 x 240
     /// </summary>
     public class ExternalVideoStreaming : MonoBehaviour
     {
-        private string url;
+        public string url;
 
         public float GetRate = 0.15f;
         private float nextGet = 0;
@@ -18,10 +21,13 @@ namespace Tsinghua.HCI.IoThingsLab
 
         IEnumerator GetTexture()
         {
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture("http://192.168.3.2:8080/shot.jpg");
-            yield return www.SendWebRequest();
-            MeshRenderer renderer = GetComponent<MeshRenderer>();
-            renderer.material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
+            {
+                yield return www.SendWebRequest();
+                MeshRenderer renderer = GetComponent<MeshRenderer>();
+                renderer.material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                www.Dispose(); // extra garbage cleaning because the heap size grows very fast at some moment
+            }
         }
 
         void Update()
@@ -38,6 +44,7 @@ namespace Tsinghua.HCI.IoThingsLab
 
 
         /*
+         * Legacy code, where i tried to receive the video data, but the code does not run well
         public GameObject _textureApplyPlane;
         private Texture2D IpCameraTexture;
         UnityWebRequest VideoRequest;

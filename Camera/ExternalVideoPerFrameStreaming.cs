@@ -6,17 +6,19 @@ namespace Tsinghua.HCI.IoThingsLab
 {
     /// <summary>
     /// Stream a per-frame video inside a texture
-    /// There is a bug I still try to fix - memory leak
+    /// https://forum.unity.com/threads/excessive-memory-consumption-when-loading-images-and-unable-to-free-the-memory.801306/
+    /// memory leak. Probably will need to write my own encoder
     /// </summary>
     public class ExternalVideoPerFrameStreaming : MonoBehaviour
     {
-        public GameObject _textureApplyPlane;
         Texture myTexture;
+        MeshRenderer _renderer;
 
         // Use this for initialization
         void Start()
         {
-            InvokeRepeating("SetTexture", 2.0f, 0.1f);
+            InvokeRepeating("SetTexture", 2.0f, 0.15f);
+            _renderer = GetComponent<MeshRenderer>();
         }
 
         void SetTexture()
@@ -34,13 +36,9 @@ namespace Tsinghua.HCI.IoThingsLab
             }
             else
             {
-
-                myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-
-                _textureApplyPlane.GetComponent<MeshRenderer>().material.mainTexture = myTexture;
+                _renderer.material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
 
             }
-            www.Dispose();
         }
     }
 }

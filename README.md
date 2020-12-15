@@ -91,7 +91,9 @@ Example: control the lamp brightness by gesture (angle of ThumbsUp)
 
 
 ## Known Issues
-1. If the camera is sticked to your head and is not moving:
+1. If the camera is sticked to your head and is not moving **OR** if the following error occurs:
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/Bug.png)
+
 On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
 
 ## Contributing to the platform

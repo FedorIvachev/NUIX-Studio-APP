@@ -96,5 +96,14 @@ Example: control the lamp brightness by gesture (angle of ThumbsUp)
 
 On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
 
+2. If the following error occurs when you try to run the project in input simulation:
+
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ErrorLayout.png)
+
+Then you need to select the default layout:
+
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/LayoutFix.png)
+
+
 ## Contributing to the platform
 请分享新想法, 谢谢！

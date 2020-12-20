@@ -13,6 +13,7 @@ namespace Tsinghua.HCI.IoThingsLab
     /// </summary>
     public class GestureThumbsUpRotated : Gesture
     {
+
         public override bool GestureCondition()
         {
             return !HandPoseUtils.IsThumbGrabbing(_handedness) && HandPoseUtils.IsMiddleGrabbing(_handedness) && HandPoseUtils.IsIndexGrabbing(_handedness);
@@ -22,7 +23,7 @@ namespace Tsinghua.HCI.IoThingsLab
         {
             if (TryGetGestureValue(out float value))
             {
-                if (value > 80.0f)
+                if (value > 40.0f)
                 {
                     _trigger.SensorTrigger();
                 }
@@ -59,6 +60,7 @@ namespace Tsinghua.HCI.IoThingsLab
                 palmPose = palmpose;
             }
             value = Vector3.Angle(palmPose.Up, this.transform.up);
+            if (_handedness == Handedness.Left) value = value * -1f;
             //_valueItem.Data = value;
             return true;
         }

@@ -55,7 +55,8 @@ namespace Tsinghua.HCI.IoThingsLab
             {
                 palmPose = palmpose;
             }
-            value = Vector3.Dot(palmPose.Up, cameraTransform.right);
+            if (_handedness == Handedness.Right) value = Vector3.Dot(palmPose.Up, cameraTransform.right);
+            else value = Vector3.Dot(palmPose.Up, cameraTransform.right) * -1f;
             //_valueItem.Data = value;
             return true;
         }

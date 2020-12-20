@@ -8,10 +8,14 @@ namespace Tsinghua.HCI.IoThingsLab
     /// </summary>
     public class YeelightColor : OpenHabItem
     {
-        [SerializeField] public GestureThumbsUpRotated _thumbsUpGesture;
-        [SerializeField] bool _enableNetworkCalls = true;
-        [SerializeField] bool _hasConnectedLightItem = true;
-        [SerializeField] public LightItem _connectedLightItem;
+        [SerializeField]
+        [Tooltip("A GameObject with a ThumbsUpRotated component")] public GestureThumbsUpRotated _thumbsUpGesture;
+        [SerializeField]
+        [Tooltip("Whether synchronization to openHAB-connected item should be performed")] bool _enableNetworkCalls = true;
+        [SerializeField]
+        [Tooltip("Whether a virtual brightness should be synchronized")] bool _hasConnectedLightItem = true;
+        [SerializeField]
+        [Tooltip("A GameObject with a synchronized Light component")] public LightItem _connectedLightItem;
 
         private float _intensityTemp;
         private uint _brightnessTemp;

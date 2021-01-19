@@ -1,9 +1,4 @@
-# IoThingsLab
-
-**12/20 Version 0.5 finally released! Please have a look at it if you still have time.**
-## **UPD 12/27 In each of the scenes look at the hierarchy->MixedRealityToolkit and select DefaultXRSDKConfigurationProfile if None selected.**
-
-The previous version can be found at https://github.com/FedorIvachev/IoThingsBeautifulLab.
+# IoTStudio-client
 
 Please see the **[Setup](#setup) procedure**, cloning the repo is not necessary because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
 

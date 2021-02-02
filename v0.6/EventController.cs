@@ -1,49 +1,109 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Proyecto26;
+using EvtSource;
+using System;
+using System.Threading.Tasks;
 
-public class EventController : MonoBehaviour
+class EventController : MonoBehaviour
 {
-	private readonly string apiPath = "http://localhost:8080/rest";
-	List<ThingModel> Things = new List<ThingModel>();
-	public void SystemInit()
+    [SerializeField]
+    private bool _isConnected = false;
+    public string _serverUri = "http://localhost:8080";
+    public List<GameObject> _subscribers;
+
+    private EventSourceReader _evt;
+
+
+    public delegate void OnConnectedEventBus(bool eventbusConnection);
+    public OnConnectedEventBus connectedEventBus;
+
+    void Start()
     {
-        if (TryGetEquipmentFromServer(out List<EquipmentItemModel> equipmentItems))
-        {
-			print("Successfully received the list of equipment items from the server");
-			foreach (EquipmentItemModel equipmentItem in equipmentItems)
-            {
-				Things.Add(new ThingModel(name = equipmentItem.name));
-            }
-			print(Things.Count);
-        }
+        StartListen();
     }
 
-    private bool TryGetEquipmentFromServer(out List<EquipmentItemModel> equipmentItems)
+    /// <summary>
+    /// Subscribe to topic
+    /// </summary>
+    /// <param name="item">the item to subscribe</param>
+    public void Subscribe(GameObject item)
     {
-		print("TryGetEquipmentFromServer");
-		equipmentItems = new List<EquipmentItemModel>();
-		List<EquipmentItemModel> equipmentItemsTemp = new List<EquipmentItemModel>();
-		RestClient.Get(apiPath + "/items?tags=Equipment").Then(res => {
-			if (res.StatusCode == 200)
-			{
-				equipmentItemsTemp = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
-			}
-			else
-			{
-				Debug.Log("Rest GET status for receiving Equipment was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
-			}
-		});
+        Debug.Log("Subscribe to topic " + item.GetComponent<ItemController>().GetItemID() + " for " + item.GetComponent<ItemController>().GetItemSubType().ToString() + " events.");
+        if (_subscribers != null)
+        {
+            _subscribers.Add(item);
+        }
+        else
+        {
+            _subscribers = new List<GameObject>();
+            _subscribers.Add(item);
+        }
 
-		if (equipmentItemsTemp.Capacity > 0)
+    }
+
+    /// <summary>
+    /// Unsubscribe to topic
+    /// </summary>
+    /// <param name="item">the item to unsubscribe</param>
+    public void Unsubscribe(GameObject item)
+    {
+        _subscribers.Remove(item);
+    }
+
+    /// <summary>
+    /// Starts the Event Listener
+    /// </summary>
+    public void StartListen()
+    {
+        _evt = new EventSourceReader(UriBuilder.GetEventStreamUri(_serverUri)).Start();
+        _evt.MessageReceived += (object sender, EventSourceMessageEventArgs e) => NewEvent(e);
+        _evt.Disconnected += async (object sender, DisconnectEventArgs err) => {
+            _isConnected = false;
+            connectedEventBus?.Invoke(false); // Lost the eventbus, handle thiswith reconnection after 3 secs.
+            Console.WriteLine($"Retry in: {err.ReconnectDelay} - Error: {err.Exception}");
+            await Task.Delay(err.ReconnectDelay);
+            _evt.Start(); // Reconnect to the same URL
+        };
+    }
+
+    /// <summary>
+    /// Parse a new event and trigger
+    /// </summary>
+    /// <param name="sender">The eventsourcereader</param>
+    /// <param name="e">event of type EvenSourceMessageEventArgs</param>
+    private void NewEvent(EventSourceMessageEventArgs e)
+    {
+        if (!_isConnected)
         {
-			equipmentItems = equipmentItemsTemp;
-			return true;
+            _isConnected = true;
+            connectedEventBus?.Invoke(true);
+            Debug.Log("Connected to OpenHab Eventbus again.");
         }
-		else
+        EventModel ev = JsonUtility.FromJson<EventModel>(e.Message);
+        ev.Parse();
+        //Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
+
+        // New revision, send event to specific item, not a fun of iterating through lists but...
+        foreach (GameObject item in _subscribers)
         {
-			return false;
+            ItemController ic = item.GetComponent<ItemController>();
+            if (ic.GetItemID() == ev.itemId && ic.GetItemSubType() == ev._eventType) ic.RecievedEvent(ev);
         }
-	}
+
+        // This sends the event to all items.
+        // It would be better if event is sent to specific item.
+        //newEvent?.Invoke(ev);
+
+    }
+
+
+    /// <summary>
+    /// Dispose EvtSource if disabling Eventbus gameobject
+    /// </summary>
+    private void OnDestroy()
+    {
+        //_evt.Dispose();
+    }
+
+
 }

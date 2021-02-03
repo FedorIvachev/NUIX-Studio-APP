@@ -1,5 +1,9 @@
 # IoTStudio-client
 
+...EDITING...
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/v0.6/Architecture.png)
+...EDITING...
+
 Please see the **[Setup](#setup) procedure**, cloning the repo is not necessary because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
 
 Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects and also explain how it works.

@@ -2,6 +2,18 @@
 
 ...EDITING...
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/v0.6/Architecture.png)
+Since the architecture of version 0.5 does not allow user-friendly control, we decided to change it.
+Currenly, it can be represented by four layers:
+1. **IoT real world devices.**
+2. **openHAB server.** Provides:
+	* Synchronization with IoT real world devices;
+	* Storage of IoT data.
+3. **PC - Unity Server.** It is connected by REST API to the openHAB server and is used for computations (virtual IoT devices interaction; virtual screens, lights, radio waves etc).
+4. **VR Headset - Unity Client.** Even though we call it Client, it is actually connected to layer 2 - openHAB server. Provides API for interaction with virtual world.
+
+The idea of running two instances of Unity at the same time is based on dividing the responsibilities between several project instances. In result, not powerful VR Headsets are responsible only for interaction with virtual IoT devices, while PC is responsible only for difficult computations (such as encoding/decoding, physics and other). In addition, *openHAB server - PC Unity Server* latency is so low compared to the latency of *openHAB server - VR Headset Unity Client* and *PC Unity Server - VR Headset Unity Client* that we don't need to care about having an additional layer.
+
+The creation of items is performed on the openHAB server in a user-friendly way. The items are automatically synchronized with Unity Client and Server. I will further describe it in the next commit.
 ...EDITING...
 
 Please see the **[Setup](#setup) procedure**, cloning the repo is not necessary because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~

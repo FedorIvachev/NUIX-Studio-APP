@@ -87,7 +87,7 @@ class EventController : MonoBehaviour
         foreach (GameObject item in _subscribers)
         {
             ItemController ic = item.GetComponent<ItemController>();
-            if (ic.GetItemID() == ev.itemId && ic.GetItemSubType() == ev._eventType) ic.RecievedEvent(ev);
+            if (ic.GetItemID() == ev.itemId && ic.GetItemSubType() == ev._eventType) ic.ReceivedEvent(ev);
         }
 
         // This sends the event to all items.

@@ -99,12 +99,6 @@ public class DimmerWidget : MonoBehaviour
         _itemController.SetItemStateAsDimmer((int)(_PinchSlider.SliderValue * 100f));
     }
 
-    public void OnSliderUpdated(SliderEventData eventData)
-    {
-        print((int)(eventData.NewValue * 100f));
-        _itemController.SetItemStateAsDimmer((int)(eventData.NewValue * 100f));
-    }
-
     /// <summary>
     /// Stop event listening from controller
     /// </summary>

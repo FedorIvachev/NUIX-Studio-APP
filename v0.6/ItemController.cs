@@ -14,6 +14,8 @@ public class ItemController : MonoBehaviour
     public delegate void OnItemUpdate();
     public OnItemUpdate updateItem;
 
+    public bool OnItemUpdated { get; set; } // used to block the update of the item while the state on the server is updating
+
     /// <summary>
     /// Initialize the ItemController.
     /// </summary>
@@ -25,7 +27,7 @@ public class ItemController : MonoBehaviour
         _ServerURL = serverUrl;
         _ItemId = itemId;
         _SubscribeTo = subType;
-
+        OnItemUpdated = true;
         GetItemFromServer();
         if (_SubscribeTo != EvtType.None)
         {
@@ -46,11 +48,11 @@ public class ItemController : MonoBehaviour
     /// Eventcontroller passes an event to ItemController
     /// </summary>
     /// <param name="evt">the event as eventmodel</param>
-    public void RecievedEvent(EventModel evt)
+    public void ReceivedEvent(EventModel evt)
     {
         if (_Item.state != evt._Payload.value) _Item.state = evt._Payload.value;
         Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + _Item.state);
-        updateItem?.Invoke(); // Send event to Widgets for UI updates
+        if (OnItemUpdated) updateItem?.Invoke(); // Send event to Widgets for UI updates
     }
 
     /// <summary>
@@ -63,7 +65,7 @@ public class ItemController : MonoBehaviour
             {
                 _Item = JsonUtility.FromJson<ItemModel>(response.Text);
                 //Debug.Log(_Item.ToString());
-                updateItem?.Invoke(); // Send event to Widgets
+                if (OnItemUpdated) updateItem?.Invoke(); // Send event to Widgets
             }
             else
             {
@@ -78,10 +80,12 @@ public class ItemController : MonoBehaviour
     /// <param name="newState">New state</param>
     private void SetItemOnServer(string newState)
     {
+        OnItemUpdated = false;
         Debug.Log("New state: " + newState);
         RestClient.DefaultRequestHeaders["content-type"] = "text/plain";
         RestClient.Post(UriBuilder.GetItemUri(_ServerURL, _ItemId), newState).Then(response => {
             //Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
+            OnItemUpdated = true;
             RestClient.ClearDefaultHeaders();
         });
     }

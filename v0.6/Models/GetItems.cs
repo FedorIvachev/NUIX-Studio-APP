@@ -20,7 +20,7 @@ public class GetItems : MonoBehaviour
 	public void GetEquipmentItems()
 	{
 		// We can add default request headers for all requests
-		//RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMTUyODU0MCwianRpIjoiMlM3RS1NYTZ5QkxBVTRSOFNETUtEdyIsImlhdCI6MTYxMTUyNDk0MCwibmJmIjoxNjExNTI0ODIwLCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.NgikNqvk7A61e3z-KZOKgaRUxLmyZqgGYobwOPNZ6pga40vRakfjr-c0Mthw4i80zOc_36wCgD3ylYNDTdnAkpJZQ7TUZ_6ZNitLLuV-NO4skAOeJoYVr-gQTKPHScXTMWixxDBht-m7i93L8R8IgawOdlbGHGHjhe4gJMN1zrMQg78l0XsA_zoAU-pjMf5iCqTe1VV3X1MMFh4a6Q08SWagutm1SqPReuMOFeXd2GI81uu5eAxdihWQ0CUTcHPgIiXIrOpkLVUXYI6JmDzFWk6pU3nvrGy4MtQ7L3zvQrVZT-YPE_5-8Vu62z3yIDxn51P6r4W6I_CzBV2Sq5Dj0w";
+		//RestClient.DefaultRequestHeaders["Authorization"] = "Bearer ";
 		Debug.Log("Get Request");
 		RequestHelper requestOptions = null;
 

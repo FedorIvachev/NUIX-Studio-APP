@@ -1,19 +1,24 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Globalization;
 
-public class SwitchWidget : MonoBehaviour
+public class DummyWidget : MonoBehaviour
 {
     [Header("Item & Server Setup")]
     [Tooltip("Server url with port if needed. ie. http://localhost:8080")]
-    public string _Server = "http://localhost:8080";
+    public string _Server = "http://openhab:8080";
     [Tooltip("Item name in openhab. ie. gf_Hallway_Light")]
     public string _Item;
     [Tooltip("If you wan't to subscribe to events on this item. What event. Usually StateChanged")]
     public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
 
     [Header("Widget Setup")]
-    public Interactable _Toggle;
+    public Text _dummyText;
+    public bool _isNumber = true;
+    public string _numberFormat = "0.00";
+    public string _culture = "en-GB";
+    public string _preText = "";
+    public string _postText = "";
 
     private ItemController _itemController;
 
@@ -33,6 +38,7 @@ public class SwitchWidget : MonoBehaviour
         }
 
         _itemController.Initialize(_Server, _Item, _SubscriptionType);
+
         _itemController.updateItem += OnUpdate;
         InitWidget();
 
@@ -45,9 +51,9 @@ public class SwitchWidget : MonoBehaviour
     /// </summary>
     private void InitWidget()
     {
-        if (_Toggle == null)
+        if (_dummyText == null)
         {
-            _Toggle = GetComponent<Interactable>();
+            _dummyText = GetComponent<Text>();
         }
     }
 
@@ -60,11 +66,19 @@ public class SwitchWidget : MonoBehaviour
     /// </summary>
     public void OnUpdate()
     {
-        _Toggle.IsToggled = _itemController.GetItemStateAsSwitch();
+        string txt = _itemController.GetItemStateAsString();
+        if (_isNumber)
+        {
+            float number = float.Parse(txt);
+            _dummyText.text = _preText + number.ToString(_numberFormat, CultureInfo.CreateSpecificCulture(_culture)) + _postText;
+        }
+        else
+        {
+            _dummyText.text = _preText + txt + _postText;
+        }
     }
 
     /// <summary>
-    /// Call this from ie OnButtonClicked() event in Unity UI
     /// Update item from UI. Call itemcontroller and update Item on server.
     /// If update is true, an event will be recieved. If state is equal no
     /// new UI update is necesarry. If not equal the PUT has failed and we need
@@ -72,8 +86,7 @@ public class SwitchWidget : MonoBehaviour
     /// </summary>
     public void OnSetItem()
     {
-        //_itemController.SetItemStateAsSwitch(_Toggle.isOn);
-        _itemController.SetItemStateAsSwitch(_Toggle.IsToggled);
+
     }
 
     /// <summary>

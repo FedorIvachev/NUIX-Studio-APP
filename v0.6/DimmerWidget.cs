@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SwitchWidget : MonoBehaviour
+public class DimmerWidget : MonoBehaviour
 {
     [Header("Item & Server Setup")]
     [Tooltip("Server url with port if needed. ie. http://localhost:8080")]
@@ -13,7 +13,9 @@ public class SwitchWidget : MonoBehaviour
     public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
 
     [Header("Widget Setup")]
-    public Interactable _Toggle;
+    //public Slider _Slider;
+    public PinchSlider _PinchSlider;
+    //public SliderEventData _PinchSliderData;
 
     private ItemController _itemController;
 
@@ -33,6 +35,7 @@ public class SwitchWidget : MonoBehaviour
         }
 
         _itemController.Initialize(_Server, _Item, _SubscriptionType);
+
         _itemController.updateItem += OnUpdate;
         InitWidget();
 
@@ -45,10 +48,16 @@ public class SwitchWidget : MonoBehaviour
     /// </summary>
     private void InitWidget()
     {
-        if (_Toggle == null)
-        {
-            _Toggle = GetComponent<Interactable>();
-        }
+        //if (_Slider == null) _Slider = GetComponent<Slider>();
+        // Assume dimmer is 0-100 percentage so make slider no 0-1 float but 0-100 int.
+        //_Slider.wholeNumbers = true;
+        //_Slider.minValue = 0;
+        //_Slider.maxValue = 100;
+
+
+        if (_PinchSlider == null) _PinchSlider = GetComponent<PinchSlider>();
+
+        //if (_PinchSliderData == null) _PinchSliderData = GetComponent<SliderEventData>();
     }
 
     /// <summary>
@@ -60,11 +69,26 @@ public class SwitchWidget : MonoBehaviour
     /// </summary>
     public void OnUpdate()
     {
-        _Toggle.IsToggled = _itemController.GetItemStateAsSwitch();
+        float value = _itemController.GetItemStateAsDimmer();
+        //Debug.Log("OnUpdate recieved state: " + value);
+        // Failed to parse the dimmer
+        if (value == -1 || value > 100)
+        {
+            //_Slider.value = 0f;
+            //_Slider.interactable = false;
+
+            _PinchSlider.SliderValue = 0f;
+        }
+        else
+        {
+            //_Slider.interactable = true;
+            //_Slider.value = value;
+
+            _PinchSlider.SliderValue = value / 100f;
+        }
     }
 
     /// <summary>
-    /// Call this from ie OnButtonClicked() event in Unity UI
     /// Update item from UI. Call itemcontroller and update Item on server.
     /// If update is true, an event will be recieved. If state is equal no
     /// new UI update is necesarry. If not equal the PUT has failed and we need
@@ -72,8 +96,13 @@ public class SwitchWidget : MonoBehaviour
     /// </summary>
     public void OnSetItem()
     {
-        //_itemController.SetItemStateAsSwitch(_Toggle.isOn);
-        _itemController.SetItemStateAsSwitch(_Toggle.IsToggled);
+        _itemController.SetItemStateAsDimmer((int)(_PinchSlider.SliderValue * 100f));
+    }
+
+    public void OnSliderUpdated(SliderEventData eventData)
+    {
+        print((int)(eventData.NewValue * 100f));
+        _itemController.SetItemStateAsDimmer((int)(eventData.NewValue * 100f));
     }
 
     /// <summary>

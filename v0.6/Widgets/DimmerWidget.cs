@@ -11,10 +11,10 @@ public class DimmerWidget : MonoBehaviour
     public string _Item;
     [Tooltip("If you wan't to subscribe to events on this item. What event. Usually StateChanged")]
     public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
-
-    [Header("Widget Setup")]
+    
+    //[Header("Widget Setup")]
     //public Slider _Slider;
-    public PinchSlider _PinchSlider;
+    private PinchSlider _PinchSlider;
     //public SliderEventData _PinchSliderData;
 
     private ItemController _itemController;

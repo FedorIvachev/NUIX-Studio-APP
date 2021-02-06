@@ -59,7 +59,7 @@ class EventController : MonoBehaviour
         _evt.MessageReceived += (object sender, EventSourceMessageEventArgs e) => NewEvent(e);
         _evt.Disconnected += async (object sender, DisconnectEventArgs err) => {
             _isConnected = false;
-            connectedEventBus?.Invoke(false); // Lost the eventbus, handle thiswith reconnection after 3 secs.
+            connectedEventBus?.Invoke(false); // Lost the eventbus, handle this with reconnection after 3 sec.
             Console.WriteLine($"Retry in: {err.ReconnectDelay} - Error: {err.Exception}");
             await Task.Delay(err.ReconnectDelay);
             _evt.Start(); // Reconnect to the same URL

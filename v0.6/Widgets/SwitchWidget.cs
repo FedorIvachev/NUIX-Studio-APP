@@ -2,20 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SwitchWidget : MonoBehaviour
+public class SwitchWidget : ItemWidget
 {
-    [Header("Item & Server Setup")]
-    [Tooltip("Server url with port if needed. ie. http://localhost:8080")]
-    public string _Server = "http://localhost:8080";
-    [Tooltip("Item name in openhab. ie. gf_Hallway_Light")]
-    public string _Item;
-    [Tooltip("If you wan't to subscribe to events on this item. What event. Usually StateChanged")]
-    public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
-
     [Header("Widget Setup")]
     public Interactable _Toggle;
-
-    private ItemController _itemController;
 
     /// <summary>
     /// Initialize ItemController

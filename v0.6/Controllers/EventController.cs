@@ -38,7 +38,6 @@ class EventController : MonoBehaviour
             _subscribers = new List<GameObject>();
             _subscribers.Add(item);
         }
-
     }
 
     /// <summary>

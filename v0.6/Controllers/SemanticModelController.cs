@@ -7,10 +7,20 @@ class SemanticModelController : MonoBehaviour
     [SerializeField]
     private bool _isConnected = false;
     public string _serverUri = "http://localhost:8080";
-    public List<ThingModel> _things;
+    public List<ThingWidget> _things;
+
+    [SerializeField] 
+    public GameObject _dimmerWidgetPrefab;
+    public GameObject _switchWidgetPrefab;
+    public GameObject _textWidgetPrefab;
+
+    public GameObject _thingWidgetPrefab;
+
+    public Dictionary<string, GameObject> _widgetPrefabs = new Dictionary<string, GameObject>();
 
     void Start()
     {
+        InitializeWidgetPrefabDictionary();
         GetModel();
     }
 
@@ -19,9 +29,9 @@ class SemanticModelController : MonoBehaviour
         GetThingNames();
     }
 
-    public void AddThingToModel(ThingModel thing)
+    public void AddThingToModel(ThingWidget thing)
     {
-        if (_things == null) _things = new List<ThingModel>();
+        if (_things == null) _things = new List<ThingWidget>();
         _things.Add(thing);
     }
 
@@ -32,10 +42,23 @@ class SemanticModelController : MonoBehaviour
 			{
 				List<EquipmentItemModel> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
                 print("Got " + equipmentItems.Count + " equipment items from the server");
-				foreach(EquipmentItemModel equipmentItemModel in equipmentItems)
+
+
+                Vector3 _shift = Vector3.zero;
+                float delta = 0.5f;
+
+                foreach (EquipmentItemModel equipmentItemModel in equipmentItems)
                 {
                     string equipmentName = equipmentItemModel.name;
                     print(equipmentName);
+
+                    GameObject createdItem;
+                    createdItem = Instantiate(_thingWidgetPrefab, this.transform.position + _shift, Quaternion.identity) as GameObject;
+
+                    _shift.Set(_shift.x + delta, _shift.y, _shift.z);
+                    createdItem.name = equipmentName + "Widget";
+                    createdItem.GetComponent<ThingWidget>().Initialize(equipmentName, _widgetPrefabs);
+                    
                     //print(equipmentItemModel.members.Count);
                 }
 			}
@@ -45,5 +68,12 @@ class SemanticModelController : MonoBehaviour
 			}
 		});
 	}
+
+    private void InitializeWidgetPrefabDictionary()
+    {
+        if (_dimmerWidgetPrefab != null) _widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
+        if (_switchWidgetPrefab != null) _widgetPrefabs["Switch"] = _switchWidgetPrefab;
+        if (_textWidgetPrefab != null) _widgetPrefabs["String"] = _textWidgetPrefab;
+    }
 
 }

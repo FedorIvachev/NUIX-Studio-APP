@@ -1,26 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Globalization;
+using TMPro;
 
-public class DummyWidget : MonoBehaviour
+public class DummyWidget : ItemWidget
 {
-    [Header("Item & Server Setup")]
-    [Tooltip("Server url with port if needed. ie. http://localhost:8080")]
-    public string _Server = "http://openhab:8080";
-    [Tooltip("Item name in openhab. ie. gf_Hallway_Light")]
-    public string _Item;
-    [Tooltip("If you wan't to subscribe to events on this item. What event. Usually StateChanged")]
-    public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
 
     [Header("Widget Setup")]
-    public Text _dummyText;
-    public bool _isNumber = true;
+    //public Text _dummyText;
+    public TextMeshPro _dummyText;
+    public bool _isNumber = false;
     public string _numberFormat = "0.00";
     public string _culture = "en-GB";
     public string _preText = "";
     public string _postText = "";
-
-    private ItemController _itemController;
 
     /// <summary>
     /// Initialize ItemController
@@ -53,7 +46,7 @@ public class DummyWidget : MonoBehaviour
     {
         if (_dummyText == null)
         {
-            _dummyText = GetComponent<Text>();
+            _dummyText = GetComponent<TextMeshPro>();
         }
     }
 

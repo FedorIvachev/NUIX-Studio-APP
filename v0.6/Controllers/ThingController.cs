@@ -4,20 +4,17 @@ using System;
 using System.Threading.Tasks;
 using Proyecto26;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit.UI;
+using System.IO;
 
 class ThingController : MonoBehaviour
 {
     [SerializeField]
-    private bool _isConnected = false;
     public string _serverUri = "http://localhost:8080";
     public string _name = "";
     public List<GameObject> _items;
-    [SerializeField] public GameObject DimmerWidgetPrefab;
 
-    void Start()
-    {
-        GetGroupItems();
-    }
+    private Dictionary<string, GameObject> _widgetPrefabs;
 
     public void GetGroupItems()
     {
@@ -25,14 +22,35 @@ class ThingController : MonoBehaviour
             if (res.StatusCode >= 200 && res.StatusCode < 300)
             {
                 EquipmentItemModel equipmentItems = JsonUtility.FromJson<EquipmentItemModel>(res.Text);
+
+                Vector3 _shift = Vector3.zero;
+                float delta = 0.5f;
+
                 foreach (ItemModel2 item in equipmentItems.members)
                 {
-                    if (item.type == "Dimmer")
+                    if (_widgetPrefabs.ContainsKey(item.type))
                     {
                         GameObject createdItem;
-                        createdItem = Instantiate(DimmerWidgetPrefab, this.transform.position + Vector3.one, Quaternion.identity) as GameObject;
-                        createdItem.GetComponent<DimmerWidget>()._Item = item.name;
+                        createdItem = Instantiate(_widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
 
+                        createdItem.GetComponent<ItemWidget>()._Item = item.name;
+                        //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);
+                        createdItem.transform.SetParent(this.gameObject.transform);
+                        createdItem.name = item.name + "Widget";
+
+                        GameObject itemToolTip;
+
+                        var loadedPrefabResource = LoadPrefabFromFile("ToolTip");
+                        itemToolTip = Instantiate(loadedPrefabResource, this.transform.position + _shift, Quaternion.identity) as GameObject;
+                        itemToolTip.GetComponent<ToolTip>().ToolTipText = item.name;
+                        itemToolTip.GetComponent<ToolTipConnector>().Target = createdItem;
+
+
+                        _shift.Set(_shift.x, _shift.y, _shift.z + delta);
+                    }
+                    else
+                    {
+                        print(equipmentItems.name + " item " + item.name + " of type " + item.type + " has no predefined prefab for this type.");
                     }
                 }
 
@@ -44,10 +62,30 @@ class ThingController : MonoBehaviour
         });
     }
 
+    public void Initialize(string name, Dictionary<string, GameObject> widgetPrefabs)
+    {
+        _name = name;
+        _widgetPrefabs = widgetPrefabs;
+        GetGroupItems();
+    }
     public void AddItemToThing(GameObject item)
     {
         if (_items == null) _items = new List<GameObject>();
         _items.Add(item);
+    }
+
+
+
+    //Move it away from this class; make loading of prefabs in semanticmodelcontroller using this method by default
+    private UnityEngine.Object LoadPrefabFromFile(string filename)
+    {
+        Debug.Log("Trying to load LevelPrefab from file (" + filename + ")...");
+        var loadedObject = Resources.Load("Prefabs/" + filename);
+        if (loadedObject == null)
+        {
+            throw new FileNotFoundException("...no file found - please check the configuration");
+        }
+        return loadedObject;
     }
 
 }

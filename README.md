@@ -14,6 +14,8 @@ Currenly, it can be represented by four layers:
 The idea of running two instances of Unity at the same time is based on dividing the responsibilities between several project instances. In result, not powerful VR Headsets are responsible only for interaction with virtual IoT devices, while PC is responsible only for difficult computations (such as encoding/decoding, physics and other). In addition, *openHAB server - PC Unity Server* latency is so low compared to the latency of *openHAB server - VR Headset Unity Client* and *PC Unity Server - VR Headset Unity Client* that we don't need to care about having an additional layer.
 
 The creation of items is performed on the openHAB server in a user-friendly way. The items are automatically synchronized with Unity Client and Server. I will further describe it in the next commit.
+[v0.6 - whole project](https://github.com/VRSimulator/IoTStudio-WholeProject). Text creators to gain access.
+
 ...EDITING...
 
 Please see the **[Setup](#setup) procedure**, cloning the repo is not necessary because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~

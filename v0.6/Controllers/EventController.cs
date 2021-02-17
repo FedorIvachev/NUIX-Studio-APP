@@ -80,7 +80,7 @@ class EventController : MonoBehaviour
         }
         EventModel ev = JsonUtility.FromJson<EventModel>(e.Message);
         ev.Parse();
-        //Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
+        Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
 
         // New revision, send event to specific item, not a fun of iterating through lists but...
         foreach (GameObject item in _subscribers)

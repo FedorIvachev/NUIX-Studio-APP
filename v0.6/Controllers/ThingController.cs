@@ -40,11 +40,10 @@ class ThingController : MonoBehaviour
 
                         GameObject itemToolTip;
 
-                        var loadedPrefabResource = LoadPrefabFromFile("ToolTip");
-                        itemToolTip = Instantiate(loadedPrefabResource, this.transform.position + _shift, Quaternion.identity) as GameObject;
+                        itemToolTip = Instantiate(LoadPrefabFromFile("ToolTip"), this.transform.position + _shift, Quaternion.identity) as GameObject;
                         itemToolTip.GetComponent<ToolTip>().ToolTipText = item.name;
                         itemToolTip.GetComponent<ToolTipConnector>().Target = createdItem;
-
+                        itemToolTip.transform.SetParent(createdItem.transform);
 
                         _shift.Set(_shift.x, _shift.y, _shift.z + delta);
                     }
@@ -88,4 +87,25 @@ class ThingController : MonoBehaviour
         return loadedObject;
     }
 
+    private bool CreateVirtualLocationItem()
+    {
+
+        return false;
+    }
+
+    public void CreateLocationItemOnServer()
+    {
+        GroupItemDTO locationItem = new GroupItemDTO();
+        locationItem.type = "Switch";
+        locationItem.name = "example_location";
+        locationItem.label = "example_location";
+        locationItem.category = "";
+        locationItem.tags = new List<object>();
+        locationItem.groupNames = new List<object>();
+        locationItem.groupType = "";
+        locationItem.function = new GroupFunctionDTO();
+        ItemController _locationitemcontroller = new ItemController();
+
+        _locationitemcontroller.CreateItemOnServer(locationItem);
+    }
 }

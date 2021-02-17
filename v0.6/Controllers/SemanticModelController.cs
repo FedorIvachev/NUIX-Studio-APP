@@ -74,6 +74,10 @@ class SemanticModelController : MonoBehaviour
         if (_dimmerWidgetPrefab != null) _widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
         if (_switchWidgetPrefab != null) _widgetPrefabs["Switch"] = _switchWidgetPrefab;
         if (_textWidgetPrefab != null) _widgetPrefabs["String"] = _textWidgetPrefab;
+        // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html
+        // Not going to add a dict entry for each of them for now
+        if (_textWidgetPrefab != null) _widgetPrefabs["Number:Time"] = _textWidgetPrefab;
+        if (_textWidgetPrefab != null) _widgetPrefabs["Number"] = _textWidgetPrefab;
+        if (_textWidgetPrefab != null) _widgetPrefabs["DateTime"] = _textWidgetPrefab;
     }
-
 }

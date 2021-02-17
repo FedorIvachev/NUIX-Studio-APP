@@ -5,7 +5,7 @@ using Proyecto26;
 
 public class ItemController : MonoBehaviour
 {
-    private string _ServerURL; //URL to server rest api ie. http://openhab:8080/rest
+    private string _ServerURL = "http://localhost:8080"; //URL to server rest api ie. http://openhab:8080/rest
     private string _ItemId; // name of item in openhab
     private ItemModel _Item; // The item this controller handles
     private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe
@@ -88,6 +88,67 @@ public class ItemController : MonoBehaviour
             OnItemUpdated = true;
             RestClient.ClearDefaultHeaders();
         });
+    }
+
+    /// <summary>
+    /// Creates an item on server with PUT method (GroupItemDTO item)
+    /// </summary>
+    /// <param name="item"></param>
+    public void CreateItemOnServer(GroupItemDTO item)
+    {
+        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMzYwNjkxMywianRpIjoiX0Z6VERZVC1JZzdXMmRPOWNfcWM0ZyIsImlhdCI6MTYxMzYwMzMxMywibmJmIjoxNjEzNjAzMTkzLCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.KCaO6zRlK8IwGQ-4jgFLYhwnsGcyq3dVKLdFWLJk8-IK_P4YNVy6jLzBCwY_A2wcn612QtygJ_NxEGLW5j9zPgKSkFlH1hpdoWIlLBubjcS4Dmwdy36WhlFlzWOGdNXmY0OvMt1ylTpwRrfWoVCqqRnd5Mtf-FvjkMsWk9vwJ80z5FsycVTJ-yzNKHIHtfQS0ZMPVLSh0sNc--_rpsxX9xJVcKgRd6VEV5DGxcblRwSKLD01RVAZurSyQsNFXpgrK3Zhc0cI91EopGrPd8iDjYZVFIJT9amWYKFSHrn9_XOkYFlUzv_NFQWD57KorLf-GjXds7VuujT1txU711-Dnw";
+        OnItemUpdated = false;
+        Debug.Log("Creating item");
+        RestClient.DefaultRequestHeaders["content-type"] = "application/json";
+        RequestHelper currentRequest;
+        currentRequest = new RequestHelper
+        {
+            Uri = UriBuilder.GetItemUri(_ServerURL, "example_location"),
+            //Uri = "https://jsonplaceholder.typicode.com",
+            //Body = JsonUtility.ToJson(item),
+            Body = item,
+            Retries = 5,
+            RetrySecondsDelay = 1,
+            RetryCallback = (err, retries) => {
+                Debug.Log(string.Format("Retry #{0} Status {1}\nError: {2}", retries, err.StatusCode, err));
+            }
+        };
+
+        //print(JsonUtility.ToJson(item));
+        /*
+        RestClient.Put<PutItemResponseModel>(currentRequest, (err, res, body) => {
+            if (err != null)
+            {
+                print("Error creating item on server");
+                print(err.Message);
+            }
+            else
+            {
+                print("Success" + JsonUtility.ToJson(body, true));
+            }
+        });
+        */
+        /*
+        RestClient.Put(UriBuilder.GetItemUri(_ServerURL, "example_location"), item).Then(response => {
+            //Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
+            print("Create item response: " + response.Text);
+            OnItemUpdated = true;
+            RestClient.ClearDefaultHeaders();
+        });
+        */
+
+        RestClient.Put<string>(currentRequest, (err, res, body) => {
+            if (err != null)
+            {
+                print("Error creating item on server");
+                print(err.Message);
+            }
+            else
+            {
+                print("Success" + JsonUtility.ToJson(body, true));
+            }
+        });
+
     }
 
     /// <summary>

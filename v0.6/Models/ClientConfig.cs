@@ -6,7 +6,7 @@ public class ClientConfig
     public string _ServerURL = "http://localhost:8080"; //URL to server rest api ie. http://openhab:8080/rest
 
     // Links to the Item Widgets prefabs
-    public Dictionary<string, GameObject> _widgetPrefabs;
+    public Dictionary<string, GameObject> _widgetPrefabs = new Dictionary<string, GameObject>();
 
     private static ClientConfig instance;
     public static ClientConfig getInstance()

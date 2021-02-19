@@ -30,10 +30,10 @@ class ThingController : MonoBehaviour
 
                 foreach (EnrichedItemDTO item in equipmentItems.members)
                 {
-                    if (_widgetPrefabs.ContainsKey(item.type))
+                    if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
                     {
                         GameObject createdItem;
-                        createdItem = Instantiate(_widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
+                        createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
 
                         createdItem.GetComponent<ItemWidget>()._Item = item.name;
                         //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);

@@ -7,7 +7,7 @@ public class ItemController : MonoBehaviour
 {
     private string _ServerURL = "http://localhost:8080"; //URL to server rest api ie. http://openhab:8080/rest
     private string _ItemId; // name of item in openhab
-    private ItemModel _Item; // The item this controller handles
+    private EnrichedItemDTO _Item; // The item this controller handles
     private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe
     private EventController _EventController;
 
@@ -63,7 +63,7 @@ public class ItemController : MonoBehaviour
         RestClient.Get(UriBuilder.GetItemUri(_ServerURL, _ItemId)).Then(response => {
             if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
-                _Item = JsonUtility.FromJson<ItemModel>(response.Text);
+                _Item = JsonUtility.FromJson<EnrichedItemDTO>(response.Text);
                 //Debug.Log(_Item.ToString());
                 if (OnItemUpdated) updateItem?.Invoke(); // Send event to Widgets
             }
@@ -96,7 +96,7 @@ public class ItemController : MonoBehaviour
     /// <param name="item"></param>
     public void CreateItemOnServer(GroupItemDTO item)
     {
-        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMzYwNjkxMywianRpIjoiX0Z6VERZVC1JZzdXMmRPOWNfcWM0ZyIsImlhdCI6MTYxMzYwMzMxMywibmJmIjoxNjEzNjAzMTkzLCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.KCaO6zRlK8IwGQ-4jgFLYhwnsGcyq3dVKLdFWLJk8-IK_P4YNVy6jLzBCwY_A2wcn612QtygJ_NxEGLW5j9zPgKSkFlH1hpdoWIlLBubjcS4Dmwdy36WhlFlzWOGdNXmY0OvMt1ylTpwRrfWoVCqqRnd5Mtf-FvjkMsWk9vwJ80z5FsycVTJ-yzNKHIHtfQS0ZMPVLSh0sNc--_rpsxX9xJVcKgRd6VEV5DGxcblRwSKLD01RVAZurSyQsNFXpgrK3Zhc0cI91EopGrPd8iDjYZVFIJT9amWYKFSHrn9_XOkYFlUzv_NFQWD57KorLf-GjXds7VuujT1txU711-Dnw";
+        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMzY1MzMyNSwianRpIjoiZnF3ZlFucTVMSVltMk43TWgxQ1hMUSIsImlhdCI6MTYxMzY0OTcyNSwibmJmIjoxNjEzNjQ5NjA1LCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.IPmZhsGM8D0Lv4zhv2mufBw_EaqzEq7ofx86otpB0NcNPP9XgR9ucNAFxB-GMljvcJKbF-x8thG2weXyJANkRz6lJCvv7QeGf7_fZLNMqHCs8sXbMPfBsG2h5Reww7NNp5qHLezNTJEHdqBwIbLZJPxTkga6cSfX7AXlFigj_huM-q-X9HxOH8ZNLrSlJDTgD6YD7kceB1iw7maOB7ZZ0bBmi6XwX8WD-3ryeBrlzE90fBmwrc__rdJQ8HMmO-J3uYkeJVCqrL5BGmC5Veve0t1y11mlBKOOqddB-zq9u-m6Dbr4PNyvYpc-pMAa-QxfgwohXJHowqBAxZHsRkd9-Q";
         OnItemUpdated = false;
         Debug.Log("Creating item");
         RestClient.DefaultRequestHeaders["content-type"] = "application/json";
@@ -113,29 +113,6 @@ public class ItemController : MonoBehaviour
                 Debug.Log(string.Format("Retry #{0} Status {1}\nError: {2}", retries, err.StatusCode, err));
             }
         };
-
-        //print(JsonUtility.ToJson(item));
-        /*
-        RestClient.Put<PutItemResponseModel>(currentRequest, (err, res, body) => {
-            if (err != null)
-            {
-                print("Error creating item on server");
-                print(err.Message);
-            }
-            else
-            {
-                print("Success" + JsonUtility.ToJson(body, true));
-            }
-        });
-        */
-        /*
-        RestClient.Put(UriBuilder.GetItemUri(_ServerURL, "example_location"), item).Then(response => {
-            //Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
-            print("Create item response: " + response.Text);
-            OnItemUpdated = true;
-            RestClient.ClearDefaultHeaders();
-        });
-        */
 
         RestClient.Put<string>(currentRequest, (err, res, body) => {
             if (err != null)

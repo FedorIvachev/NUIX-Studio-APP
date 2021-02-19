@@ -40,14 +40,14 @@ class SemanticModelController : MonoBehaviour
 		RestClient.Get(_serverUri + "/rest/items?tags=Equipment").Then(res => {
 			if (res.StatusCode >= 200 && res.StatusCode < 300)
 			{
-				List<EquipmentItemModel> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
+				List<EnrichedGroupItemDTO> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
                 print("Got " + equipmentItems.Count + " equipment items from the server");
 
 
                 Vector3 _shift = Vector3.zero;
                 float delta = 0.5f;
 
-                foreach (EquipmentItemModel equipmentItemModel in equipmentItems)
+                foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
                 {
                     string equipmentName = equipmentItemModel.name;
                     print(equipmentName);

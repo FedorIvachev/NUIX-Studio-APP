@@ -21,12 +21,12 @@ class ThingController : MonoBehaviour
         RestClient.Get(_serverUri + "/rest/items/" + _name).Then(res => {
             if (res.StatusCode >= 200 && res.StatusCode < 300)
             {
-                EquipmentItemModel equipmentItems = JsonUtility.FromJson<EquipmentItemModel>(res.Text);
+                EnrichedGroupItemDTO equipmentItems = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
 
                 Vector3 _shift = Vector3.zero;
                 float delta = 0.5f;
 
-                foreach (ItemModel2 item in equipmentItems.members)
+                foreach (EnrichedItemDTO item in equipmentItems.members)
                 {
                     if (_widgetPrefabs.ContainsKey(item.type))
                     {
@@ -99,11 +99,6 @@ class ThingController : MonoBehaviour
         locationItem.type = "Switch";
         locationItem.name = "example_location";
         locationItem.label = "example_location";
-        locationItem.category = "";
-        locationItem.tags = new List<object>();
-        locationItem.groupNames = new List<object>();
-        locationItem.groupType = "";
-        locationItem.function = new GroupFunctionDTO();
         ItemController _locationitemcontroller = new ItemController();
 
         _locationitemcontroller.CreateItemOnServer(locationItem);

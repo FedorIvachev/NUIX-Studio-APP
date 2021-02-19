@@ -3,9 +3,13 @@ using UnityEngine;
 using EvtSource;
 using Proyecto26;
 
+/// <summary>
+/// Responsible for updating the state of the item
+/// Usually is attached to the ItemWidget
+/// </summary>
 public class ItemController : MonoBehaviour
 {
-    private string _ServerURL = "http://localhost:8080"; //URL to server rest api ie. http://openhab:8080/rest
+    private string _ServerURL = ClientConfig.getInstance()._ServerURL; //URL to server rest api ie. http://openhab:8080/rest
     private string _ItemId; // name of item in openhab
     private EnrichedItemDTO _Item; // The item this controller handles
     private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe

@@ -7,18 +7,20 @@ using System.Collections.Generic;
 using Microsoft.MixedReality.Toolkit.UI;
 using System.IO;
 
+
+/// <summary>
+/// Used to control the group of items
+/// Usually is created automatically by SemanticModelController
+/// </summary>
 class ThingController : MonoBehaviour
 {
     [SerializeField]
-    public string _serverUri = "http://localhost:8080";
     public string _name = "";
     public List<GameObject> _items;
 
-    private Dictionary<string, GameObject> _widgetPrefabs;
-
     public void GetGroupItems()
     {
-        RestClient.Get(_serverUri + "/rest/items/" + _name).Then(res => {
+        RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items/" + _name).Then(res => {
             if (res.StatusCode >= 200 && res.StatusCode < 300)
             {
                 EnrichedGroupItemDTO equipmentItems = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
@@ -61,10 +63,9 @@ class ThingController : MonoBehaviour
         });
     }
 
-    public void Initialize(string name, Dictionary<string, GameObject> widgetPrefabs)
+    public void Initialize(string name)
     {
         _name = name;
-        _widgetPrefabs = widgetPrefabs;
         GetGroupItems();
     }
     public void AddItemToThing(GameObject item)
@@ -87,16 +88,10 @@ class ThingController : MonoBehaviour
         return loadedObject;
     }
 
-    private bool CreateVirtualLocationItem()
-    {
-
-        return false;
-    }
-
     public void CreateLocationItemOnServer()
     {
         GroupItemDTO locationItem = new GroupItemDTO();
-        locationItem.type = "Switch";
+        locationItem.type = "Number";
         locationItem.name = "example_location";
         locationItem.label = "example_location";
         ItemController _locationitemcontroller = new ItemController();

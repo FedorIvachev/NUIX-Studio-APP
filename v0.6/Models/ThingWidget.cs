@@ -5,15 +5,11 @@ public class ThingWidget : MonoBehaviour
 {
     public string _name;
 
-    private Dictionary<string, GameObject> _widgetPrefabs;
-
-
     private ThingController _thingController;
 
-    public void Initialize(string name, Dictionary<string, GameObject> widgetPrefabs)
+    public void Initialize(string name)
     {
         _name = name;
-        _widgetPrefabs = widgetPrefabs;
 
         if (GetComponent<ThingController>() != null)
         {
@@ -24,7 +20,7 @@ public class ThingWidget : MonoBehaviour
             _thingController = gameObject.AddComponent<ThingController>();
         }
 
-        _thingController.Initialize(_name, _widgetPrefabs);
+        _thingController.Initialize(_name);
     }
 
 

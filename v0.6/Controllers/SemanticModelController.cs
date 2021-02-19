@@ -4,9 +4,6 @@ using UnityEngine;
 
 class SemanticModelController : MonoBehaviour
 {
-    [SerializeField]
-    private bool _isConnected = false;
-    public string _serverUri = "http://localhost:8080";
     public List<ThingWidget> _things;
 
     [SerializeField] 
@@ -15,8 +12,6 @@ class SemanticModelController : MonoBehaviour
     public GameObject _textWidgetPrefab;
 
     public GameObject _thingWidgetPrefab;
-
-    public Dictionary<string, GameObject> _widgetPrefabs = new Dictionary<string, GameObject>();
 
     void Start()
     {
@@ -37,12 +32,10 @@ class SemanticModelController : MonoBehaviour
 
 	public void GetThingNames()
 	{
-		RestClient.Get(_serverUri + "/rest/items?tags=Equipment").Then(res => {
+		RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items?tags=Equipment").Then(res => {
 			if (res.StatusCode >= 200 && res.StatusCode < 300)
 			{
 				List<EnrichedGroupItemDTO> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
-                print("Got " + equipmentItems.Count + " equipment items from the server");
-
 
                 Vector3 _shift = Vector3.zero;
                 float delta = 0.5f;
@@ -57,9 +50,7 @@ class SemanticModelController : MonoBehaviour
 
                     _shift.Set(_shift.x + delta, _shift.y, _shift.z);
                     createdItem.name = equipmentName + "Widget";
-                    createdItem.GetComponent<ThingWidget>().Initialize(equipmentName, _widgetPrefabs);
-                    
-                    //print(equipmentItemModel.members.Count);
+                    createdItem.GetComponent<ThingWidget>().Initialize(equipmentName); // Get each of the group members from the server
                 }
 			}
 			else
@@ -71,13 +62,13 @@ class SemanticModelController : MonoBehaviour
 
     private void InitializeWidgetPrefabDictionary()
     {
-        if (_dimmerWidgetPrefab != null) _widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
-        if (_switchWidgetPrefab != null) _widgetPrefabs["Switch"] = _switchWidgetPrefab;
-        if (_textWidgetPrefab != null) _widgetPrefabs["String"] = _textWidgetPrefab;
+        if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
+        if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
+        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
         // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html
         // Not going to add a dict entry for each of them for now
-        if (_textWidgetPrefab != null) _widgetPrefabs["Number:Time"] = _textWidgetPrefab;
-        if (_textWidgetPrefab != null) _widgetPrefabs["Number"] = _textWidgetPrefab;
-        if (_textWidgetPrefab != null) _widgetPrefabs["DateTime"] = _textWidgetPrefab;
+        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number:Time"] = _textWidgetPrefab;
+        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number"] = _textWidgetPrefab;
+        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["DateTime"] = _textWidgetPrefab;
     }
 }

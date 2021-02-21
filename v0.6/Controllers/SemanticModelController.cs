@@ -8,6 +8,7 @@ class SemanticModelController : MonoBehaviour
     public GameObject _dimmerWidgetPrefab;
     public GameObject _switchWidgetPrefab;
     public GameObject _textWidgetPrefab;
+    public GameObject _locationWidgetPrefab;
 
     public GameObject _thingWidgetPrefab;
 
@@ -22,6 +23,10 @@ class SemanticModelController : MonoBehaviour
         GetThingNames();
     }
 
+
+    // TODO: get all items names, put in a dictionary of itemcontrollers
+    // Next build a tree of items based on the groupNames field
+    // Then it must be easy to assign item values
 	public void GetThingNames()
 	{
 		RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items?tags=Equipment").Then(res => {
@@ -54,6 +59,8 @@ class SemanticModelController : MonoBehaviour
         if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
         if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
+        if (_locationWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Virtual Location"] = _locationWidgetPrefab;
+
         // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html
         // Not going to add a dict entry for each of them for now
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number:Time"] = _textWidgetPrefab;

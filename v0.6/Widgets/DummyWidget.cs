@@ -34,7 +34,6 @@ public class DummyWidget : ItemWidget
 
         _itemController.updateItem += OnUpdate;
         InitWidget();
-
     }
 
     /// <summary>

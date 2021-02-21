@@ -104,5 +104,10 @@ class EventController : MonoBehaviour
         //_evt.Dispose();
     }
 
+    public void UnsubscribeFromEverything()
+    {
+        _subscribers.Clear();
+    }
+
 
 }

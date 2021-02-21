@@ -4,8 +4,6 @@ using UnityEngine;
 
 class SemanticModelController : MonoBehaviour
 {
-    public List<ThingWidget> _things;
-
     [SerializeField] 
     public GameObject _dimmerWidgetPrefab;
     public GameObject _switchWidgetPrefab;
@@ -24,12 +22,6 @@ class SemanticModelController : MonoBehaviour
         GetThingNames();
     }
 
-    public void AddThingToModel(ThingWidget thing)
-    {
-        if (_things == null) _things = new List<ThingWidget>();
-        _things.Add(thing);
-    }
-
 	public void GetThingNames()
 	{
 		RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items?tags=Equipment").Then(res => {
@@ -43,14 +35,11 @@ class SemanticModelController : MonoBehaviour
                 foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
                 {
                     string equipmentName = equipmentItemModel.name;
-                    print(equipmentName);
-
                     GameObject createdItem;
                     createdItem = Instantiate(_thingWidgetPrefab, this.transform.position + _shift, Quaternion.identity) as GameObject;
-
+                    createdItem.GetComponent<ItemWidget>()._Item = equipmentName;
                     _shift.Set(_shift.x + delta, _shift.y, _shift.z);
                     createdItem.name = equipmentName + "Widget";
-                    createdItem.GetComponent<ThingWidget>().Initialize(equipmentName); // Get each of the group members from the server
                 }
 			}
 			else

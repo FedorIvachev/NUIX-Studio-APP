@@ -11,4 +11,16 @@ public class ItemWidget : MonoBehaviour
     public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
 
     protected ItemController _itemController;
+
+
+
+    protected void CreateLocationItem()
+    {
+        if (_itemController != null)
+        {
+            _itemController.CreateLocationItemOnServer();
+        }
+    }
+
+
 }

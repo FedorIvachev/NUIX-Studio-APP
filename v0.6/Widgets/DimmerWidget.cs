@@ -29,7 +29,6 @@ public class DimmerWidget : ItemWidget
 
         _itemController.updateItem += OnUpdate;
         InitWidget();
-
     }
 
     /// <summary>
@@ -47,6 +46,7 @@ public class DimmerWidget : ItemWidget
 
 
         if (_PinchSlider == null) _PinchSlider = GetComponent<PinchSlider>();
+
 
         //if (_PinchSliderData == null) _PinchSliderData = GetComponent<SliderEventData>();
     }

@@ -2,6 +2,8 @@
 using UnityEngine;
 using EvtSource;
 using Proyecto26;
+using System.IO;
+using Microsoft.MixedReality.Toolkit.UI;
 
 /// <summary>
 /// Responsible for updating the state of the item
@@ -10,10 +12,12 @@ using Proyecto26;
 public class ItemController : MonoBehaviour
 {
     private string _ServerURL = ClientConfig.getInstance()._ServerURL; //URL to server rest api ie. http://openhab:8080/rest
-    private string _ItemId; // name of item in openhab
-    private EnrichedItemDTO _Item; // The item this controller handles
+    public string _ItemId { get; set; } // name of item in openhab
+    private EnrichedGroupItemDTO _Item; // The item this controller handles
     private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe
     private EventController _EventController;
+
+    public bool _isGroupItem;
 
     public delegate void OnItemUpdate();
     public OnItemUpdate updateItem;
@@ -67,9 +71,13 @@ public class ItemController : MonoBehaviour
         RestClient.Get(UriBuilder.GetItemUri(_ServerURL, _ItemId)).Then(response => {
             if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
-                _Item = JsonUtility.FromJson<EnrichedItemDTO>(response.Text);
-                //Debug.Log(_Item.ToString());
+                _Item = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
+                print("Rest GET status for Item: " + _Item.name + " was OK");
                 if (OnItemUpdated) updateItem?.Invoke(); // Send event to Widgets
+                if (_Item.type == "Group") // TODO move away to invoke method
+                {
+                    GetGroupItems();
+                }
             }
             else
             {
@@ -100,16 +108,14 @@ public class ItemController : MonoBehaviour
     /// <param name="item"></param>
     public void CreateItemOnServer(GroupItemDTO item)
     {
-        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMzY1MzMyNSwianRpIjoiZnF3ZlFucTVMSVltMk43TWgxQ1hMUSIsImlhdCI6MTYxMzY0OTcyNSwibmJmIjoxNjEzNjQ5NjA1LCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.IPmZhsGM8D0Lv4zhv2mufBw_EaqzEq7ofx86otpB0NcNPP9XgR9ucNAFxB-GMljvcJKbF-x8thG2weXyJANkRz6lJCvv7QeGf7_fZLNMqHCs8sXbMPfBsG2h5Reww7NNp5qHLezNTJEHdqBwIbLZJPxTkga6cSfX7AXlFigj_huM-q-X9HxOH8ZNLrSlJDTgD6YD7kceB1iw7maOB7ZZ0bBmi6XwX8WD-3ryeBrlzE90fBmwrc__rdJQ8HMmO-J3uYkeJVCqrL5BGmC5Veve0t1y11mlBKOOqddB-zq9u-m6Dbr4PNyvYpc-pMAa-QxfgwohXJHowqBAxZHsRkd9-Q";
+        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMzkwMTA4NywianRpIjoidmRmbGt6NklRWFJqeG5lbnVlanR6QSIsImlhdCI6MTYxMzg5NzQ4NywibmJmIjoxNjEzODk3MzY3LCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.IKszonbTFSMQ9JTJLxO7mlkFbCXm96Mvvcc7E0VHB_aDj2oVj6s--3qGe5ud77Mp_oFuqP_iZLt8MUrSZy_c-Jb5c2dAfG51V_jKyrizjTxe3V2_cpyDaZByieQXmKMoJ73-Zmks4hvhlsu9yrGCfV2i-i1z1yVYZSoJeoH8XzomxB9KPR8WkisHH6iWslZF2uLLD6tJF1JAjeo95EVUZ8mWtsvT3N6lHDyCS9xV_ZRcdTRAlecxBKWimKP32uEiRDzSNkxC28VpwZtif-G3TTDlHz3Clq5D1nAchHcHGiJUwEqcofZxcuPikkb_RGIe1Ji_2ymvbpT21ExM1LNx5A";
         OnItemUpdated = false;
         Debug.Log("Creating item");
         RestClient.DefaultRequestHeaders["content-type"] = "application/json";
         RequestHelper currentRequest;
         currentRequest = new RequestHelper
         {
-            Uri = UriBuilder.GetItemUri(_ServerURL, "example_location"),
-            //Uri = "https://jsonplaceholder.typicode.com",
-            //Body = JsonUtility.ToJson(item),
+            Uri = UriBuilder.GetItemUri(_ServerURL, item.name),
             Body = item,
             Retries = 5,
             RetrySecondsDelay = 1,
@@ -126,10 +132,84 @@ public class ItemController : MonoBehaviour
             }
             else
             {
-                print("Success" + JsonUtility.ToJson(body, true));
+                print("Success " + res.StatusCode + JsonUtility.ToJson(body, true));
             }
         });
 
+    }
+
+    /// <summary>
+    /// Adds a location Item for current item on server
+    /// </summary>
+    public void CreateLocationItemOnServer()
+    {
+        GroupItemDTO locationItem = new GroupItemDTO
+        {
+            type = "Group",
+            name = _ItemId + "_VirtualLocation",
+            label = _ItemId + " Virtual Location"
+            //groupNames = { _ItemId }
+        };
+        CreateItemOnServer(locationItem);
+    }
+
+
+    public void GetGroupItems()
+    {
+        RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items/" + _ItemId).Then(res => {
+            if (res.StatusCode >= 200 && res.StatusCode < 300)
+            {
+                EnrichedGroupItemDTO equipmentItems = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
+
+                Vector3 _shift = Vector3.zero;
+                float delta = 0.5f;
+
+                foreach (EnrichedItemDTO item in equipmentItems.members)
+                {
+                    if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
+                    {
+                        GameObject createdItem;
+                        createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
+
+                        createdItem.GetComponent<ItemWidget>()._Item = item.name;
+                        //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);
+                        createdItem.transform.SetParent(this.gameObject.transform);
+                        createdItem.name = item.name + "Widget";
+
+                        GameObject itemToolTip;
+
+                        itemToolTip = Instantiate(LoadPrefabFromFile("ToolTip"), this.transform.position + _shift, Quaternion.identity) as GameObject;
+                        itemToolTip.GetComponent<ToolTip>().ToolTipText = item.name;
+                        itemToolTip.GetComponent<ToolTipConnector>().Target = createdItem;
+                        itemToolTip.transform.SetParent(createdItem.transform);
+
+                        _shift.Set(_shift.x, _shift.y, _shift.z + delta);
+                    }
+                    else
+                    {
+                        print(equipmentItems.name + " item " + item.name + " of type " + item.type + " has no predefined prefab for this type.");
+                    }
+                }
+
+            }
+            else
+            {
+                Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
+            }
+        });
+    }
+
+
+    //Move it away from this class; make loading of prefabs in semanticmodelcontroller using this method by default
+    private UnityEngine.Object LoadPrefabFromFile(string filename)
+    {
+        Debug.Log("Trying to load LevelPrefab from file (" + filename + ")...");
+        var loadedObject = Resources.Load("Prefabs/" + filename);
+        if (loadedObject == null)
+        {
+            throw new FileNotFoundException("...no file found - please check the configuration");
+        }
+        return loadedObject;
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 # IoTStudio-client
 
+**V0.6-aplha released*
 ...EDITING...
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/v0.6/Architecture.png)
 Since the architecture of version 0.5 does not allow user-friendly control, we decided to change it.

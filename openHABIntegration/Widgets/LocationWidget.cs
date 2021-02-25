@@ -76,7 +76,6 @@ public class LocationWidget : ItemWidget
         if (_itemController._Item != null)
         {
             int length = _itemController._ItemId.Length;
-            print("HSSHJSBHJSBJH " + _itemController._ItemId);
             if (_itemController._ItemId[length - 1] == 'X') location = transform.parent.position.x;
             if (_itemController._ItemId[length - 1] == 'Y') location = transform.parent.position.y;
             if (_itemController._ItemId[length - 1] == 'Z') location = transform.parent.position.z;

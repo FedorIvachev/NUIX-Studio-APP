@@ -21,7 +21,6 @@ public class ItemController : MonoBehaviour
     public delegate void OnItemUpdate();
     public OnItemUpdate updateItem;
 
-    public bool OnItemUpdated { get; set; } // used to block the update of the item while the state on the server is updating
 
     /// <summary>
     /// Initialize the ItemController.
@@ -34,7 +33,6 @@ public class ItemController : MonoBehaviour
         _ServerURL = serverUrl;
         _ItemId = itemId;
         _SubscribeTo = subType;
-        OnItemUpdated = true;
         GetItemFromServer();
         if (_SubscribeTo != EvtType.None)
         {
@@ -59,7 +57,7 @@ public class ItemController : MonoBehaviour
     {
         if (_Item.state != evt._Payload.value) _Item.state = evt._Payload.value;
         Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + _Item.state);
-        if (OnItemUpdated) updateItem?.Invoke(); // Send event to Widgets for UI updates
+        updateItem?.Invoke(); // Send event to Widgets for UI updates
     }
 
     /// <summary>
@@ -71,8 +69,8 @@ public class ItemController : MonoBehaviour
             if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
                 _Item = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
-                print("Rest GET status for Item: " + _Item.name + " was OK");
-                if (OnItemUpdated) updateItem?.Invoke(); // Send event to Widgets
+                //print("Rest GET status for Item: " + _Item.name + " was OK");
+                updateItem?.Invoke(); // Send event to Widgets
                 if (_Item.type == "Group") // TODO move away to invoke method
                 {
                     CreateLocationItemOnServer();
@@ -92,12 +90,12 @@ public class ItemController : MonoBehaviour
     /// <param name="newState">New state</param>
     private void SetItemOnServer(string newState)
     {
-        OnItemUpdated = false;
+        //OnItemUpdated = false;
         Debug.Log("New state: " + newState);
         RestClient.DefaultRequestHeaders["content-type"] = "text/plain";
         RestClient.Post(UriBuilder.GetItemUri(_ServerURL, _ItemId), newState).Then(response => {
             //Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
-            OnItemUpdated = true;
+            //OnItemUpdated = true;
             RestClient.ClearDefaultHeaders();
         });
     }
@@ -110,8 +108,9 @@ public class ItemController : MonoBehaviour
     /// <param name="item"></param>
     public void CreateItemOnServer(GroupItemDTO item)
     {
-        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer eyJraWQiOm51bGwsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJvcGVuaGFiIiwiYXVkIjoib3BlbmhhYiIsImV4cCI6MTYxMzk1MjQ1NiwianRpIjoiOG1KeUx5X1hpZWtmR2duQnJKeFJxZyIsImlhdCI6MTYxMzk0ODg1NiwibmJmIjoxNjEzOTQ4NzM2LCJzdWIiOiJhZG1pbiIsImNsaWVudF9pZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInNjb3BlIjoiYWRtaW4iLCJyb2xlIjpbImFkbWluaXN0cmF0b3IiXX0.BlZrstn6ZZobDf-5SKQC3xBGuLWtoZh4T8NP-6A20V5rcBvkH-yJH0RigDtguSp0NX0YxrOy8XrQHNICqs7EhtAt_mn3wiKvqv2dCpCx-QFSQveBhmwx4k5qXDmDWlHyBRejK6L_TZI6Mx2SuiDrtpbjtFMyYsz-tZ68ZRyJVW7VKC6Q_RaxAN5KkAEebMr0QKi38qBsPgMupdd9EYJJ3P2uxss7O56eYf-U3sXPYolrAmYHUdGHD20isFhET9B81PFfsm1c5dOjYu_MGGHg1w9zS7tz_Bl-KbVgIi4ihZMCQI2SrZ6z7LnMcKaHUhLK4reX2O2eS4053GMTHcirvg";
-        OnItemUpdated = false;
+        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + ClientConfig.getInstance().Bearer;
+        //RestClient.DefaultRequestParams["Username"] = ClientConfig.getInstance().APIToken;
+        //RestClient.DefaultRequestHeaders["Authorization"] = "admin:admin";
         Debug.Log("Creating item");
         RestClient.DefaultRequestHeaders["content-type"] = "application/json";
         RequestHelper currentRequest;
@@ -197,9 +196,20 @@ public class ItemController : MonoBehaviour
                 EnrichedGroupItemDTO equipmentItems = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
 
                 Vector3 _shift = Vector3.zero;
-                float delta = 0.5f;
-                _shift.Set(_shift.x, _shift.y, _shift.z + delta);
+                float delta = 0.2f;
+                _shift.Set(_shift.x, _shift.y + delta, _shift.z);
 
+                //print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + equipmentItems.category);
+                if (ClientConfig.getInstance()._categoryPrefabs[equipmentItems.category] != null)
+                {
+                    GameObject createdItem;
+                    createdItem = Instantiate(ClientConfig.getInstance()._categoryPrefabs[equipmentItems.category], this.transform.position, Quaternion.identity) as GameObject;
+
+                    //createdItem.GetComponent<ItemWidget>()._Item = item.name;
+                    //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);
+                    gameObject.transform.SetParent(createdItem.gameObject.transform);
+                    //createdItem.name = item.name + "Widget";
+                }
 
                 foreach (EnrichedItemDTO item in equipmentItems.members)
                 {
@@ -216,6 +226,8 @@ public class ItemController : MonoBehaviour
                             createdItem.transform.SetParent(this.gameObject.transform);
                             createdItem.name = item.name + "Widget";
 
+
+                            /*
                             GameObject itemToolTip;
 
                             itemToolTip = Instantiate(LoadPrefabFromFile("ToolTip"), this.transform.position + _shift, Quaternion.identity) as GameObject;
@@ -223,10 +235,14 @@ public class ItemController : MonoBehaviour
                             itemToolTip.GetComponent<ToolTipConnector>().Target = createdItem;
                             itemToolTip.transform.SetParent(createdItem.transform);
 
-                            _shift.Set(_shift.x, _shift.y, _shift.z + delta);
+                            */
+
+                            _shift.Set(_shift.x, _shift.y + delta, _shift.z);
                         }
                         else
                         {
+
+                            print("Creating GameObject for Virtual Location " + item.name);
                             GameObject createdItem;
                             createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["Virtual Location"], this.transform.position, Quaternion.identity) as GameObject;
 
@@ -241,6 +257,10 @@ public class ItemController : MonoBehaviour
                         print(equipmentItems.name + " item " + item.name + " of type " + item.type + " has no predefined prefab for this type.");
                     }
                 }
+
+
+
+
 
             }
             else

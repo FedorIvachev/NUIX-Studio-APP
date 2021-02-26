@@ -108,10 +108,7 @@ public class ItemController : MonoBehaviour
     /// <param name="item"></param>
     public void CreateItemOnServer(GroupItemDTO item)
     {
-        RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + ClientConfig.getInstance().Bearer;
-        //RestClient.DefaultRequestParams["Username"] = ClientConfig.getInstance().APIToken;
-        //RestClient.DefaultRequestHeaders["Authorization"] = "admin:admin";
-        Debug.Log("Creating item");
+        RestClient.DefaultRequestHeaders["Authorization"] = ClientConfig.getInstance().authenticate("admin", "admin");
         RestClient.DefaultRequestHeaders["content-type"] = "application/json";
         RequestHelper currentRequest;
         currentRequest = new RequestHelper
@@ -147,8 +144,6 @@ public class ItemController : MonoBehaviour
         List<string> asGroup = new List<string>();
         asGroup.Add(_ItemId);
 
-        //List<string> tag = new List<string>();
-        //asGroup.Add("Location");
         // TODO: get rid of Copypaste
         GroupItemDTO locationItem = new GroupItemDTO
         {
@@ -156,7 +151,6 @@ public class ItemController : MonoBehaviour
             name = _ItemId + "_X",
             label = _ItemId + " X",
             category = "Virtual Location",
-            //tags = tag,
             groupNames = asGroup
         };
         CreateItemOnServer(locationItem);
@@ -168,7 +162,6 @@ public class ItemController : MonoBehaviour
             name = _ItemId + "_Y",
             label = _ItemId + " Y",
             category = "Virtual Location",
-            //tags = tag,
             groupNames = asGroup
         };
         CreateItemOnServer(locationItem);
@@ -180,7 +173,6 @@ public class ItemController : MonoBehaviour
             name = _ItemId + "_Z",
             label = _ItemId + " Z",
             category = "Virtual Location",
-            //tags = tag,
             groupNames = asGroup
         };
         CreateItemOnServer(locationItem);
@@ -199,16 +191,11 @@ public class ItemController : MonoBehaviour
                 float delta = 0.2f;
                 _shift.Set(_shift.x, _shift.y + delta, _shift.z);
 
-                //print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + equipmentItems.category);
-                if (ClientConfig.getInstance()._categoryPrefabs[equipmentItems.category] != null)
+                if (ClientConfig.getInstance()._categoryPrefabs.ContainsKey(equipmentItems.category))
                 {
                     GameObject createdItem;
                     createdItem = Instantiate(ClientConfig.getInstance()._categoryPrefabs[equipmentItems.category], this.transform.position, Quaternion.identity) as GameObject;
-
-                    //createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                    //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);
                     gameObject.transform.SetParent(createdItem.gameObject.transform);
-                    //createdItem.name = item.name + "Widget";
                 }
 
                 foreach (EnrichedItemDTO item in equipmentItems.members)
@@ -222,21 +209,8 @@ public class ItemController : MonoBehaviour
                             createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
 
                             createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                            //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);
                             createdItem.transform.SetParent(this.gameObject.transform);
                             createdItem.name = item.name + "Widget";
-
-
-                            /*
-                            GameObject itemToolTip;
-
-                            itemToolTip = Instantiate(LoadPrefabFromFile("ToolTip"), this.transform.position + _shift, Quaternion.identity) as GameObject;
-                            itemToolTip.GetComponent<ToolTip>().ToolTipText = item.name;
-                            itemToolTip.GetComponent<ToolTipConnector>().Target = createdItem;
-                            itemToolTip.transform.SetParent(createdItem.transform);
-
-                            */
-
                             _shift.Set(_shift.x, _shift.y + delta, _shift.z);
                         }
                         else
@@ -247,7 +221,6 @@ public class ItemController : MonoBehaviour
                             createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["Virtual Location"], this.transform.position, Quaternion.identity) as GameObject;
 
                             createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                            //if (_name == "YeelightColorLEDBulb") DontDestroyOnLoad(createdItem);
                             createdItem.transform.SetParent(this.gameObject.transform);
                             createdItem.name = item.name + "Widget";
                         }
@@ -257,11 +230,6 @@ public class ItemController : MonoBehaviour
                         print(equipmentItems.name + " item " + item.name + " of type " + item.type + " has no predefined prefab for this type.");
                     }
                 }
-
-
-
-
-
             }
             else
             {

@@ -108,7 +108,7 @@ public class ItemController : MonoBehaviour
     /// <param name="item"></param>
     public void CreateItemOnServer(GroupItemDTO item)
     {
-        RestClient.DefaultRequestHeaders["Authorization"] = ClientConfig.getInstance().authenticate("admin", "admin");
+        RestClient.DefaultRequestHeaders["Authorization"] = ClientConfig.getInstance().Authenticate();
         RestClient.DefaultRequestHeaders["content-type"] = "application/json";
         RequestHelper currentRequest;
         currentRequest = new RequestHelper

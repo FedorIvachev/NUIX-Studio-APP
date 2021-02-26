@@ -12,6 +12,12 @@ class SemanticModelController : MonoBehaviour
 
     public GameObject _thingWidgetPrefab;
 
+
+    [Header("Category prefabs")]
+    public GameObject _lampPrefab;
+    public GameObject _mobilePhonePrefab;
+
+
     void Start()
     {
         InitializeWidgetPrefabDictionary();
@@ -66,5 +72,9 @@ class SemanticModelController : MonoBehaviour
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number:Time"] = _textWidgetPrefab;
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number"] = _textWidgetPrefab;
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["DateTime"] = _textWidgetPrefab;
+
+        // Category prefabs
+        if (_mobilePhonePrefab != null) ClientConfig.getInstance()._categoryPrefabs["MobilePhone"] = _mobilePhonePrefab;
+        if (_lampPrefab != null) ClientConfig.getInstance()._categoryPrefabs["Lamp"] = _lampPrefab;
     }
 }

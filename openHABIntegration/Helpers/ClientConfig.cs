@@ -15,12 +15,12 @@ public class ClientConfig
     // Links to the Category classes mprefabs
     public Dictionary<string, GameObject> _categoryPrefabs = new Dictionary<string, GameObject>();
 
-    private static ClientConfig instance;
+    private static ClientConfig _ClientConfigInstance;
     public static ClientConfig getInstance()
     {
-        if (instance == null)
-            instance = new ClientConfig();
-        return instance;
+        if (_ClientConfigInstance == null)
+            _ClientConfigInstance = new ClientConfig();
+        return _ClientConfigInstance;
     }
 
     /// <summary>
@@ -34,5 +34,4 @@ public class ClientConfig
         auth = "Basic " + auth;
         return auth;
     }
-
 }

@@ -46,20 +46,18 @@ class SemanticModelController : MonoBehaviour
 			{
 				List<EnrichedGroupItemDTO> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
 
-                Vector3 _shift = Vector3.zero;
-                float delta = 0.5f;
+
 
                 foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
                 {
-                    string equipmentName = equipmentItemModel.name;
-                    GameObject createdItem;
-                    createdItem = Instantiate(_thingWidgetPrefab, this.transform.position + _shift, Quaternion.identity) as GameObject;
-                    createdItem.GetComponent<ItemWidget>()._Item = equipmentName;
-                    _shift.Set(_shift.x + delta, _shift.y, _shift.z);
-                    createdItem.name = equipmentName + "Widget";
+                    Item item = new Item();
+                    item._itemModel = equipmentItemModel;
+                    //item._itemWidget = createdItem;
+                    SemanticModel.getInstance()._items[equipmentItemModel.name] = item;
                 }
-			}
-			else
+                CreateWidgetsForItems();
+            }
+            else
 			{
 				Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
 			}
@@ -82,5 +80,23 @@ class SemanticModelController : MonoBehaviour
         // Category prefabs
         if (_mobilePhonePrefab != null) ClientConfig.getInstance()._categoryPrefabs["MobilePhone"] = _mobilePhonePrefab;
         if (_lampPrefab != null) ClientConfig.getInstance()._categoryPrefabs["Lamp"] = _lampPrefab;
+    }
+
+
+    private void CreateWidgetsForItems()
+    {
+        Vector3 _shift = Vector3.zero;
+        float delta = 0.5f;
+
+        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
+        {
+            string equipmentName = item.Key;
+            GameObject createdItem;
+            createdItem = Instantiate(_thingWidgetPrefab, this.transform.position + _shift, Quaternion.identity) as GameObject;
+            createdItem.GetComponent<ItemWidget>()._Item = equipmentName;
+            _shift.Set(_shift.x + delta, _shift.y, _shift.z);
+            createdItem.name = equipmentName + "Widget";
+            item.Value._itemWidget = createdItem;
+        }
     }
 }

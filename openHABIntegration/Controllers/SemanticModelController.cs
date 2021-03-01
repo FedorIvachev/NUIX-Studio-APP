@@ -9,9 +9,7 @@ class SemanticModelController : MonoBehaviour
     public GameObject _switchWidgetPrefab;
     public GameObject _textWidgetPrefab;
     public GameObject _locationWidgetPrefab;
-
-    public GameObject _thingWidgetPrefab;
-
+    public GameObject _equipmentWidgetPrefab;
 
     [Header("Category prefabs")]
     public GameObject _lampPrefab;
@@ -32,14 +30,19 @@ class SemanticModelController : MonoBehaviour
 
     private void GetModel()
     {
-        GetThingNames();
+        //GetThingNames();
+        GetAllItems();
     }
 
+    private void Update()
+    {
+        SetParentTransforms();
+    }
 
     // TODO: get all items names, put in a dictionary of itemcontrollers
     // Next build a tree of items based on the groupNames field
     // Then it must be easy to assign item values
-	public void GetThingNames()
+    public void GetThingNames()
 	{
 		RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items?tags=Equipment").Then(res => {
 			if (res.StatusCode >= 200 && res.StatusCode < 300)
@@ -64,12 +67,39 @@ class SemanticModelController : MonoBehaviour
 		});
 	}
 
+
+    public void GetAllItems()
+    {
+        RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items").Then(res => {
+            if (res.StatusCode >= 200 && res.StatusCode < 300)
+            {
+                List<EnrichedGroupItemDTO> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
+
+
+                foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
+                {
+                    Item item = new Item();
+                    item._itemModel = equipmentItemModel;
+                    //item._itemWidget = createdItem;
+                    SemanticModel.getInstance()._items[equipmentItemModel.name] = item;
+                }
+                CreateWidgetsForItems();
+            }
+            else
+            {
+                Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
+            }
+        });
+    }
+
     private void InitializeWidgetPrefabDictionary()
     {
         if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
         if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
         if (_locationWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Virtual Location"] = _locationWidgetPrefab;
+        if (_equipmentWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Group"] = _equipmentWidgetPrefab;
+
 
         // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html
         // Not going to add a dict entry for each of them for now
@@ -90,13 +120,37 @@ class SemanticModelController : MonoBehaviour
 
         foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
         {
-            string equipmentName = item.Key;
-            GameObject createdItem;
-            createdItem = Instantiate(_thingWidgetPrefab, this.transform.position + _shift, Quaternion.identity) as GameObject;
-            createdItem.GetComponent<ItemWidget>()._Item = equipmentName;
-            _shift.Set(_shift.x + delta, _shift.y, _shift.z);
-            createdItem.name = equipmentName + "Widget";
-            item.Value._itemWidget = createdItem;
+            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
+            {
+                string itemname = item.Key;
+                GameObject createdItem;
+                createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.Value._itemModel.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
+                createdItem.GetComponent<ItemWidget>()._Item = itemname;
+                _shift.Set(_shift.x + delta, _shift.y, _shift.z);
+                createdItem.name = itemname + " Widget";
+                item.Value._itemWidget = createdItem;
+            }
+        }
+    }
+
+    private void SetParentTransforms()
+    {
+        // setting the parent based on groupnames
+
+        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
+        {
+            if (item.Value._itemWidget != null)
+            {
+                // The item should be a child of its groupname item. If we find at least one such groupname, set the transform parent to its widget then
+                foreach (string groupName in item.Value._itemModel.groupNames)
+                {
+                    GameObject parent;
+                    if ((parent = GameObject.Find(groupName + " Widget")) != null)
+                    {
+                        item.Value._itemWidget.gameObject.transform.SetParent(parent.transform);
+                    }
+                }
+            }
         }
     }
 }

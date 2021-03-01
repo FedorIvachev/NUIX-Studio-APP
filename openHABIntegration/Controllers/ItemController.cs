@@ -47,6 +47,7 @@ public class ItemController : MonoBehaviour
             }
 
         }
+
     }
 
     /// <summary>
@@ -74,7 +75,7 @@ public class ItemController : MonoBehaviour
                 if (_Item.type == "Group") // TODO move away to invoke method
                 {
                     CreateLocationItemOnServer();
-                    GetGroupItems();
+                    //GetGroupItems();
                 }
             }
             else

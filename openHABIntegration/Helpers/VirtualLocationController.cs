@@ -1,4 +1,7 @@
-﻿public class VirtualLocationController
+﻿/// <summary>
+/// Singleton to process location sync
+/// </summary>
+public class VirtualLocationController
 {
     public delegate void OnLocationSync();
     public OnLocationSync locationSync;
@@ -16,4 +19,5 @@
     {
         locationSync?.Invoke();
     }
+
 }

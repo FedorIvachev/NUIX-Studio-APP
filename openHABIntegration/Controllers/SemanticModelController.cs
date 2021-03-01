@@ -36,6 +36,8 @@ class SemanticModelController : MonoBehaviour
 
     private void Update()
     {
+        // Otherwise call it after all the widgets are added to the scene
+        // Currently the complexity is O(n)
         SetParentTransforms();
     }
 
@@ -59,6 +61,7 @@ class SemanticModelController : MonoBehaviour
                     SemanticModel.getInstance()._items[equipmentItemModel.name] = item;
                 }
                 CreateWidgetsForItems();
+                SetParentTransforms();
             }
             else
 			{
@@ -130,15 +133,30 @@ class SemanticModelController : MonoBehaviour
                 item.Value._itemWidget = createdItem;
                 continue;
             }
-            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
+            else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
             {
-                string itemname = item.Key;
-                GameObject createdItem;
-                createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.Value._itemModel.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
-                createdItem.GetComponent<ItemWidget>()._Item = itemname;
-                _shift.Set(_shift.x + delta, _shift.y, _shift.z);
-                createdItem.name = itemname + " Widget";
-                item.Value._itemWidget = createdItem;
+                if (item.Value._itemModel.type == "Group" && ClientConfig.getInstance()._categoryPrefabs.ContainsKey(item.Value._itemModel.category))
+                {
+                    string categoryitemname = item.Key;
+                    GameObject createdCategoryItem;
+                    createdCategoryItem = Instantiate(ClientConfig.getInstance()._categoryPrefabs[item.Value._itemModel.category], this.transform.position + _shift, Quaternion.identity) as GameObject;
+                    createdCategoryItem.GetComponent<ItemWidget>()._Item = categoryitemname;
+                    _shift.Set(_shift.x + delta, _shift.y, _shift.z);
+                    createdCategoryItem.name = categoryitemname + " Widget";
+                    item.Value._itemWidget = createdCategoryItem;
+                }
+                else
+                {
+                    string itemname = item.Key;
+                    GameObject createdItem;
+                    createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.Value._itemModel.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
+                    createdItem.GetComponent<ItemWidget>()._Item = itemname;
+                    _shift.Set(_shift.x + delta, _shift.y, _shift.z);
+                    createdItem.name = itemname + " Widget";
+                    item.Value._itemWidget = createdItem;
+                }
+
+                
             }
         }
     }

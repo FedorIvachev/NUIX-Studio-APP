@@ -47,7 +47,6 @@ public class ItemController : MonoBehaviour
             }
 
         }
-
     }
 
     /// <summary>

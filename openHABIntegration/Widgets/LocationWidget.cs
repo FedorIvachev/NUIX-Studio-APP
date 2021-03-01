@@ -26,7 +26,9 @@ public class LocationWidget : ItemWidget
 
         _itemController.updateItem += OnUpdate;
 
-        LocationControl();
+        VirtualLocationController.getInstance().locationSync += GetParentLocation;
+
+        //LocationControl();
     }
 
 
@@ -68,10 +70,10 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void LocationControl()
     {
-        InvokeRepeating(nameof(SetNameEqualToNumber), 0.0f, 1.0f);
+        //InvokeRepeating(nameof(SetNameEqualToNumber), 0.0f, 10.0f);
     }
 
-    private void SetNameEqualToNumber()
+    private void GetParentLocation()
     {
         if (_itemController._Item != null)
         {
@@ -90,7 +92,10 @@ public class LocationWidget : ItemWidget
             int length = _itemController._ItemId.Length;
             if (_itemController._ItemId[length - 1] == 'X') transform.parent.position.Set(location, transform.parent.position.y, transform.parent.position.z);
             if (_itemController._ItemId[length - 1] == 'Y') transform.parent.position.Set(transform.parent.position.x, location, transform.parent.position.z);
-            if (_itemController._ItemId[length - 1] == 'Z') transform.parent.position.Set(transform.parent.position.x, transform.parent.position.y, location);
+            if (_itemController._ItemId[length - 1] == 'Z')
+            {
+                transform.parent.position = new Vector3(transform.parent.position.x, transform.parent.position.y, location);
+            }
         }
     }
 }

@@ -120,6 +120,16 @@ class SemanticModelController : MonoBehaviour
 
         foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
         {
+            if (item.Value._itemModel.category == "Virtual Location")
+            {
+                string itemname = item.Key;
+                GameObject createdItem;
+                createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.Value._itemModel.category], Vector3.zero, Quaternion.identity) as GameObject;
+                createdItem.GetComponent<ItemWidget>()._Item = itemname;
+                createdItem.name = itemname + " Widget";
+                item.Value._itemWidget = createdItem;
+                continue;
+            }
             if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
             {
                 string itemname = item.Key;

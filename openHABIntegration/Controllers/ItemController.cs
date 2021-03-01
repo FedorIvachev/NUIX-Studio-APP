@@ -75,7 +75,6 @@ public class ItemController : MonoBehaviour
                 if (_Item.type == "Group") // TODO move away to invoke method
                 {
                     CreateLocationItemOnServer();
-                    //GetGroupItems();
                 }
             }
             else
@@ -178,65 +177,6 @@ public class ItemController : MonoBehaviour
         };
         CreateItemOnServer(locationItem);
 
-    }
-
-
-    public void GetGroupItems()
-    {
-        RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items/" + _ItemId).Then(res => {
-            if (res.StatusCode >= 200 && res.StatusCode < 300)
-            {
-                EnrichedGroupItemDTO equipmentItems = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
-
-                Vector3 _shift = Vector3.zero;
-                float delta = 0.2f;
-                _shift.Set(_shift.x, _shift.y + delta, _shift.z);
-
-                if (ClientConfig.getInstance()._categoryPrefabs.ContainsKey(equipmentItems.category))
-                {
-                    GameObject createdItem;
-                    createdItem = Instantiate(ClientConfig.getInstance()._categoryPrefabs[equipmentItems.category], this.transform.position, Quaternion.identity) as GameObject;
-                    gameObject.transform.SetParent(createdItem.gameObject.transform);
-                }
-
-                foreach (EnrichedItemDTO item in equipmentItems.members)
-                {
-
-                    if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
-                    {
-                        if (item.category != "Virtual Location")
-                        {
-                            GameObject createdItem;
-                            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
-
-                            createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                            createdItem.transform.SetParent(this.gameObject.transform);
-                            createdItem.name = item.name + "Widget";
-                            _shift.Set(_shift.x, _shift.y + delta, _shift.z);
-                        }
-                        else
-                        {
-
-                            print("Creating GameObject for Virtual Location " + item.name);
-                            GameObject createdItem;
-                            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["Virtual Location"], this.transform.position, Quaternion.identity) as GameObject;
-
-                            createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                            createdItem.transform.SetParent(this.gameObject.transform);
-                            createdItem.name = item.name + "Widget";
-                        }
-                    }
-                    else
-                    {
-                        print(equipmentItems.name + " item " + item.name + " of type " + item.type + " has no predefined prefab for this type.");
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
-            }
-        });
     }
 
 

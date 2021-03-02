@@ -17,7 +17,7 @@ class SemanticModelController : MonoBehaviour
     public GameObject _mobilePhonePrefab;
 
     [Header("Server setup")]
-    public string _ServerURL = ClientConfig.getInstance()._ServerURL;
+    private string _ServerURL = ClientConfig.getInstance()._ServerURL;
     public string _Username = ClientConfig.getInstance()._Username;
     public string _Password = ClientConfig.getInstance()._Password;
 

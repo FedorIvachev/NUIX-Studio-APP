@@ -5,6 +5,7 @@ using Proyecto26;
 using System.IO;
 using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// Responsible for updating the state of the item
@@ -258,6 +259,12 @@ public class ItemController : MonoBehaviour
         if (_Item.state == "ON") return true;
         return false;
     }
+    /*
+    public Color GetItemStateAsColor()
+    {
+        float[] HSB = Array.ConvertAll(_Item.state.Split(','), float.Parse);
+        Color colorState = Color.HSVToRGB(HSB[0], HSB[1], HSB[2]);
+    }*/
 
     /// <summary>
     /// Update item on server as a switch

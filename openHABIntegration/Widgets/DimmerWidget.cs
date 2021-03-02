@@ -77,6 +77,7 @@ public class DimmerWidget : ItemWidget
 
             _PinchSlider.SliderValue = value / 100f;
         }
+
     }
 
     /// <summary>
@@ -88,6 +89,9 @@ public class DimmerWidget : ItemWidget
     public void OnSetItem()
     {
         _itemController.SetItemStateAsDimmer((int)(_PinchSlider.SliderValue * 100f));
+        if (_Item.Contains("Brightness")) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightBrightness(_PinchSlider.SliderValue * 100f);
+        if (_Item.Contains("ColorTemperature")) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightBrightness(_PinchSlider.SliderValue * 100f);
+
     }
 
     /// <summary>

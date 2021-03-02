@@ -317,6 +317,19 @@ public class ItemController : MonoBehaviour
         }
     }
 
+    public void SetItemStateAsColor(Color newColor)
+    {
+        float Hue;
+        float Saturation;
+        float Brightness;
+        Color.RGBToHSV(newColor, out Hue, out Saturation, out Brightness);
+
+        print(Hue.ToString() + ", " + Saturation.ToString() + ", " + Brightness.ToString());
+        SetItemOnServer((Hue * 360).ToString() + "," + (Saturation * 100).ToString() + "," + (Brightness*100).ToString());
+    }
+        
+
+
 
     /// <summary>
     /// Getter for item ID

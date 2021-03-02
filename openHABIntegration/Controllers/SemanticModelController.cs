@@ -10,6 +10,7 @@ class SemanticModelController : MonoBehaviour
     public GameObject _textWidgetPrefab;
     public GameObject _locationWidgetPrefab;
     public GameObject _equipmentWidgetPrefab;
+    public GameObject _colorWidgetPrefab;
 
     [Header("Category prefabs")]
     public GameObject _lampPrefab;
@@ -102,6 +103,7 @@ class SemanticModelController : MonoBehaviour
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
         if (_locationWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Virtual Location"] = _locationWidgetPrefab;
         if (_equipmentWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Group"] = _equipmentWidgetPrefab;
+        if (_colorWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Color"] = _colorWidgetPrefab;
 
 
         // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html

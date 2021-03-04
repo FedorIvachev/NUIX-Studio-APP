@@ -1,4 +1,4 @@
-# IoTStudio-client
+# NUIXStudio-client
 
 **V0.6-aplha released**
 

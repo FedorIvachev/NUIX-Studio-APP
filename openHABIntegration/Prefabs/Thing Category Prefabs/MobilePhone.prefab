@@ -19,8 +19,9 @@ GameObject:
   - component: {fileID: 1133751878646412612}
   - component: {fileID: 1133751878646412613}
   - component: {fileID: 1133751878646412614}
+  - component: {fileID: 4425182942721395791}
   m_Layer: 0
-  m_Name: CoffeeCup
+  m_Name: MobilePhone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -422,6 +423,27 @@ MonoBehaviour:
   autoConstraintSelection: 0
   selectedConstraints:
   - {fileID: 1133751878646412622}
+--- !u!114 &4425182942721395791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133751878646445032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9457ef62b13ad54eb0ef53771828d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Server: http://localhost:8080
+  _Item: 
+  _SubscriptionType: 0
+  _state: 
+  _isNumber: 0
+  _numberFormat: 0.00
+  _culture: en-GB
+  _preText: 
+  _postText: 
 --- !u!1 &8651223472152587811
 GameObject:
   m_ObjectHideFlags: 0

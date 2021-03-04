@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 class EventController : MonoBehaviour
 {
+    private string _serverUri = ClientConfig.getInstance()._ServerURL;
+
+
     [SerializeField]
     private bool _isConnected = false;
-    public string _serverUri = "http://localhost:8080";
     public List<GameObject> _subscribers;
 
     private EventSourceReader _evt;

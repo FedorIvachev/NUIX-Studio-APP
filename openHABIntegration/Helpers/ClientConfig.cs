@@ -4,7 +4,7 @@ using UnityEngine;
 public class ClientConfig
 {
     [SerializeField]
-    public string _ServerURL = "http://localhost:8080";
+    public string _ServerURL = "http://192.168.3.3:8080"; // "http://localhost:8080";
     public string _Username = "admin";
     public string _Password = "admin";
 

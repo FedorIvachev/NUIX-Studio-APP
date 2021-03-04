@@ -3,6 +3,10 @@ using System.Globalization;
 using TMPro;
 using System.Threading.Tasks;
 
+
+/// <summary>
+/// Is used to sync the transform position of the item widget to the server
+/// </summary>
 public class LocationWidget : ItemWidget
 {
     [Header("Widget Setup")]
@@ -26,7 +30,9 @@ public class LocationWidget : ItemWidget
 
         _itemController.updateItem += OnUpdate;
 
-        LocationControl();
+        VirtualLocationController.getInstance().locationSync += OnSetItem;
+
+        //LocationControl();
     }
 
 
@@ -51,7 +57,14 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
-
+        if (_itemController._Item != null)
+        {
+            int length = _itemController._ItemId.Length;
+            if (_itemController._ItemId[length - 1] == 'X') location = transform.parent.position.x;
+            if (_itemController._ItemId[length - 1] == 'Y') location = transform.parent.position.y;
+            if (_itemController._ItemId[length - 1] == 'Z') location = transform.parent.position.z;
+            _itemController.SetItemStateAsString(location.ToString());
+        }
     }
 
     /// <summary>
@@ -68,19 +81,7 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void LocationControl()
     {
-        InvokeRepeating(nameof(SetNameEqualToNumber), 0.0f, 1.0f);
-    }
-
-    private void SetNameEqualToNumber()
-    {
-        if (_itemController._Item != null)
-        {
-            int length = _itemController._ItemId.Length;
-            if (_itemController._ItemId[length - 1] == 'X') location = transform.parent.position.x;
-            if (_itemController._ItemId[length - 1] == 'Y') location = transform.parent.position.y;
-            if (_itemController._ItemId[length - 1] == 'Z') location = transform.parent.position.z;
-            _itemController.SetItemStateAsString(location.ToString());
-        }
+        //InvokeRepeating(nameof(SetNameEqualToNumber), 0.0f, 10.0f);
     }
 
     private void SynchronizeParentLocation()
@@ -88,9 +89,9 @@ public class LocationWidget : ItemWidget
         if (_itemController._Item != null)
         {
             int length = _itemController._ItemId.Length;
-            if (_itemController._ItemId[length - 1] == 'X') transform.parent.position.Set(location, transform.parent.position.y, transform.parent.position.z);
-            if (_itemController._ItemId[length - 1] == 'Y') transform.parent.position.Set(transform.parent.position.x, location, transform.parent.position.z);
-            if (_itemController._ItemId[length - 1] == 'Z') transform.parent.position.Set(transform.parent.position.x, transform.parent.position.y, location);
+            if (_itemController._ItemId[length - 1] == 'X') transform.parent.position = new Vector3(location, transform.parent.position.y, transform.parent.position.z);
+            if (_itemController._ItemId[length - 1] == 'Y') transform.parent.position = new Vector3(transform.parent.position.x, location, transform.parent.position.z);
+            if (_itemController._ItemId[length - 1] == 'Z') transform.parent.position = new Vector3(transform.parent.position.x, transform.parent.position.y, location);
         }
     }
 }

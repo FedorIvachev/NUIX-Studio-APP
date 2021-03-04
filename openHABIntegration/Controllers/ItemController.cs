@@ -5,6 +5,7 @@ using Proyecto26;
 using System.IO;
 using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// Responsible for updating the state of the item
@@ -74,7 +75,6 @@ public class ItemController : MonoBehaviour
                 if (_Item.type == "Group") // TODO move away to invoke method
                 {
                     CreateLocationItemOnServer();
-                    GetGroupItems();
                 }
             }
             else
@@ -180,65 +180,6 @@ public class ItemController : MonoBehaviour
     }
 
 
-    public void GetGroupItems()
-    {
-        RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items/" + _ItemId).Then(res => {
-            if (res.StatusCode >= 200 && res.StatusCode < 300)
-            {
-                EnrichedGroupItemDTO equipmentItems = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
-
-                Vector3 _shift = Vector3.zero;
-                float delta = 0.2f;
-                _shift.Set(_shift.x, _shift.y + delta, _shift.z);
-
-                if (ClientConfig.getInstance()._categoryPrefabs.ContainsKey(equipmentItems.category))
-                {
-                    GameObject createdItem;
-                    createdItem = Instantiate(ClientConfig.getInstance()._categoryPrefabs[equipmentItems.category], this.transform.position, Quaternion.identity) as GameObject;
-                    gameObject.transform.SetParent(createdItem.gameObject.transform);
-                }
-
-                foreach (EnrichedItemDTO item in equipmentItems.members)
-                {
-
-                    if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
-                    {
-                        if (item.category != "Virtual Location")
-                        {
-                            GameObject createdItem;
-                            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type], this.transform.position + _shift, Quaternion.identity) as GameObject;
-
-                            createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                            createdItem.transform.SetParent(this.gameObject.transform);
-                            createdItem.name = item.name + "Widget";
-                            _shift.Set(_shift.x, _shift.y + delta, _shift.z);
-                        }
-                        else
-                        {
-
-                            print("Creating GameObject for Virtual Location " + item.name);
-                            GameObject createdItem;
-                            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["Virtual Location"], this.transform.position, Quaternion.identity) as GameObject;
-
-                            createdItem.GetComponent<ItemWidget>()._Item = item.name;
-                            createdItem.transform.SetParent(this.gameObject.transform);
-                            createdItem.name = item.name + "Widget";
-                        }
-                    }
-                    else
-                    {
-                        print(equipmentItems.name + " item " + item.name + " of type " + item.type + " has no predefined prefab for this type.");
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
-            }
-        });
-    }
-
-
     //Move it away from this class; make loading of prefabs in semanticmodelcontroller using this method by default
     private UnityEngine.Object LoadPrefabFromFile(string filename)
     {
@@ -318,6 +259,12 @@ public class ItemController : MonoBehaviour
         if (_Item.state == "ON") return true;
         return false;
     }
+    /*
+    public Color GetItemStateAsColor()
+    {
+        float[] HSB = Array.ConvertAll(_Item.state.Split(','), float.Parse);
+        Color colorState = Color.HSVToRGB(HSB[0], HSB[1], HSB[2]);
+    }*/
 
     /// <summary>
     /// Update item on server as a switch
@@ -376,6 +323,19 @@ public class ItemController : MonoBehaviour
                 break;
         }
     }
+
+    public void SetItemStateAsColor(Color newColor)
+    {
+        float Hue;
+        float Saturation;
+        float Brightness;
+        Color.RGBToHSV(newColor, out Hue, out Saturation, out Brightness);
+
+        print(Hue.ToString() + ", " + Saturation.ToString() + ", " + Brightness.ToString());
+        SetItemOnServer((Hue * 360).ToString() + "," + (Saturation * 100).ToString() + "," + (Brightness*100).ToString());
+    }
+        
+
 
 
     /// <summary>

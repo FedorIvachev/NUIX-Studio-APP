@@ -7,7 +7,7 @@ public class DimmerWidget : ItemWidget
     
     //[Header("Widget Setup")]
     //public Slider _Slider;
-    private PinchSlider _PinchSlider;
+    public PinchSlider _PinchSlider;
     //public SliderEventData _PinchSliderData;
 
     /// <summary>
@@ -15,6 +15,7 @@ public class DimmerWidget : ItemWidget
     /// </summary>
     void Start()
     {
+        gameObject.tag = "Dimmer";
         // Add or get controller component
         if (GetComponent<ItemController>() != null)
         {
@@ -25,7 +26,7 @@ public class DimmerWidget : ItemWidget
             _itemController = gameObject.AddComponent<ItemController>();
         }
 
-        _itemController.Initialize(_Server, _Item, _SubscriptionType);
+        _itemController.Initialize(_Item, _SubscriptionType);
 
         _itemController.updateItem += OnUpdate;
         InitWidget();
@@ -60,7 +61,10 @@ public class DimmerWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
+        print("Updating dimmer value");
         float value = _itemController.GetItemStateAsDimmer();
+
+        if (Mathf.Abs(value / 100f - _PinchSlider.SliderValue) <= 0.01f) return;
         //Debug.Log("OnUpdate recieved state: " + value);
         // Failed to parse the dimmer
         if (value == -1 || value > 100)
@@ -89,8 +93,10 @@ public class DimmerWidget : ItemWidget
     public void OnSetItem()
     {
         _itemController.SetItemStateAsDimmer((int)(_PinchSlider.SliderValue * 100f));
-        if (_Item.Contains("Brightness")) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightBrightness(_PinchSlider.SliderValue * 100f);
-        if (_Item.Contains("ColorTemperature")) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightBrightness(_PinchSlider.SliderValue * 100f);
+        if (_Item.Contains("Brightness"))
+            if (GameObject.Find("BrightnessControlledItem") != null) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightBrightness(_PinchSlider.SliderValue * 100f);
+        if (_Item.Contains("ColorTemperature"))
+            if (GameObject.Find("BrightnessControlledItem") != null) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightColorTemperature(_PinchSlider.SliderValue * 100f);
 
     }
 

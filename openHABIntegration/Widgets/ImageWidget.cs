@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+
 public class ImageWidget : MonoBehaviour
 {
     [Header("Item & Server Setup")]
@@ -37,7 +38,7 @@ public class ImageWidget : MonoBehaviour
             _itemController = gameObject.AddComponent<ItemController>();
         }
 
-        _itemController.Initialize(_Server, _Item, _SubscriptionType);
+        _itemController.Initialize(_Item, _SubscriptionType);
 
         _itemController.updateItem += OnUpdate;
         InitWidget();

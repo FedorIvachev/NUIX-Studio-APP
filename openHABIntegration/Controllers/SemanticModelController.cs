@@ -1,6 +1,7 @@
 ﻿using Proyecto26;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 class SemanticModelController : MonoBehaviour
 {
@@ -21,10 +22,20 @@ class SemanticModelController : MonoBehaviour
     public string _Username = ClientConfig.getInstance()._Username;
     public string _Password = ClientConfig.getInstance()._Password;
 
+    public bool InitOnStartup = false;
 
 
-    void Start()
+
+    private void Start()
     {
+        if (InitOnStartup)
+        {
+            StartSystem();
+        }
+    }
+    public void StartSystem()
+    {
+        print("Starting System");
         InitializeWidgetPrefabDictionary();
         GetModel();
     }
@@ -41,35 +52,6 @@ class SemanticModelController : MonoBehaviour
         // Currently the complexity is O(n)
         SetParentTransforms();
     }
-
-    // TODO: get all items names, put in a dictionary of itemcontrollers
-    // Next build a tree of items based on the groupNames field
-    // Then it must be easy to assign item values
-    public void GetThingNames()
-	{
-		RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items?tags=Equipment").Then(res => {
-			if (res.StatusCode >= 200 && res.StatusCode < 300)
-			{
-				List<EnrichedGroupItemDTO> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
-
-
-
-                foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
-                {
-                    Item item = new Item();
-                    item._itemModel = equipmentItemModel;
-                    //item._itemWidget = createdItem;
-                    SemanticModel.getInstance()._items[equipmentItemModel.name] = item;
-                }
-                CreateWidgetsForItems();
-                SetParentTransforms();
-            }
-            else
-			{
-				Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
-			}
-		});
-	}
 
 
     public void GetAllItems()
@@ -120,7 +102,7 @@ class SemanticModelController : MonoBehaviour
 
     private void CreateWidgetsForItems()
     {
-        Vector3 _shift = Vector3.zero;
+        Vector3 _shift = new Vector3(0.0f, 0.0f, 0.0f);
         float delta = 0.5f;
 
         foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
@@ -182,5 +164,13 @@ class SemanticModelController : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    public void SetServerIPAdress()
+    {
+        string adr = GameObject.Find("KeyboardOutputIPAdress").GetComponent<TMPro.TextMeshPro>().text;
+        print("DEBUG IP ADRESS " + adr);
+        ClientConfig.getInstance()._ServerURL = "http://" +  adr;
     }
 }

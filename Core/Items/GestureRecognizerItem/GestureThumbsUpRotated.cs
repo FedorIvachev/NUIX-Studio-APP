@@ -43,7 +43,7 @@ namespace Tsinghua.HCI.IoThingsLab
             if (TryGetGestureValue(out float value))
             {
                 normalizedValue = (uint) value * 10 / 9;
-                return ((value > 0f) && (value < 90f)) ? true : false;
+                return ((value > 2f) && (value < 90f)) ? true : false;
             }
             normalizedValue = 0;
             return false;
@@ -59,9 +59,12 @@ namespace Tsinghua.HCI.IoThingsLab
             {
                 palmPose = palmpose;
             }
+            else
+            {
+                return false;
+            }
             value = Vector3.Angle(palmPose.Up, this.transform.up);
             if (_handedness == Handedness.Left) value = value * -1f;
-            //_valueItem.Data = value;
             return true;
         }
     }

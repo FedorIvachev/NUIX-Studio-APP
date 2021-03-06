@@ -13,7 +13,6 @@ using System;
 /// </summary>
 public class ItemController : MonoBehaviour
 {
-    private string _ServerURL = ClientConfig.getInstance()._ServerURL; //URL to server rest api ie. http://openhab:8080/rest
     public string _ItemId { get; set; } // name of item in openhab
     public EnrichedGroupItemDTO _Item; // The item this controller handles
     private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe
@@ -29,9 +28,8 @@ public class ItemController : MonoBehaviour
     /// <param name="serverUrl">server url from widget</param>
     /// <param name="itemId">item name from widget</param>
     /// <param name="subType">subscription type from widget</param>
-    public void Initialize(string serverUrl, string itemId, EvtType subType)
+    public void Initialize(string itemId, EvtType subType)
     {
-        _ServerURL = serverUrl;
         _ItemId = itemId;
         _SubscribeTo = subType;
         GetItemFromServer();
@@ -66,16 +64,16 @@ public class ItemController : MonoBehaviour
     /// </summary>
     private void GetItemFromServer()
     {
-        RestClient.Get(UriBuilder.GetItemUri(_ServerURL, _ItemId)).Then(response => {
+        RestClient.Get(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId)).Then(response => {
             if (response.StatusCode >= 200 && response.StatusCode < 300)
             {
                 _Item = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
-                //print("Rest GET status for Item: " + _Item.name + " was OK");
+                print("Rest GET status for Item: " + _Item.name + " was OK");
                 updateItem?.Invoke(); // Send event to Widgets
-                if (_Item.type == "Group") // TODO move away to invoke method
-                {
-                    CreateLocationItemOnServer();
-                }
+                //if (_Item.type == "Group") // TODO move away to invoke method
+                //{
+                //    CreateLocationItemOnServer();
+                //}
             }
             else
             {
@@ -93,8 +91,8 @@ public class ItemController : MonoBehaviour
         //OnItemUpdated = false;
         Debug.Log("New state: " + newState);
         RestClient.DefaultRequestHeaders["content-type"] = "text/plain";
-        RestClient.Post(UriBuilder.GetItemUri(_ServerURL, _ItemId), newState).Then(response => {
-            //Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
+        RestClient.Post(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId), newState).Then(response => {
+            Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
             //OnItemUpdated = true;
             RestClient.ClearDefaultHeaders();
         });
@@ -113,7 +111,7 @@ public class ItemController : MonoBehaviour
         RequestHelper currentRequest;
         currentRequest = new RequestHelper
         {
-            Uri = UriBuilder.GetItemUri(_ServerURL, item.name),
+            Uri = UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, item.name),
             Body = item,
             Retries = 5,
             RetrySecondsDelay = 1,
@@ -132,6 +130,7 @@ public class ItemController : MonoBehaviour
             {
                 print("Success " + res.StatusCode + JsonUtility.ToJson(body, true));
             }
+            RestClient.ClearDefaultHeaders();
         });
 
     }

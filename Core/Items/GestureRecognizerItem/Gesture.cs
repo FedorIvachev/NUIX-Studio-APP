@@ -17,9 +17,7 @@ namespace Tsinghua.HCI.IoThingsLab
         
         [SerializeField] public bool isTrigger;
         [SerializeField] public SensorItem _trigger;
-        
-        [SerializeField] public ValueItem<float> _valueItem;
-        
+                
         public Gesture(Handedness handedness = Handedness.Right)
         {
             _handedness = handedness;

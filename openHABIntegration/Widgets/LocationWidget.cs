@@ -26,7 +26,7 @@ public class LocationWidget : ItemWidget
         {
             _itemController = gameObject.AddComponent<ItemController>();
         }
-        _itemController.Initialize(_Server, _Item, _SubscriptionType);
+        _itemController.Initialize(_Item, _SubscriptionType);
 
         _itemController.updateItem += OnUpdate;
 

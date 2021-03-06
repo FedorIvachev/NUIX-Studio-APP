@@ -39,7 +39,7 @@ public class PlayerWidget : MonoBehaviour
             _itemController = gameObject.AddComponent<ItemController>();
         }
 
-        _itemController.Initialize(_Server, _Item, _SubscriptionType);
+        _itemController.Initialize(_Item, _SubscriptionType);
 
         _itemController.updateItem += OnUpdate;
         _muteSwitch.gameObject.GetComponent<ItemController>().updateItem += OnMuteUpdate; //Subscribe to mutebutton events in this script

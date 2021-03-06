@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 class EventController : MonoBehaviour
 {
-    private string _serverUri = ClientConfig.getInstance()._ServerURL;
-
 
     [SerializeField]
     private bool _isConnected = false;
@@ -56,7 +54,7 @@ class EventController : MonoBehaviour
     /// </summary>
     public void StartListen()
     {
-        _evt = new EventSourceReader(UriBuilder.GetEventStreamUri(_serverUri)).Start();
+        _evt = new EventSourceReader(UriBuilder.GetEventStreamUri(ClientConfig.getInstance()._ServerURL)).Start();
         _evt.MessageReceived += (object sender, EventSourceMessageEventArgs e) => NewEvent(e);
         _evt.Disconnected += async (object sender, DisconnectEventArgs err) => {
             _isConnected = false;

@@ -2,7 +2,6 @@
 
 **V0.6-aplha released**
 
-...EDITING...
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/v0.6/Architecture.png)
 Since the architecture of version 0.5 does not allow user-friendly control, we decided to change it.
 Currenly, it can be represented by four layers:
@@ -19,7 +18,10 @@ The creation of items is performed on the openHAB server in a user-friendly way.
 
 [You can also download the whole Project (Unity App + openHAB server).](https://github.com/VRSimulator/IoTStudio-WholeProject). Text creators to gain access.
 
-...EDITING...
+
+
+
+
 
 Please see the **[Setup](#setup) procedure**, cloning the repo is not necessary because the repository is only bare code. All stuff is inside [Releases](https://github.com/VRSimulator/IoThingsLab/releases) ~~~~
 
@@ -39,11 +41,11 @@ Text Fedor 费杰 on WeChat to know how to adapt the platform for your projects 
 <img align="left" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_173803.jpg">
 <img align="left" width="200" src="https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/20201030_175023.jpg">
 
-By using IoThingsLab platform researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
+By using NUIX-Studio platform researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
 
 	
 ## Technologies
-IoThingsLab uses the features of [Microsoft's Mixed Reality Toolkit](https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. 
+NUIX-Studio uses the features of [Microsoft's Mixed Reality Toolkit](https://github.com/microsoft/MixedRealityToolkit-Unity#feature-areas), such as hand tracking and interaction techniques. 
 
 Connection to real-world IoT devices is performed by REST API calls to [openHAB](https://www.openhab.org/download/) server, which runs either locally on user machine, or remotely on [myopenhab server](http://myopenhab.org/).
 ## Required software and hardware:
@@ -53,8 +55,9 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 2. OpenHAB (running on local or remote server)
 3. IoT devices
 
-## IoT VR Platform package
-Available items (the list is frequently updated):
+## NUIX-Studio VR Platform package
+**Obsolete**
+Available virtual items (the list is frequently updated):
 
 | [![Lamp](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/Lamp.png)]() [Light Item](Documentation/Things/Lamp.md) | [![Door](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/Door.png)]() [Door](Documentation/Things/Door.md) | [![WeightScaler](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/WeightScaler.png)]() [Weight Scaler](Documentation/Things/WeightScaler.md) | 
 |:--- | :--- | :--- |
@@ -63,14 +66,14 @@ Available items (the list is frequently updated):
 | A camera with a motion sensor connected | A TV translating an image from the camera | A vacuum cleaner thing, which can be docked/undocked and move around the scene |
 
 ### Gesture recognizer
-
+**v0.5**
 GestureRecognizerItem.cs item class enables usage of user-defined gestures. In the example, the Lamp toggles when Thumbs Up gesture is shown.
 
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ThumbsUp.gif)
 
 
 ### Thing Designer
-
+**Obsolete**
 In the Client scene you can find a GameObject called ThingDesigner. Add item prefabs to ThingDesignerItemCollection. You can instantiate new items, move them around the scene and even edit them (in the future update). Save the newly created thing as a prefab using Unity Editor (in Play Mode - input simulation mode).  
 
 ![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ThingDesignerEditor.gif)
@@ -88,6 +91,8 @@ Other parts of IoT VR Platform are: Resources, Thirdparty and Scenes.
 	
 	
 ## Setup
+
+**For v0.5**
 
 ### VR (Client) part
 1. **[VIDEO TUTORIAL](https://www.bilibili.com/video/BV1vr4y1F7Jg)** Intall MRTK [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Installation.html) and configure it for Oculus [here](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)

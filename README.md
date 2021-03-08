@@ -51,10 +51,13 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 1. Install [openHAB](https://openhab.org/docs/installation/)
 
 **Optional**
+
 2. Go to Settings - Bindings and add Network Binding
 3. Go to Things and add a new thing through Network binding Scan
 4. Go to Model - Create Equipment from Things and select the recently created thing
 5. Edit the added equipment thing. Write "Network device" in the category
+
+### Unity installation
 
 1. [Download Unity Hub](https://unity3d.com/get-unity/download)
 2. Install Unity v.2020.2+ through the Installs Tab
@@ -66,7 +69,7 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 
 
 ### Additional: Run on Oculus
-8. Go to the Asset Store tab and search for Oculus Integration package
+9. Go to the Asset Store tab and search for Oculus Integration package
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)

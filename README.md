@@ -64,7 +64,7 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 3. In the Projects Tab, select New - 2020.2+. Create a new 3D project and open it
 4. Download MRTK packages: [Foundation](https://github.com/microsoft/MixedRealityToolkit-Unity/releases/download/v2.6.0/Microsoft.MixedReality.Toolkit.Unity.Foundation.2.6.0.unitypackage), [Examples](https://github.com/microsoft/MixedRealityToolkit-Unity/releases/download/v2.6.0/Microsoft.MixedReality.Toolkit.Unity.Examples.2.6.0.unitypackage), [Extensions](https://github.com/microsoft/MixedRealityToolkit-Unity/releases/download/v2.6.0/Microsoft.MixedReality.Toolkit.Unity.Extensions.2.6.0.unitypackage)
 6. In the Assets tab, select Import package - Custom package and then import each of the downloaded packages. Select Apply Default settings, Select Import TMP Essentials
-7. Download NUIX-Studio-3rdparty package and import it.
+7. Download [NUIX-Studio-3rdparty](https://github.com/VRSimulator/NUIX-Studio-Client/releases/download/v0.6-alpha1/3rdparty.unitypackage) package and import it.
 8. Download NUIX-Studio-Client package and import it.
 
 

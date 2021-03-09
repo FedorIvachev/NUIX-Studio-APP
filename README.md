@@ -37,7 +37,7 @@ NUIX-Studio uses the features of [Microsoft's Mixed Reality Toolkit](https://git
 Connection to real-world IoT devices is performed by REST API calls to [openHAB](https://www.openhab.org/download/) server.
 
 ## Required software and hardware:
-1. Unity Version 2019.4.19+
+1. Unity 2020
 2. openHAB v3.0+
 
 ### Additional hardware:
@@ -57,7 +57,7 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 ### Unity installation
 
 1. [Download Unity Hub](https://unity3d.com/get-unity/download)
-2. Install Unity v.2019.4.19+ through the Installs Tab
+2. Install Unity 2020 through the Installs Tab
 3. In the Projects Tab, select Add. Open the dowloaded project
 4. Download [3DLivingRoom](https://github.com/VRSimulator/NUIX-Studio-Client/releases/download/v0.6-alpha1/3DLivingRoom.unitypackage) package and import it.
 5. If the openHAB server is running on your PC, the server will be accessible by address <Your IP Address>:8080

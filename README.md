@@ -64,13 +64,13 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 7. Download [3DLivingRoom](https://github.com/VRSimulator/NUIX-Studio-Client/releases/download/v0.6-alpha1/3DLivingRoom.unitypackage) package and import it.
 8. Download [NUIX-Studio-Foundation](https://github.com/VRSimulator/NUIX-Studio-Client/releases/download/v0.6-alpha1/NUIX-Studio-Foundation-v0.6-beta1.unitypackage) package and import it.
 9. If the openHAB server is running on your PC, the server will be accessible by address <Your IP Address>:8080
-10. Run the Scene *Editing*
+10. Run the Scene from \Assets\NUIX-Studio-Client\openHABIntegration\Scenes
 
 
 ### Additional: Run on Oculus
-9. Follow the steps on [adding Oculus to MRTK](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
-10. In the builds settings, select platform - Android and Device - Oculus Quest 1 or 2. Press Build and Run
-11. Now Oculus is used to control the IoT devices stored on your openHAB server
+11. Follow the steps on [adding Oculus to MRTK](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
+12. In the builds settings, select platform - Android and Device - Oculus Quest 1 or 2. Press Build and Run
+13. Now Oculus is used to control the IoT devices stored on your openHAB server
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)

@@ -33,19 +33,6 @@ public class ItemController : MonoBehaviour
         _ItemId = itemId;
         _SubscribeTo = subType;
         GetItemFromServer();
-        if (_SubscribeTo != EvtType.None)
-        {
-            _EventController = GameObject.FindGameObjectWithTag("Eventbus").GetComponent<EventController>();
-            if (_EventController != null)
-            {
-                _EventController.Subscribe(gameObject);
-            }
-            else
-            {
-                Debug.Log("Failed to find Eventbus. Are you sure you have an EventController attached to a GameObject with \"Eventbus\" tag.");
-            }
-
-        }
     }
 
     /// <summary>
@@ -64,22 +51,32 @@ public class ItemController : MonoBehaviour
     /// </summary>
     private void GetItemFromServer()
     {
-        RestClient.Get(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId)).Then(response => {
-            if (response.StatusCode >= 200 && response.StatusCode < 300)
+        if (SemanticModel.getInstance()._items.ContainsKey(_ItemId))
+        {
+            _Item = SemanticModel.getInstance()._items[_ItemId]._itemModel;
+        }
+        else
+        {
+            print("No item " + _ItemId + "in semantic model");
+
+            RestClient.Get(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId)).Then(response =>
             {
-                _Item = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
-                print("Rest GET status for Item: " + _Item.name + " was OK");
-                updateItem?.Invoke(); // Send event to Widgets
-                //if (_Item.type == "Group") // TODO move away to invoke method
-                //{
-                //    CreateLocationItemOnServer();
-                //}
-            }
-            else
-            {
-                Debug.Log("Rest GET status for Item: " + _ItemId + " was not in OK span. (" + response.StatusCode + ")\n" + response.Error);
-            }
-        });
+                if (response.StatusCode >= 200 && response.StatusCode < 300)
+                {
+                    _Item = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
+                    print("Rest GET status for Item: " + _Item.name + " was OK");
+                    updateItem?.Invoke(); // Send event to Widgets
+                                          //if (_Item.type == "Group") // TODO move away to invoke method
+                                          //{
+                                          //    CreateLocationItemOnServer();
+                                          //}
+                }
+                else
+                {
+                    Debug.Log("Rest GET status for Item: " + _ItemId + " was not in OK span. (" + response.StatusCode + ")\n" + response.Error);
+                }
+            });
+        }
     }
 
     /// <summary>

@@ -60,9 +60,12 @@ class EventController : MonoBehaviour
 
         if (SemanticModel.getInstance()._items.ContainsKey(ev.itemId))
         {
-            if (SemanticModel.getInstance()._items[ev.itemId]._itemWidget.GetComponent<ItemController>().GetItemSubType() == ev._eventType)
+            foreach (GameObject itemWidget in SemanticModel.getInstance()._items[ev.itemId]._itemWidgets)
             {
-                SemanticModel.getInstance()._items[ev.itemId]._itemWidget.GetComponent<ItemController>().ReceivedEvent(ev);
+                if (itemWidget.GetComponent<ItemController>().GetItemSubType() == ev._eventType)
+                {
+                    itemWidget.GetComponent<ItemController>().ReceivedEvent(ev);
+                }
             }
         }
 

@@ -114,7 +114,7 @@ class SemanticModelController : MonoBehaviour
                 createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.Value._itemModel.category], Vector3.zero, Quaternion.identity) as GameObject;
                 createdItem.GetComponent<ItemWidget>()._Item = itemname;
                 createdItem.name = itemname + " Widget";
-                item.Value._itemWidget = createdItem;
+                item.Value.AddWidget(createdItem);
                 continue;
             }
             else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
@@ -127,7 +127,7 @@ class SemanticModelController : MonoBehaviour
                     createdCategoryItem.GetComponent<ItemWidget>()._Item = categoryitemname;
                     _shift.Set(_shift.x + delta, _shift.y, _shift.z);
                     createdCategoryItem.name = categoryitemname + " Widget";
-                    item.Value._itemWidget = createdCategoryItem;
+                    item.Value.AddWidget(createdCategoryItem);
                 }
                 else
                 {
@@ -137,10 +137,8 @@ class SemanticModelController : MonoBehaviour
                     createdItem.GetComponent<ItemWidget>()._Item = itemname;
                     _shift.Set(_shift.x + delta, _shift.y, _shift.z);
                     createdItem.name = itemname + " Widget";
-                    item.Value._itemWidget = createdItem;
+                    item.Value.AddWidget(createdItem);
                 }
-
-                
             }
         }
     }
@@ -151,7 +149,7 @@ class SemanticModelController : MonoBehaviour
 
         foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
         {
-            if (item.Value._itemWidget != null)
+            if (item.Value._itemWidgets != null)
             {
                 // The item should be a child of its groupname item. If we find at least one such groupname, set the transform parent to its widget then
                 foreach (string groupName in item.Value._itemModel.groupNames)
@@ -159,7 +157,10 @@ class SemanticModelController : MonoBehaviour
                     GameObject parent;
                     if ((parent = GameObject.Find(groupName + " Widget")) != null)
                     {
-                        item.Value._itemWidget.gameObject.transform.SetParent(parent.transform);
+                        foreach (GameObject itemWidget in item.Value._itemWidgets)
+                        {
+                            itemWidget.transform.SetParent(parent.transform);
+                        }
                     }
                 }
             }

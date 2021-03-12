@@ -10,6 +10,8 @@ class EventController : MonoBehaviour
     [SerializeField]
     private bool _isConnected = false;
     public List<GameObject> _subscribers;
+    public Dictionary<string, Item> _subscribersFixed; // = new Dictionary<string, Item>();
+
 
     private EventSourceReader _evt;
 
@@ -20,33 +22,6 @@ class EventController : MonoBehaviour
     void Start()
     {
         StartListen();
-    }
-
-    /// <summary>
-    /// Subscribe to topic
-    /// </summary>
-    /// <param name="item">the item to subscribe</param>
-    public void Subscribe(GameObject item)
-    {
-        Debug.Log("Subscribe to topic " + item.GetComponent<ItemController>().GetItemID() + " for " + item.GetComponent<ItemController>().GetItemSubType().ToString() + " events.");
-        if (_subscribers != null)
-        {
-            _subscribers.Add(item);
-        }
-        else
-        {
-            _subscribers = new List<GameObject>();
-            _subscribers.Add(item);
-        }
-    }
-
-    /// <summary>
-    /// Unsubscribe to topic
-    /// </summary>
-    /// <param name="item">the item to unsubscribe</param>
-    public void Unsubscribe(GameObject item)
-    {
-        _subscribers.Remove(item);
     }
 
     /// <summary>
@@ -82,16 +57,24 @@ class EventController : MonoBehaviour
         ev.Parse();
         Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
 
-        // New revision, send event to specific item, not a fun of iterating through lists but...
-        foreach (GameObject item in _subscribers)
+
+        if (SemanticModel.getInstance()._items.ContainsKey(ev.itemId))
         {
-            ItemController ic = item.GetComponent<ItemController>();
-            if (ic.GetItemID() == ev.itemId && ic.GetItemSubType() == ev._eventType) ic.ReceivedEvent(ev);
+            foreach (GameObject itemWidget in SemanticModel.getInstance()._items[ev.itemId]._itemWidgets)
+            {
+                if (itemWidget.GetComponent<ItemController>().GetItemSubType() == ev._eventType)
+                {
+                    itemWidget.GetComponent<ItemController>().ReceivedEvent(ev);
+                }
+            }
         }
 
         // This sends the event to all items.
         // It would be better if event is sent to specific item.
         //newEvent?.Invoke(ev);
+
+
+
 
     }
 
@@ -102,11 +85,6 @@ class EventController : MonoBehaviour
     private void OnDestroy()
     {
         //_evt.Dispose();
-    }
-
-    public void UnsubscribeFromEverything()
-    {
-        _subscribers.Clear();
     }
 
 

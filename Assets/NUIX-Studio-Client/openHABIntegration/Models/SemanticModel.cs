@@ -11,6 +11,4 @@ public class SemanticModel
     }
 
     public Dictionary<string, Item> _items = new Dictionary<string, Item>();
-
-
 }

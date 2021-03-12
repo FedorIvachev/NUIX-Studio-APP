@@ -44,6 +44,7 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 ### openHAB installation
 
 1. Install [openHAB](https://openhab.org/docs/installation/)
+### openHAB example device adding
 2. Go to Settings - Bindings and add Network Binding
 3. Go to Things and add a new thing through Network binding Scan
 4. Go to Model - Create Equipment from Things and select the recently created thing

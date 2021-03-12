@@ -66,7 +66,6 @@ class SemanticModelController : MonoBehaviour
                 {
                     Item item = new Item();
                     item._itemModel = equipmentItemModel;
-                    //item._itemWidget = createdItem;
                     SemanticModel.getInstance()._items[equipmentItemModel.name] = item;
                 }
                 CreateWidgetsForItems();
@@ -107,6 +106,7 @@ class SemanticModelController : MonoBehaviour
 
         foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
         {
+            /*
             if (item.Value._itemModel.category == "Virtual Location")
             {
                 string itemname = item.Key;
@@ -117,7 +117,8 @@ class SemanticModelController : MonoBehaviour
                 item.Value.AddWidget(createdItem);
                 continue;
             }
-            else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
+            */
+            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
             {
                 if (item.Value._itemModel.type == "Group" && ClientConfig.getInstance()._categoryPrefabs.ContainsKey(item.Value._itemModel.category))
                 {
@@ -138,6 +139,12 @@ class SemanticModelController : MonoBehaviour
                     _shift.Set(_shift.x + delta, _shift.y, _shift.z);
                     createdItem.name = itemname + " Widget";
                     item.Value.AddWidget(createdItem);
+
+
+                    foreach (string itemTag in item.Value._itemModel.tags)
+                    {
+                        print(itemTag);
+                    }
                 }
             }
         }

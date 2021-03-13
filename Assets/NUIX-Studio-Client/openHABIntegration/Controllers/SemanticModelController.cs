@@ -17,8 +17,10 @@ class SemanticModelController : MonoBehaviour
     public GameObject _lampPrefab;
     public GameObject _mobilePhonePrefab;
 
+    [Header("Tag-based interactables")]
+    public GameObject _dimmerGestureControlPrefab;
+
     [Header("Server setup")]
-    private string _ServerURL = ClientConfig.getInstance()._ServerURL;
     public string _Username = ClientConfig.getInstance()._Username;
     public string _Password = ClientConfig.getInstance()._Password;
 
@@ -96,6 +98,10 @@ class SemanticModelController : MonoBehaviour
         // Category prefabs
         if (_mobilePhonePrefab != null) ClientConfig.getInstance()._categoryPrefabs["MobilePhone"] = _mobilePhonePrefab;
         if (_lampPrefab != null) ClientConfig.getInstance()._categoryPrefabs["Lamp"] = _lampPrefab;
+
+
+        // Tag-Based interactables
+        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["GestureControlledDimmer"] = _dimmerGestureControlPrefab;
     }
 
 
@@ -106,7 +112,7 @@ class SemanticModelController : MonoBehaviour
 
         foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
         {
-            /*
+            
             if (item.Value._itemModel.category == "Virtual Location")
             {
                 string itemname = item.Key;
@@ -117,8 +123,8 @@ class SemanticModelController : MonoBehaviour
                 item.Value.AddWidget(createdItem);
                 continue;
             }
-            */
-            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
+            
+            else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.Value._itemModel.type))
             {
                 if (item.Value._itemModel.type == "Group" && ClientConfig.getInstance()._categoryPrefabs.ContainsKey(item.Value._itemModel.category))
                 {
@@ -141,10 +147,21 @@ class SemanticModelController : MonoBehaviour
                     item.Value.AddWidget(createdItem);
 
 
-                    foreach (string itemTag in item.Value._itemModel.tags)
-                    {
-                        print(itemTag);
-                    }
+                }
+            }
+
+
+            foreach (string itemTag in item.Value._itemModel.tags)
+            {
+                if (itemTag == "GestureControlled")
+                {
+                    string itemname = item.Key;
+                    GameObject createdItem;
+                    createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["GestureControlledDimmer"], this.transform.position + _shift, Quaternion.identity) as GameObject;
+                    createdItem.GetComponent<ItemWidget>()._Item = itemname;
+                    _shift.Set(_shift.x + delta, _shift.y, _shift.z);
+                    createdItem.name = itemname + "GestureControlled Widget";
+                    item.Value.AddWidget(createdItem);
                 }
             }
         }

@@ -5,9 +5,12 @@ using Tsinghua.HCI.IoThingsLab;
 
 public class GestureDimmerWidget : ItemWidget 
 {
-
-    public new EvtType _SubscriptionType = EvtType.None;
     public GestureThumbsUpRotated _Gesture;
+
+    GestureDimmerWidget()
+    {
+        _SubscriptionType = EvtType.None;
+    }
 
     /// <summary>
     /// Initialize ItemController

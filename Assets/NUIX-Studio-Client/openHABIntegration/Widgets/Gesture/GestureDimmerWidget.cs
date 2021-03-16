@@ -1,5 +1,4 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
-using UnityEngine;
 
 using Tsinghua.HCI.IoThingsLab;
 
@@ -31,7 +30,7 @@ public class GestureDimmerWidget : ItemWidget
 
 
         // OnUpdate is not needed for Gestures only OnSetItem
-        //_itemController.updateItem += OnUpdate;
+        _itemController.updateItem += OnUpdate;
         InitWidget();
     }
 

@@ -21,7 +21,7 @@ class EventController : MonoBehaviour
 
     void Start()
     {
-        StartListen();
+        //StartListen();
     }
 
     /// <summary>

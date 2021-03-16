@@ -60,10 +60,9 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 6. Run the Scene from \Assets\NUIX-Studio-Client\openHABIntegration\Scenes
 
 
-### Additional: Run on Oculus
-7. Follow the steps on [adding Oculus to MRTK](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/CrossPlatform/OculusQuestMRTK.html)
-8. In the builds settings, select platform - Android and Device - Oculus Quest 1 or 2. Press Build and Run
-9. Now Oculus is used to control the IoT devices stored on your openHAB server
+### Run on Oculus
+7. In the builds settings, select platform - Android and Device - Oculus Quest 1 or 2. Press Build and Run
+8. Now Oculus is used to control the IoT devices stored on your openHAB server
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)

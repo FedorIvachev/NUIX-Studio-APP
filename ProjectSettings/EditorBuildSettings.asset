@@ -4,5 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
-  m_configObjects: {}
+  m_Scenes:
+  - enabled: 1
+    path: Assets/NUIX-Studio-Client/openHABIntegration/Scenes/openHABIntegration.unity
+    guid: 09fbaf19d9a40454fb90dc538e780456
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: c7b03e25f09aa424bbac80b718a4302e, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 90ceec92d4fa39543a589faceb23aab3, type: 2}

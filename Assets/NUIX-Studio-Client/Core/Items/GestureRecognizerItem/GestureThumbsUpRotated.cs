@@ -43,7 +43,7 @@ namespace Tsinghua.HCI.IoThingsLab
             if (TryGetGestureValue(out float value))
             {
                 normalizedValue = (uint) value * 10 / 9;
-                return ((value > 2f) && (value < 90f)) ? true : false;
+                return ((value > 2f) && (value < 100f)) ? true : false;
             }
             normalizedValue = 0;
             return false;

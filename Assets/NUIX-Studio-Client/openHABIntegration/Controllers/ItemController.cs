@@ -70,6 +70,8 @@ public class ItemController : MonoBehaviour
                                           //{
                                           //    CreateLocationItemOnServer();
                                           //}
+                    //SemanticModel.getInstance().AddWidget(_ItemId, _Item);
+                    // ADD the widget to semantic model
                 }
                 else
                 {
@@ -176,17 +178,7 @@ public class ItemController : MonoBehaviour
     }
 
 
-    //Move it away from this class; make loading of prefabs in semanticmodelcontroller using this method by default
-    private UnityEngine.Object LoadPrefabFromFile(string filename)
-    {
-        Debug.Log("Trying to load LevelPrefab from file (" + filename + ")...");
-        var loadedObject = Resources.Load("Prefabs/" + filename);
-        if (loadedObject == null)
-        {
-            throw new FileNotFoundException("...no file found - please check the configuration");
-        }
-        return loadedObject;
-    }
+
 
     /// <summary>
     /// Return Item state (value) as string
@@ -225,6 +217,7 @@ public class ItemController : MonoBehaviour
     public float GetItemStateAsDimmer()
     {
         float value = 0;
+        if (_Item.state == "NULL") return -1f;
         value = float.Parse(_Item.state);
         //Debug.Log("Value parsed to: " + value);
         if (value >= 0f && value <= 100f)
@@ -330,6 +323,26 @@ public class ItemController : MonoBehaviour
         print(Hue.ToString() + ", " + Saturation.ToString() + ", " + Brightness.ToString());
         SetItemOnServer((Hue * 360).ToString() + "," + (Saturation * 100).ToString() + "," + (Brightness*100).ToString());
     }
+
+    public Vector3 StringToVec(string s)
+    {
+        print("Converting string to vector: " + s);
+        if (s == "NULL") return SemanticModel.getInstance().SpawnPosition;
+        string[] temp = s.Substring(1, s.Length - 2).Split(',');
+        if (temp.Length == 3) return new Vector3(float.Parse(temp[0]), float.Parse(temp[1]), float.Parse(temp[2]));
+        else return SemanticModel.getInstance().SpawnPosition;
+    }
+    public Vector3 GetItemStateAsVector()
+    {
+        if (_Item.state != null) return StringToVec(_Item.state);
+        else return Vector3.zero;
+    }
+
+    public void SetItemStateAsVector(Vector3 value)
+    {
+        SetItemOnServer(value.ToString());
+    }
+
         
 
 

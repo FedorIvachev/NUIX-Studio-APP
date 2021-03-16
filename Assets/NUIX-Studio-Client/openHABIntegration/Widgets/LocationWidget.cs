@@ -2,16 +2,14 @@
 using System.Globalization;
 using TMPro;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 
 /// <summary>
 /// Is used to sync the transform position of the item widget to the server
 /// </summary>
 public class LocationWidget : ItemWidget
 {
-    [Header("Widget Setup")]
-    public float location;
-
+    private Vector3 sentPosition = Vector3.zero;
     /// <summary>
     /// Initialize ItemController
     /// </summary>
@@ -30,11 +28,41 @@ public class LocationWidget : ItemWidget
 
         _itemController.updateItem += OnUpdate;
 
-        VirtualLocationController.getInstance().locationSync += OnSetItem;
+        //VirtualLocationController.getInstance().locationSync += OnSetItem;
 
         //LocationControl();
+
+        InitWidget();
     }
 
+    /// <summary>
+    /// For public field initialization etc. This is to be able to use
+    /// a generic start function for all widgets. This function is called for
+    /// at end of Start()
+    /// </summary>
+    private void InitWidget()
+    {
+        //transform.position = _itemController.GetItemStateAsVector();
+        _itemController.updateItem?.Invoke();
+        InvokeRepeating(nameof(OnSetItem), 1.0f, 0.064f);
+        if (SemanticModel.getInstance()._items.ContainsKey(_Item.Substring(0, _Item.Length - "VirtualLocation".Length)))
+        {
+            List<string> groupName = new List<string>();
+            groupName.Add(_Item);
+            SemanticModel.getInstance()._items[_Item.Substring(0, _Item.Length - "VirtualLocation".Length)]._itemModel.groupNames.Add(_Item);
+            int tempcount = 1;
+            if (GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " Widget") != null)
+            {
+                GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " Widget").transform.position = transform.position + Vector3.up / 5f * tempcount;
+                tempcount += 1;
+            }
+            // TODO : get rid of hardcode, rewrite to support every tag
+            if (GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " LightDimmerWidget") != null)
+            {
+                GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " LightDimmerWidget").transform.position = transform.position + Vector3.up / 5f * tempcount;
+            }
+        }
+    }
 
     /// <summary>
     /// When an item updates from server. This function is
@@ -45,8 +73,8 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        location = float.Parse(_itemController.GetItemStateAsString());
-        SynchronizeParentLocation();
+        Vector3 receivedPosition = _itemController.GetItemStateAsVector();
+        if (receivedPosition != sentPosition) transform.position = receivedPosition;
     }
 
     /// <summary>
@@ -59,11 +87,14 @@ public class LocationWidget : ItemWidget
     {
         if (_itemController._Item != null)
         {
-            int length = _itemController._ItemId.Length;
-            if (_itemController._ItemId[length - 1] == 'X') location = transform.parent.position.x;
-            if (_itemController._ItemId[length - 1] == 'Y') location = transform.parent.position.y;
-            if (_itemController._ItemId[length - 1] == 'Z') location = transform.parent.position.z;
-            _itemController.SetItemStateAsString(location.ToString());
+            if (_itemController._Item.state != transform.position.ToString())
+            {
+                if (sentPosition != transform.position)
+                {
+                    sentPosition = transform.position;
+                    _itemController.SetItemStateAsVector(sentPosition);
+                }           
+            }
         }
     }
 
@@ -73,25 +104,5 @@ public class LocationWidget : ItemWidget
     void OnDisable()
     {
         _itemController.updateItem -= OnUpdate;
-    }
-
-    /// <summary>
-    /// Is used only for location items
-    /// TODO: Move it to a different class
-    /// </summary>
-    public void LocationControl()
-    {
-        //InvokeRepeating(nameof(SetNameEqualToNumber), 0.0f, 10.0f);
-    }
-
-    private void SynchronizeParentLocation()
-    {
-        if (_itemController._Item != null)
-        {
-            int length = _itemController._ItemId.Length;
-            if (_itemController._ItemId[length - 1] == 'X') transform.parent.position = new Vector3(location, transform.parent.position.y, transform.parent.position.z);
-            if (_itemController._ItemId[length - 1] == 'Y') transform.parent.position = new Vector3(transform.parent.position.x, location, transform.parent.position.z);
-            if (_itemController._ItemId[length - 1] == 'Z') transform.parent.position = new Vector3(transform.parent.position.x, transform.parent.position.y, location);
-        }
     }
 }

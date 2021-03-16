@@ -3,17 +3,12 @@ using UnityEngine;
 
 public class ClientConfig
 {
-    [SerializeField]
-    public string _ServerURL = "http://192.168.3.3:8080"; // "https://ivaccchev%40gmail.com:TF85ygARC5K4@home.myopenhab.org"; // "http://localhost:8080";
+    public string _ServerURL; // = "http://openhab:8080";//"http://192.168.3.3:8080"; // "https://ivaccchev%40gmail.com:TF85ygARC5K4@home.myopenhab.org"; // "http://localhost:8080";
     public string _Username = "admin";
     public string _Password = "admin";
 
     // Links to the Item Widgets prefabs
     public Dictionary<string, GameObject> _widgetPrefabs = new Dictionary<string, GameObject>();
-
-
-    // Links to the Category classes mprefabs
-    public Dictionary<string, GameObject> _categoryPrefabs = new Dictionary<string, GameObject>();
 
     private static ClientConfig _ClientConfigInstance;
     public static ClientConfig getInstance()

@@ -10,6 +10,7 @@ public class DimmerWidget : ItemWidget
     public PinchSlider _PinchSlider;
     //public SliderEventData _PinchSliderData;
 
+    private int sentValue = -10;
     /// <summary>
     /// Initialize ItemController
     /// </summary>
@@ -46,6 +47,7 @@ public class DimmerWidget : ItemWidget
 
 
         if (_PinchSlider == null) _PinchSlider = GetComponent<PinchSlider>();
+        _itemController.updateItem?.Invoke();
 
 
         //if (_PinchSliderData == null) _PinchSliderData = GetComponent<SliderEventData>();
@@ -60,25 +62,20 @@ public class DimmerWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        print("Updating dimmer value");
         float value = _itemController.GetItemStateAsDimmer();
-
-        if (Mathf.Abs(value / 100f - _PinchSlider.SliderValue) <= 0.01f) return;
-        //Debug.Log("OnUpdate recieved state: " + value);
-        // Failed to parse the dimmer
-        if (value == -1 || value > 100)
+        if (!Mathf.Approximately(value, sentValue))
         {
-            //_Slider.value = 0f;
-            //_Slider.interactable = false;
-
-            _PinchSlider.SliderValue = 0f;
-        }
-        else
-        {
-            //_Slider.interactable = true;
-            //_Slider.value = value;
-
-            _PinchSlider.SliderValue = value / 100f;
+            if (Mathf.Abs(value / 100f - _PinchSlider.SliderValue) <= 0.01f) return;
+            //Debug.Log("OnUpdate recieved state: " + value);
+            // Failed to parse the dimmer
+            if (value == -1 || value > 100)
+            {
+                _PinchSlider.SliderValue = 0f;
+            }
+            else
+            {
+                _PinchSlider.SliderValue = value / 100f;
+            }
         }
 
     }
@@ -91,12 +88,8 @@ public class DimmerWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
-        _itemController.SetItemStateAsDimmer((int)(_PinchSlider.SliderValue * 100f));
-        if (_Item.Contains("Brightness"))
-            if (GameObject.Find("BrightnessControlledItem") != null) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightBrightness(_PinchSlider.SliderValue * 100f);
-        if (_Item.Contains("ColorTemperature"))
-            if (GameObject.Find("BrightnessControlledItem") != null) GameObject.Find("BrightnessControlledItem").GetComponent<VirtualLightController>().SetLightColorTemperature(_PinchSlider.SliderValue * 100f);
-
+        sentValue = (int)(_PinchSlider.SliderValue * 100f);
+        _itemController.SetItemStateAsDimmer(sentValue);
     }
 
     /// <summary>

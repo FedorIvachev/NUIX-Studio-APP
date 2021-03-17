@@ -67,11 +67,17 @@ class SemanticModelController : MonoBehaviour
 
                 foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
                 {
-                    Item item = new Item();
-                    item._itemModel = equipmentItemModel;
-                    SemanticModel.getInstance()._items[equipmentItemModel.name] = item;
+                    List<GameObject> Widgets = new List<GameObject>();
+                    if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(equipmentItemModel.type))
+                    {
+                        GameObject itemWidget;
+                        itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[equipmentItemModel.type], this.transform.position, Quaternion.identity) as GameObject;
+                        itemWidget.GetComponent<ItemWidget>().item = equipmentItemModel.name;
+                        itemWidget.name = equipmentItemModel.name + " Widget";
+                        Widgets.Add(itemWidget);
+                    }
+                    SemanticModel.getInstance().AddItem(equipmentItemModel, Widgets);
                 }
-                CreateWidgetsForItems();
             }
             else
             {
@@ -109,32 +115,32 @@ class SemanticModelController : MonoBehaviour
     public void InstantiateWidget(Item item)
     {
 
-        string itemname = item._itemModel.name;
+        string itemname = item.itemModel.name;
         print("Instantiating widgets for " + itemname);
-        if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item._itemModel.category))
+        if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.itemModel.category))
         {
             GameObject createdItem;
-            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item._itemModel.category], this.transform.position, Quaternion.identity) as GameObject;
-            createdItem.GetComponent<ItemWidget>()._Item = itemname;
+            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.itemModel.category], this.transform.position, Quaternion.identity) as GameObject;
+            createdItem.GetComponent<ItemWidget>().item = itemname;
             createdItem.name = itemname + " Widget";
             item.AddWidget(createdItem);
         }
-        else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item._itemModel.type))
+        else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.itemModel.type))
         {
             GameObject createdItem;
-            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item._itemModel.type], this.transform.position, Quaternion.identity) as GameObject;
-            createdItem.GetComponent<ItemWidget>()._Item = itemname;
+            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.itemModel.type], this.transform.position, Quaternion.identity) as GameObject;
+            createdItem.GetComponent<ItemWidget>().item = itemname;
             createdItem.name = itemname + " Widget";
             item.AddWidget(createdItem);
         }
         
-        foreach (string itemTag in item._itemModel.tags)
+        foreach (string itemTag in item.itemModel.tags)
         {
             if (itemTag == "GestureControlled")
             {
                 GameObject createdItem;
                 createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["GestureControlledDimmer"], Vector3.zero, Quaternion.identity) as GameObject;
-                createdItem.GetComponent<ItemWidget>()._Item = itemname;
+                createdItem.GetComponent<ItemWidget>().item = itemname;
                 createdItem.name = itemname + " GestureControlledWidget";
                 item.AddWidget(createdItem);
             }
@@ -143,7 +149,7 @@ class SemanticModelController : MonoBehaviour
                 // Need to assign the light component
                 GameObject createdItem;
                 createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["LightDimmer"], this.transform.position, Quaternion.identity) as GameObject;
-                createdItem.GetComponent<ItemWidget>()._Item = itemname;
+                createdItem.GetComponent<ItemWidget>().item = itemname;
                 createdItem.name = itemname + " LightDimmerWidget";
                 item.AddWidget(createdItem);
             }
@@ -215,7 +221,7 @@ class SemanticModelController : MonoBehaviour
 
     private void CreateWidgetsForItems()
     {
-        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
+        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance().items)
         {
             InstantiateWidget(item.Value);
         }
@@ -225,12 +231,12 @@ class SemanticModelController : MonoBehaviour
     {
         // setting the parent based on groupnames
 
-        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance()._items)
+        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance().items)
         {
             if (item.Value._itemWidgets != null)
             {
                 // The item should be a child of its groupname item. If we find at least one such groupname, set the transform parent to its widget then
-                foreach (string groupName in item.Value._itemModel.groupNames)
+                foreach (string groupName in item.Value.itemModel.groupNames)
                 {
                     GameObject parent;
                     if ((parent = GameObject.Find(groupName + " Widget")) != null)
@@ -248,8 +254,8 @@ class SemanticModelController : MonoBehaviour
 
     public void SetServerIPAdress()
     {
-        //string adr = GameObject.Find("KeyboardOutputIPAdress").GetComponent<TMPro.TextMeshPro>().text;
-        string adr = GameObject.Find("KeyboardOutputIPAdress").GetComponent<TMP_InputField>().text;
+        string adr = GameObject.Find("NativeKeyboardOutputIPAdress").GetComponent<TMPro.TextMeshPro>().text;
+        //string adr = GameObject.Find("KeyboardOutputIPAdress").GetComponent<TMP_InputField>().text;
         print(adr);
         if (System.Net.IPAddress.TryParse(adr, out var _))
         {

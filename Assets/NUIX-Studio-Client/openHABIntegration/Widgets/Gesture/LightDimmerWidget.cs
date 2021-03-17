@@ -9,19 +9,10 @@ public class LightDimmerWidget : ItemWidget
     /// </summary>
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
 
-        _itemController.Initialize(_Item, _SubscriptionType);
+        ConnectedItemController.Initialize(item, _SubscriptionType);
 
-        _itemController.updateItem += OnUpdate;
+        ConnectedItemController.updateItem += OnUpdate;
         InitWidget();
     }
 
@@ -33,7 +24,7 @@ public class LightDimmerWidget : ItemWidget
     private void InitWidget()
     {
         if (_light == null) _light = GetComponent<Light>();
-        _itemController.updateItem?.Invoke();
+        ConnectedItemController.updateItem?.Invoke();
     }
 
     /// <summary>
@@ -45,7 +36,7 @@ public class LightDimmerWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        float value = _itemController.GetItemStateAsDimmer();
+        float value = ConnectedItemController.GetItemStateAsDimmer();
 
         // Failed to parse the dimmer
         if (value == -1 || value > 100) _light.intensity = 0;

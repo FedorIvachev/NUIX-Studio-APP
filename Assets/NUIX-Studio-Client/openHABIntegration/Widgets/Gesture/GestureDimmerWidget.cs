@@ -16,21 +16,8 @@ public class GestureDimmerWidget : ItemWidget
     /// </summary>
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
-
-        _itemController.Initialize(_Item, _SubscriptionType);
-
-
         // OnUpdate is not needed for Gestures only OnSetItem
-        _itemController.updateItem += OnUpdate;
+        ConnectedItemController.updateItem += OnUpdate;
         InitWidget();
     }
 
@@ -67,7 +54,7 @@ public class GestureDimmerWidget : ItemWidget
     {
         if (_Gesture.TryGetNormalizedValue(out uint value))
         {
-            _itemController.SetItemStateAsDimmer((int) value);
+            ConnectedItemController.SetItemStateAsDimmer((int) value);
         }
     }
 
@@ -76,6 +63,6 @@ public class GestureDimmerWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        _itemController.updateItem -= OnUpdate;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 }

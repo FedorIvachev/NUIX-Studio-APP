@@ -58,15 +58,18 @@ class EventController : MonoBehaviour
         Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
 
 
-        if (SemanticModel.getInstance()._items.ContainsKey(ev.itemId))
+        if (SemanticModel.getInstance().items.ContainsKey(ev.itemId))
         {
-            foreach (GameObject itemWidget in SemanticModel.getInstance()._items[ev.itemId]._itemWidgets)
+            SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
+            /*
+            foreach (GameObject itemWidget in SemanticModel.getInstance().items[ev.itemId]._itemWidgets)
             {
                 if (itemWidget.GetComponent<ItemController>().GetItemSubType() == ev._eventType)
                 {
                     itemWidget.GetComponent<ItemController>().ReceivedEvent(ev);
                 }
             }
+            */
         }
 
         // This sends the event to all items.

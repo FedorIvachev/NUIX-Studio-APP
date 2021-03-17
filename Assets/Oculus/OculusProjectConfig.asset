@@ -18,5 +18,5 @@ MonoBehaviour:
   enableNSCConfig: 1
   securityXmlPath: 
   skipUnneededShaders: 0
-  focusAware: 0
-  requiresSystemKeyboard: 0
+  focusAware: 1
+  requiresSystemKeyboard: 1

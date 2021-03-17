@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class Item
 {
-    public EnrichedGroupItemDTO _itemModel { get; set; }
+    public EnrichedGroupItemDTO itemModel { get; set; }
 
     public List<GameObject> _itemWidgets;
+
+    public ItemController itemController;
 
     public void AddWidget(GameObject itemWidget)
     {

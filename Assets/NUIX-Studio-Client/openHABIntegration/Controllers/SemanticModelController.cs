@@ -21,7 +21,7 @@ class SemanticModelController : MonoBehaviour
 
     [Header("Tag-based interactables")]
     public GameObject _dimmerGestureControlPrefab;
-    public GameObject _virtualLightDimmerWidgetPrefab;
+    public GameObject _dimmerBrightnessWidgetPrefab;
     public GameObject _virtualLocationControlPrefab;
 
     public bool InitOnStartup = false;
@@ -68,14 +68,7 @@ class SemanticModelController : MonoBehaviour
                 foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
                 {
                     List<GameObject> Widgets = new List<GameObject>();
-                    if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(equipmentItemModel.type))
-                    {
-                        GameObject itemWidget;
-                        itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[equipmentItemModel.type], this.transform.position, Quaternion.identity) as GameObject;
-                        itemWidget.GetComponent<ItemWidget>().item = equipmentItemModel.name;
-                        itemWidget.name = equipmentItemModel.name + " Widget";
-                        Widgets.Add(itemWidget);
-                    }
+                    Widgets.AddRange(CreateWidgetsByPrefab(equipmentItemModel));
                     SemanticModel.getInstance().AddItem(equipmentItemModel, Widgets);
                 }
             }
@@ -105,11 +98,37 @@ class SemanticModelController : MonoBehaviour
 
         // Tag-Based interactables
         if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["GestureControlledDimmer"] = _dimmerGestureControlPrefab;
-        if (_virtualLightDimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["LightDimmer"] = _virtualLightDimmerWidgetPrefab;
+        if (_dimmerBrightnessWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer#NUIXBrightness"] = _dimmerBrightnessWidgetPrefab;
         if (_virtualLocationControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["LocationControl"] = _virtualLocationControlPrefab;
     }
 
 
+    public List<GameObject> CreateWidgetsByPrefab(EnrichedGroupItemDTO item)
+    {
+        List<GameObject> itemWidgets = new List<GameObject>();
+
+        if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
+        {
+            GameObject itemWidget;
+            itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type], this.transform.position, Quaternion.identity) as GameObject;
+            itemWidget.GetComponent<ItemWidget>().item = item.name;
+            itemWidget.name = item.name + " Widget";
+            itemWidgets.Add(itemWidget);
+        }
+
+        foreach (string itemTag in item.tags)
+        {
+            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type + "#" + itemTag))
+            {
+                GameObject itemWidget;
+                itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type + "#" + itemTag], this.transform.position, Quaternion.identity) as GameObject;
+                itemWidget.GetComponent<ItemWidget>().item = item.name;
+                itemWidget.name = item.name + "#" + itemTag + " Widget";
+                itemWidgets.Add(itemWidget);
+            }
+        }
+        return itemWidgets;
+    }
 
 
     public void InstantiateWidget(Item item)

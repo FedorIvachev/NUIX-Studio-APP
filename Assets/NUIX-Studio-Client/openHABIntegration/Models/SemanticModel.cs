@@ -54,6 +54,5 @@ public class SemanticModel
             // Add the created item to the SemanticModel dict
             items[enrichedGroupItemDTO.name] = item;
         }
-
     }
 }

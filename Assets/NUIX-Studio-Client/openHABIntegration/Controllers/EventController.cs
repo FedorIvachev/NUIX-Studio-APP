@@ -61,20 +61,11 @@ class EventController : MonoBehaviour
         if (SemanticModel.getInstance().items.ContainsKey(ev.itemId))
         {
             SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
-            /*
-            foreach (GameObject itemWidget in SemanticModel.getInstance().items[ev.itemId]._itemWidgets)
-            {
-                if (itemWidget.GetComponent<ItemController>().GetItemSubType() == ev._eventType)
-                {
-                    itemWidget.GetComponent<ItemController>().ReceivedEvent(ev);
-                }
-            }
-            */
         }
 
         // This sends the event to all items.
         // It would be better if event is sent to specific item.
-        //newEvent?.Invoke(ev);
+        // newEvent?.Invoke(ev);
 
 
 

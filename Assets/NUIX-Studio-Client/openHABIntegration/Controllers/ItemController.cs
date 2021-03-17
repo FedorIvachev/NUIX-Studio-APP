@@ -168,7 +168,7 @@ public class ItemController
     /// <returns>Dimmer as percent in integer</returns>
     public float GetItemStateAsDimmer()
     {
-        float value = 0;
+        float value;
         if (SemanticModel.getInstance().items[_ItemId].itemModel.state == "NULL") return -1f;
         value = float.Parse(SemanticModel.getInstance().items[_ItemId].itemModel.state);
         //Debug.Log("Value parsed to: " + value);

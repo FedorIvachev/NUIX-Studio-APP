@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LightDimmerWidget : ItemWidget
+public class DimmerBrightnessWidget : ItemWidget
 {
     public Light _light;
 

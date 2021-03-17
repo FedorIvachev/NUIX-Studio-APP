@@ -685,7 +685,7 @@ MonoBehaviour:
   _lampPrefab: {fileID: 7533277742948924298, guid: cad6d4f6216075247b38958fc2c00a29, type: 3}
   _mobilePhonePrefab: {fileID: 1133751878646445032, guid: f14c89d4ff8453244a0a22a9cbdaec7e, type: 3}
   _dimmerGestureControlPrefab: {fileID: 2027956727345257733, guid: 4e67133e12037cc46977256a09f069b3, type: 3}
-  _virtualLightDimmerWidgetPrefab: {fileID: 3656494548096741898, guid: 6ea545f0c1d30a64d934eaf7da85e654, type: 3}
+  _dimmerBrightnessWidgetPrefab: {fileID: 1691939868882444331, guid: 3f5b0dbcc1a60be4eaab2be10e02fd1c, type: 3}
   _virtualLocationControlPrefab: {fileID: 8846935930656585226, guid: 8b6428d80b1eac04aab3bff65d56d2fa, type: 3}
   InitOnStartup: 0
 --- !u!1001 &94016360

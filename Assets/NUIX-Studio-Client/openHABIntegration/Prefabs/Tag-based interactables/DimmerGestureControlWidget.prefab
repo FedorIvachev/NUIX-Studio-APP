@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2027956727345257731}
   - component: {fileID: 2027956727345257732}
-  - component: {fileID: 2027956727345257730}
+  - component: {fileID: 8150897107004508637}
   m_Layer: 0
-  m_Name: GestureDimmerWidget
+  m_Name: DimmerGestureControlWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   _handedness: 2
   isTrigger: 0
   _trigger: {fileID: 0}
---- !u!114 &2027956727345257730
+--- !u!114 &8150897107004508637
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,10 +56,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2027956727345257733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4e0c97680c36ce489e556eec7d757ba, type: 3}
+  m_Script: {fileID: 11500000, guid: aaa8593abadd32641b8016fb949e9817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Item: 
+  item: 
   _SubscriptionType: 0
-  _SubscriptionType: 6
   _Gesture: {fileID: 0}

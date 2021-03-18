@@ -97,7 +97,7 @@ class SemanticModelController : MonoBehaviour
 
 
         // Tag-Based interactables
-        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["GestureControlledDimmer"] = _dimmerGestureControlPrefab;
+        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer#NUIXGestureControl"] = _dimmerGestureControlPrefab;
         if (_dimmerBrightnessWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer#NUIXBrightness"] = _dimmerBrightnessWidgetPrefab;
         if (_virtualLocationControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["LocationControl"] = _virtualLocationControlPrefab;
     }
@@ -120,6 +120,7 @@ class SemanticModelController : MonoBehaviour
         {
             if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type + "#" + itemTag))
             {
+                print(item.type + "#" + itemTag);
                 GameObject itemWidget;
                 itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type + "#" + itemTag], this.transform.position, Quaternion.identity) as GameObject;
                 itemWidget.GetComponent<ItemWidget>().item = item.name;

@@ -56,11 +56,17 @@ class EventController : MonoBehaviour
         EventModel ev = JsonUtility.FromJson<EventModel>(e.Message);
         ev.Parse();
         Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
+        Debug.Log("EventType: " + ev._eventType);
 
 
         if (SemanticModel.getInstance().items.ContainsKey(ev.itemId))
         {
             SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
+        }
+
+        else if (ev._eventType == EvtType.ItemAddedEvent)
+        {
+            GetComponent<SemanticModelController>().GetItem(ev.itemId);
         }
 
         // This sends the event to all items.

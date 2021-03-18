@@ -44,7 +44,6 @@ class SemanticModelController : MonoBehaviour
 
     private void GetModel()
     {
-        //GetThingNames();
         GetComponent<EventController>().StartListen();
         GetAllItems();
     }
@@ -62,10 +61,10 @@ class SemanticModelController : MonoBehaviour
         RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items").Then(res => {
             if (res.StatusCode >= 200 && res.StatusCode < 300)
             {
-                List<EnrichedGroupItemDTO> equipmentItems = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
+                List<EnrichedGroupItemDTO> items = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
 
 
-                foreach (EnrichedGroupItemDTO equipmentItemModel in equipmentItems)
+                foreach (EnrichedGroupItemDTO equipmentItemModel in items)
                 {
                     List<GameObject> Widgets = new List<GameObject>();
                     Widgets.AddRange(CreateWidgetsByPrefab(equipmentItemModel));
@@ -79,12 +78,28 @@ class SemanticModelController : MonoBehaviour
         });
     }
 
+    public void GetItem(string itemId)
+    {
+        RestClient.Get(ClientConfig.getInstance()._ServerURL + "/rest/items/" + itemId).Then(res => {
+            if (res.StatusCode >= 200 && res.StatusCode < 300)
+            {
+                EnrichedGroupItemDTO item = JsonUtility.FromJson<EnrichedGroupItemDTO>(res.Text);
+                List<GameObject> Widgets = new List<GameObject>();
+                Widgets.AddRange(CreateWidgetsByPrefab(item));
+                SemanticModel.getInstance().AddItem(item, Widgets);
+            }
+            else
+            {
+                Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
+            }
+        });
+    }
+
     private void InitializeWidgetPrefabDictionary()
     {
         if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
         if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
         if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
-        if (_locationWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["VirtualLocation"] = _locationWidgetPrefab;
         if (_equipmentWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Group"] = _equipmentWidgetPrefab;
         if (_colorWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Color"] = _colorWidgetPrefab;
 
@@ -131,78 +146,6 @@ class SemanticModelController : MonoBehaviour
         return itemWidgets;
     }
 
-
-    public void InstantiateWidget(Item item)
-    {
-
-        string itemname = item.itemModel.name;
-        print("Instantiating widgets for " + itemname);
-        if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.itemModel.category))
-        {
-            GameObject createdItem;
-            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.itemModel.category], this.transform.position, Quaternion.identity) as GameObject;
-            createdItem.GetComponent<ItemWidget>().item = itemname;
-            createdItem.name = itemname + " Widget";
-            item.AddWidget(createdItem);
-        }
-        else if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.itemModel.type))
-        {
-            GameObject createdItem;
-            createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.itemModel.type], this.transform.position, Quaternion.identity) as GameObject;
-            createdItem.GetComponent<ItemWidget>().item = itemname;
-            createdItem.name = itemname + " Widget";
-            item.AddWidget(createdItem);
-        }
-        
-        foreach (string itemTag in item.itemModel.tags)
-        {
-            if (itemTag == "GestureControlled")
-            {
-                GameObject createdItem;
-                createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["GestureControlledDimmer"], Vector3.zero, Quaternion.identity) as GameObject;
-                createdItem.GetComponent<ItemWidget>().item = itemname;
-                createdItem.name = itemname + " GestureControlledWidget";
-                item.AddWidget(createdItem);
-            }
-            else if (itemTag == "LightDimmer")
-            {
-                // Need to assign the light component
-                GameObject createdItem;
-                createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["LightDimmer"], this.transform.position, Quaternion.identity) as GameObject;
-                createdItem.GetComponent<ItemWidget>().item = itemname;
-                createdItem.name = itemname + " LightDimmerWidget";
-                item.AddWidget(createdItem);
-            }
-            else if (itemTag == "LocationControl")
-            {
-                // Need to create locationWidgets
-                //GameObject createdItem;
-                //createdItem = Instantiate(ClientConfig.getInstance()._widgetPrefabs["LocationControl"], this.transform.position + Vector3.down / 5f, Quaternion.identity) as GameObject;
-                //createdItem.GetComponent<ItemWidget>()._Item = itemname + "VirtualLocation";
-                //createdItem.name = itemname + "VirtualLocation Widget";
-                //item.AddWidget(createdItem);
-
-
-                List<string> asGroup = new List<string>();
-                asGroup.Add(itemname);
-
-                GroupItemDTO locationItem = new GroupItemDTO
-                {
-                    type = "String",
-                    name = itemname + "VirtualLocation",
-                    label = itemname + "VirtualLocation",
-                    category = "VirtualLocation",
-                    groupNames = asGroup
-                };
-                CreateItemOnServer(locationItem);
-
-            }
-        }
-        
-
-
-    }
-
     // TODO: Create a widget for the item on Success calback
     /// <summary>
     /// Creates an item on server with PUT method (GroupItemDTO item)
@@ -237,14 +180,6 @@ class SemanticModelController : MonoBehaviour
             RestClient.ClearDefaultHeaders();
         });
 
-    }
-
-    private void CreateWidgetsForItems()
-    {
-        foreach (KeyValuePair<string, Item> item in SemanticModel.getInstance().items)
-        {
-            InstantiateWidget(item.Value);
-        }
     }
 
     private void SetParentTransforms()
@@ -299,11 +234,5 @@ class SemanticModelController : MonoBehaviour
             throw new FileNotFoundException("...no file found - please check the configuration");
         }
         return loadedObject as GameObject;
-    }
-
-
-    private void CreateWidget()
-    {
-
     }
 }

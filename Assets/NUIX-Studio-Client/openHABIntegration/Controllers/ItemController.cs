@@ -41,8 +41,8 @@ public class ItemController
     /// <param name="evt">the event as eventmodel</param>
     public void ReceivedEvent(EventModel evt)
     {
-        if (SemanticModel.getInstance().items[_ItemId].itemModel.state != evt._Payload.value) SemanticModel.getInstance().items[_ItemId].itemModel.state = evt._Payload.value;
-        Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + SemanticModel.getInstance().items[_ItemId].itemModel.state);
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state != evt._Payload.value) SemanticModel.getInstance().items[_ItemId].ItemModel.state = evt._Payload.value;
+        Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + SemanticModel.getInstance().items[_ItemId].ItemModel.state);
         updateItem?.Invoke(); // Send event to Widgets for UI updates
     }
 
@@ -53,7 +53,7 @@ public class ItemController
     {
         if (SemanticModel.getInstance().items.ContainsKey(_ItemId))
         {
-            SemanticModel.getInstance().items[_ItemId].itemModel = SemanticModel.getInstance().items[_ItemId].itemModel;
+            SemanticModel.getInstance().items[_ItemId].ItemModel = SemanticModel.getInstance().items[_ItemId].ItemModel;
         }
         else
         {
@@ -63,8 +63,8 @@ public class ItemController
             {
                 if (response.StatusCode >= 200 && response.StatusCode < 300)
                 {
-                    SemanticModel.getInstance().items[_ItemId].itemModel = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
-                    Debug.Log("Rest GET status for Item: " + SemanticModel.getInstance().items[_ItemId].itemModel.name + " was OK");
+                    SemanticModel.getInstance().items[_ItemId].ItemModel = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
+                    Debug.Log("Rest GET status for Item: " + SemanticModel.getInstance().items[_ItemId].ItemModel.name + " was OK");
                     updateItem?.Invoke(); // Send event to Widgets
                     //SemanticModel.getInstance().AddWidget(_ItemId, _Item);
                     // ADD the widget to semantic model
@@ -138,7 +138,7 @@ public class ItemController
     /// <returns>string with current state</returns>
     public string GetItemStateAsString()
     {
-        return SemanticModel.getInstance().items[_ItemId].itemModel.state.ToString();
+        return SemanticModel.getInstance().items[_ItemId].ItemModel.state.ToString();
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ public class ItemController
     public float GetItemStateAsFloat()
     {
         float result;
-        float.TryParse(SemanticModel.getInstance().items[_ItemId].itemModel.state, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out result);
+        float.TryParse(SemanticModel.getInstance().items[_ItemId].ItemModel.state, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out result);
         return result;
     }
 
@@ -169,8 +169,8 @@ public class ItemController
     public float GetItemStateAsDimmer()
     {
         float value;
-        if (SemanticModel.getInstance().items[_ItemId].itemModel.state == "NULL") return -1f;
-        value = float.Parse(SemanticModel.getInstance().items[_ItemId].itemModel.state);
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state == "NULL") return -1f;
+        value = float.Parse(SemanticModel.getInstance().items[_ItemId].ItemModel.state);
         //Debug.Log("Value parsed to: " + value);
         if (value >= 0f && value <= 100f)
         {
@@ -197,7 +197,7 @@ public class ItemController
     /// <returns>Switch state as bool (ON = True, OFF=False)</returns>
     public bool GetItemStateAsSwitch()
     {
-        if (SemanticModel.getInstance().items[_ItemId].itemModel.state == "ON") return true;
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state == "ON") return true;
         return false;
     }
     /*
@@ -286,7 +286,7 @@ public class ItemController
     }
     public Vector3 GetItemStateAsVector()
     {
-        if (SemanticModel.getInstance().items[_ItemId].itemModel.state != null) return StringToVec(SemanticModel.getInstance().items[_ItemId].itemModel.state);
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state != null) return StringToVec(SemanticModel.getInstance().items[_ItemId].ItemModel.state);
         else return Vector3.zero;
     }
 

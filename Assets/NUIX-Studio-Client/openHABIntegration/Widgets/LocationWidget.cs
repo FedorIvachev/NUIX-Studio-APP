@@ -39,7 +39,7 @@ public class LocationWidget : ItemWidget
         {
             List<string> groupName = new List<string>();
             groupName.Add(item);
-            SemanticModel.getInstance().items[item.Substring(0, item.Length - "VirtualLocation".Length)].itemModel.groupNames.Add(item);
+            SemanticModel.getInstance().items[item.Substring(0, item.Length - "VirtualLocation".Length)].ItemModel.groupNames.Add(item);
             int tempcount = 1;
             if (GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " Widget") != null)
             {

@@ -38,7 +38,7 @@ public class SemanticModel
         {
             Item item = new Item
             {
-                itemModel = enrichedGroupItemDTO,
+                ItemModel = enrichedGroupItemDTO,
                 itemController = new ItemController
                 {
                     _ItemId = enrichedGroupItemDTO.name
@@ -55,4 +55,13 @@ public class SemanticModel
             items[enrichedGroupItemDTO.name] = item;
         }
     }
+
+    
+    public void RemoveItem(string itemId)
+    {
+        Debug.Log("REMOVING ITEM");
+        items[itemId].DestroyWidgets();
+        items.Remove(itemId);
+    }
+    
 }

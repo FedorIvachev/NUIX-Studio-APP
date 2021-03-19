@@ -11,19 +11,15 @@ class SemanticModelController : MonoBehaviour
     public GameObject _dimmerWidgetPrefab;
     public GameObject _switchWidgetPrefab;
     public GameObject _textWidgetPrefab;
-    public GameObject _locationWidgetPrefab;
     public GameObject _equipmentWidgetPrefab;
     public GameObject _colorWidgetPrefab;
-
-    [Header("Category prefabs")]
-    public GameObject _lampPrefab;
-    public GameObject _mobilePhonePrefab;
 
     [Header("Tag-based interactables")]
     public GameObject _dimmerGestureControlPrefab;
     public GameObject _dimmerBrightnessWidgetPrefab;
     public GameObject _virtualLocationControlPrefab;
 
+    [Header("Client config")]
     public bool InitOnStartup = false;
 
 
@@ -63,9 +59,9 @@ class SemanticModelController : MonoBehaviour
             {
                 List<EnrichedGroupItemDTO> items = JsonUtility.FromJson<EquipmentItemModelList>("{\"result\":" + res.Text + "}").result;
 
-
                 foreach (EnrichedGroupItemDTO equipmentItemModel in items)
                 {
+                    Debug.Log("Adding item " + equipmentItemModel.name + " to the model");
                     List<GameObject> Widgets = new List<GameObject>();
                     Widgets.AddRange(CreateWidgetsByPrefab(equipmentItemModel));
                     SemanticModel.getInstance().AddItem(equipmentItemModel, Widgets);
@@ -93,6 +89,11 @@ class SemanticModelController : MonoBehaviour
                 Debug.Log("Rest GET status for Item: " + " was not in OK span. (" + res.StatusCode + ")\n" + res.Error);
             }
         });
+    }
+
+    public void RemoveItem(string itemId)
+    {
+        SemanticModel.getInstance().RemoveItem(itemId);
     }
 
     private void InitializeWidgetPrefabDictionary()
@@ -191,7 +192,7 @@ class SemanticModelController : MonoBehaviour
             if (item.Value._itemWidgets != null)
             {
                 // The item should be a child of its groupname item. If we find at least one such groupname, set the transform parent to its widget then
-                foreach (string groupName in item.Value.itemModel.groupNames)
+                foreach (string groupName in item.Value.ItemModel.groupNames)
                 {
                     GameObject parent;
                     if ((parent = GameObject.Find(groupName + " Widget")) != null)

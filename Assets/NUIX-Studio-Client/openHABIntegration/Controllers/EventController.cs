@@ -61,9 +61,23 @@ class EventController : MonoBehaviour
 
         if (SemanticModel.getInstance().items.ContainsKey(ev.itemId))
         {
-            SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
-        }
+            print(ev._eventType);
+            if (ev._eventType == EvtType.ItemRemovedEvent)
+            {
+                GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
+            }
+            else if (ev._eventType == EvtType.None)
+            {
+                //print("EVTTYPE NONE PAYLOAD " + ev._Payload.type + " " + ev._Payload.value + " " + ev._Payload.status);
+                // Not sure why, but it seems that instead of itemremovedevent None is sent
+                GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
+            }
+            else
+            {
+                SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
 
+            }
+        }
         else if (ev._eventType == EvtType.ItemAddedEvent)
         {
             GetComponent<SemanticModelController>().GetItem(ev.itemId);

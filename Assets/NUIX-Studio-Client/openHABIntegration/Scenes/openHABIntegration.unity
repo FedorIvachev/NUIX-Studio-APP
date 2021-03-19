@@ -678,12 +678,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dimmerWidgetPrefab: {fileID: 7843420733872397179, guid: 1b52c840541f20f4fa89b5c3618d35d4, type: 3}
   _switchWidgetPrefab: {fileID: 2602830651426680980, guid: 34c71d9b3e1044e408ea1fd59f864bec, type: 3}
-  _textWidgetPrefab: {fileID: 5866219032199212292, guid: 7be78ffcda7f77d468b06e77718bae30, type: 3}
-  _locationWidgetPrefab: {fileID: 8846935930656585226, guid: 8b6428d80b1eac04aab3bff65d56d2fa, type: 3}
+  _textWidgetPrefab: {fileID: 0}
   _equipmentWidgetPrefab: {fileID: 6592429083614613982, guid: 4ea1a05dfcd3e7c449716e7b15b8e564, type: 3}
   _colorWidgetPrefab: {fileID: 0}
-  _lampPrefab: {fileID: 7533277742948924298, guid: cad6d4f6216075247b38958fc2c00a29, type: 3}
-  _mobilePhonePrefab: {fileID: 1133751878646445032, guid: f14c89d4ff8453244a0a22a9cbdaec7e, type: 3}
   _dimmerGestureControlPrefab: {fileID: 2027956727345257733, guid: 4e67133e12037cc46977256a09f069b3, type: 3}
   _dimmerBrightnessWidgetPrefab: {fileID: 1691939868882444331, guid: 3f5b0dbcc1a60be4eaab2be10e02fd1c, type: 3}
   _virtualLocationControlPrefab: {fileID: 8846935930656585226, guid: 8b6428d80b1eac04aab3bff65d56d2fa, type: 3}

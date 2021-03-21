@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
-using System.Globalization;
-using TMPro;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
 /// <summary>
-/// Is used to sync the transform position of the item widget to the server
+/// A widget for the location item created by *VirtualLocationWidget
 /// </summary>
-public class LocationWidget : ItemWidget
+public class VirtualLocationDataWidget : ItemWidget
 {
     private Vector3 sentPosition = Vector3.zero;
+    private GameObject virtualLocationWidget;
+
     /// <summary>
     /// Initialize ItemController
     /// </summary>
@@ -17,10 +14,6 @@ public class LocationWidget : ItemWidget
     {
 
         ConnectedItemController.updateItem += OnUpdate;
-
-        //VirtualLocationController.getInstance().locationSync += OnSetItem;
-
-        //LocationControl();
 
         InitWidget();
     }
@@ -33,25 +26,9 @@ public class LocationWidget : ItemWidget
     private void InitWidget()
     {
         //transform.position = _itemController.GetItemStateAsVector();
+        virtualLocationWidget = GameObject.Find(item.Substring(0, item.Length - "_VirtualLocationData".Length) + " Widget"); // Only if it exists. TODO: make it find based on semanticmodel
         ConnectedItemController.updateItem?.Invoke();
         InvokeRepeating(nameof(OnSetItem), 1.0f, 0.064f);
-        if (SemanticModel.getInstance().items.ContainsKey(item.Substring(0, item.Length - "VirtualLocation".Length)))
-        {
-            List<string> groupName = new List<string>();
-            groupName.Add(item);
-            SemanticModel.getInstance().items[item.Substring(0, item.Length - "VirtualLocation".Length)].ItemModel.groupNames.Add(item);
-            int tempcount = 1;
-            if (GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " Widget") != null)
-            {
-                GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " Widget").transform.position = transform.position + Vector3.up / 5f * tempcount;
-                tempcount += 1;
-            }
-            // TODO : get rid of hardcode, rewrite to support every tag
-            if (GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " LightDimmerWidget") != null)
-            {
-                GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " LightDimmerWidget").transform.position = transform.position + Vector3.up / 5f * tempcount;
-            }
-        }
     }
 
     /// <summary>
@@ -64,7 +41,11 @@ public class LocationWidget : ItemWidget
     public void OnUpdate()
     {
         Vector3 receivedPosition = ConnectedItemController.GetItemStateAsVector();
-        if (receivedPosition != sentPosition) transform.position = receivedPosition;
+        if (receivedPosition != sentPosition)
+        {
+            if (virtualLocationWidget != null)
+                virtualLocationWidget.transform.position = receivedPosition;
+        }
     }
 
     /// <summary>
@@ -75,9 +56,10 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
-        if (sentPosition != transform.position)
+        if (sentPosition != virtualLocationWidget.transform.position)
         {
-            sentPosition = transform.position;
+            if (virtualLocationWidget != null)
+                sentPosition = virtualLocationWidget.transform.position;
             ConnectedItemController.SetItemStateAsVector(sentPosition);
         }
     }

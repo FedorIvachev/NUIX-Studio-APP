@@ -17,7 +17,8 @@ class SemanticModelController : MonoBehaviour
     [Header("Tag-based interactables")]
     public GameObject _dimmerGestureControlPrefab;
     public GameObject _dimmerBrightnessWidgetPrefab;
-    public GameObject _virtualLocationControlPrefab;
+
+    public GameObject _stringVirtualLocationDataPrefab;
 
     [Header("Client config")]
     public bool InitOnStartup = false;
@@ -113,9 +114,11 @@ class SemanticModelController : MonoBehaviour
 
 
         // Tag-Based interactables
-        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer#NUIXGestureControl"] = _dimmerGestureControlPrefab;
-        if (_dimmerBrightnessWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer#NUIXBrightness"] = _dimmerBrightnessWidgetPrefab;
-        if (_virtualLocationControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["LocationControl"] = _virtualLocationControlPrefab;
+        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer_NUIXGestureControl"] = _dimmerGestureControlPrefab;
+        if (_dimmerBrightnessWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer_NUIXBrightness"] = _dimmerBrightnessWidgetPrefab;
+
+        if (_stringVirtualLocationDataPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String_VirtualLocationData"] = _stringVirtualLocationDataPrefab;
+        
     }
 
 
@@ -123,6 +126,7 @@ class SemanticModelController : MonoBehaviour
     {
         List<GameObject> itemWidgets = new List<GameObject>();
 
+        // Need to delete it and only create if there is no item based on tag created
         if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
         {
             GameObject itemWidget;
@@ -130,21 +134,51 @@ class SemanticModelController : MonoBehaviour
             itemWidget.GetComponent<ItemWidget>().item = item.name;
             itemWidget.name = item.name + " Widget";
             itemWidgets.Add(itemWidget);
-        }
 
+            if (item.label != "VirtualLocationData") CreateVirtualLocationItemOnServer(item.name);
+        }
         foreach (string itemTag in item.tags)
         {
-            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type + "#" + itemTag))
+            if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type + "_" + itemTag))
             {
-                print(item.type + "#" + itemTag);
                 GameObject itemWidget;
-                itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type + "#" + itemTag], this.transform.position, Quaternion.identity) as GameObject;
+                itemWidget = Instantiate(ClientConfig.getInstance()._widgetPrefabs[item.type + "_" + itemTag], this.transform.position, Quaternion.identity) as GameObject;
                 itemWidget.GetComponent<ItemWidget>().item = item.name;
-                itemWidget.name = item.name + "#" + itemTag + " Widget";
+                itemWidget.name = item.name + "_" + itemTag + " Widget";
                 itemWidgets.Add(itemWidget);
+
+                if (itemTag != "VirtualLocationData")
+                {
+                    CreateVirtualLocationItemOnServer(item.name + "_" + itemTag);
+                }
             }
         }
         return itemWidgets;
+    }
+
+
+
+    private void CreateVirtualLocationItemOnServer(string itemName)
+    {
+        // Create Location Data Item
+        List<string> groups = new List<string>
+        {
+
+        };
+        List<string> locationTag = new List<string>
+                        {
+                            "VirtualLocationData"
+                        };
+        // Need to Create a locationItem on server
+        GroupItemDTO locationDataItem = new GroupItemDTO
+        {
+            type = "String",
+            name = itemName + "_" + "VirtualLocationData",
+            label = "VirtualLocationData",
+            tags = locationTag,
+            groupNames = groups
+        };
+        CreateItemOnServer(locationDataItem);
     }
 
     // TODO: Create a widget for the item on Success calback

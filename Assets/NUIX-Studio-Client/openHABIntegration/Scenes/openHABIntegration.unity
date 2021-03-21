@@ -683,7 +683,7 @@ MonoBehaviour:
   _colorWidgetPrefab: {fileID: 0}
   _dimmerGestureControlPrefab: {fileID: 2027956727345257733, guid: 4e67133e12037cc46977256a09f069b3, type: 3}
   _dimmerBrightnessWidgetPrefab: {fileID: 1691939868882444331, guid: 3f5b0dbcc1a60be4eaab2be10e02fd1c, type: 3}
-  _virtualLocationControlPrefab: {fileID: 8846935930656585226, guid: 8b6428d80b1eac04aab3bff65d56d2fa, type: 3}
+  _stringVirtualLocationDataPrefab: {fileID: 1580198496328093158, guid: ea1a66a5234dfbd4c9e51745b5641088, type: 3}
   InitOnStartup: 0
 --- !u!1001 &94016360
 PrefabInstance:

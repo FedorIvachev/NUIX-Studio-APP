@@ -28,31 +28,16 @@ public class EventModel
     {
         _Payload = JsonUtility.FromJson<Payload>(payload);
 
-        switch (type)
+        _eventType = type switch
         {
-            case "ItemAddedEvent":
-                _eventType = EvtType.ItemAddedEvent;
-                break;
-            case "ItemRemoved":
-                _eventType = EvtType.ItemRemovedEvent;
-                break;
-            case "ItemUpdateEvent":
-                _eventType = EvtType.ItemUpdatedEvent;
-                break;
-            case "ItemCommandEvent":
-                _eventType = EvtType.ItemCommandEvent;
-                break;
-            case "ItemStateEvent":
-                _eventType = EvtType.ItemStateEvent;
-                break;
-            case "ItemStateChangedEvent":
-                _eventType = EvtType.ItemStateChangedEvent;
-                break;
-            default:
-                _eventType = EvtType.None;
-                break;
-        }
-
+            "ItemAddedEvent" => EvtType.ItemAddedEvent,
+            "ItemRemoved" => EvtType.ItemRemovedEvent,
+            "ItemUpdateEvent" => EvtType.ItemUpdatedEvent,
+            "ItemCommandEvent" => EvtType.ItemCommandEvent,
+            "ItemStateEvent" => EvtType.ItemStateEvent,
+            "ItemStateChangedEvent" => EvtType.ItemStateChangedEvent,
+            _ => EvtType.None,
+        };
         /**
         ItemAddedEvent          /added
         ItemRemovedEvent        /removed

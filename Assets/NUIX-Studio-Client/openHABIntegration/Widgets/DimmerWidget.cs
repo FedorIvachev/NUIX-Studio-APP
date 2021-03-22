@@ -11,24 +11,10 @@ public class DimmerWidget : ItemWidget
     //public SliderEventData _PinchSliderData;
 
     private int sentValue = -10;
-    /// <summary>
-    /// Initialize ItemController
-    /// </summary>
+
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
-
-        _itemController.Initialize(_Item, _SubscriptionType);
-
-        _itemController.updateItem += OnUpdate;
+        ConnectedItemController.updateItem += OnUpdate;
         InitWidget();
     }
 
@@ -47,7 +33,7 @@ public class DimmerWidget : ItemWidget
 
 
         if (_PinchSlider == null) _PinchSlider = GetComponent<PinchSlider>();
-        _itemController.updateItem?.Invoke();
+        ConnectedItemController.updateItem?.Invoke();
 
 
         //if (_PinchSliderData == null) _PinchSliderData = GetComponent<SliderEventData>();
@@ -62,7 +48,7 @@ public class DimmerWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        float value = _itemController.GetItemStateAsDimmer();
+        float value = ConnectedItemController.GetItemStateAsDimmer();
         if (!Mathf.Approximately(value, sentValue))
         {
             if (Mathf.Abs(value / 100f - _PinchSlider.SliderValue) <= 0.01f) return;
@@ -89,7 +75,7 @@ public class DimmerWidget : ItemWidget
     public void OnSetItem()
     {
         sentValue = (int)(_PinchSlider.SliderValue * 100f);
-        _itemController.SetItemStateAsDimmer(sentValue);
+        ConnectedItemController.SetItemStateAsDimmer(sentValue);
     }
 
     /// <summary>
@@ -97,6 +83,6 @@ public class DimmerWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        _itemController.updateItem -= OnUpdate;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 }

@@ -1,38 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Globalization;
-using TMPro;
-
-public class DummyWidget : ItemWidget
+/// <summary>
+/// A widget for the location item created by *VirtualLocationWidget
+/// </summary>
+public class VirtualLocationDataWidget : ItemWidget
 {
-
-    [Header("Widget Setup")]
-    //public Text _dummyText;
-    public TextMeshPro _dummyText;
-    public bool _isNumber = false;
-    public string _numberFormat = "0.00";
-    public string _culture = "en-GB";
-    public string _preText = "";
-    public string _postText = "";
+    private Vector3 sentPosition = Vector3.zero;
+    private GameObject virtualLocationWidget;
 
     /// <summary>
     /// Initialize ItemController
     /// </summary>
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
 
-        _itemController.Initialize(_Item, _SubscriptionType);
+        ConnectedItemController.updateItem += OnUpdate;
 
-        _itemController.updateItem += OnUpdate;
         InitWidget();
     }
 
@@ -43,10 +25,10 @@ public class DummyWidget : ItemWidget
     /// </summary>
     private void InitWidget()
     {
-        if (_dummyText == null)
-        {
-            _dummyText = GetComponent<TextMeshPro>();
-        }
+        //transform.position = _itemController.GetItemStateAsVector();
+        virtualLocationWidget = GameObject.Find(item.Substring(0, item.Length - "_VirtualLocationData".Length) + " Widget"); // Only if it exists. TODO: make it find based on semanticmodel
+        ConnectedItemController.updateItem?.Invoke();
+        InvokeRepeating(nameof(OnSetItem), 1.0f, 0.064f);
     }
 
     /// <summary>
@@ -58,15 +40,11 @@ public class DummyWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        string txt = _itemController.GetItemStateAsString();
-        if (_isNumber)
+        Vector3 receivedPosition = ConnectedItemController.GetItemStateAsVector();
+        if (receivedPosition != sentPosition)
         {
-            float number = float.Parse(txt);
-            _dummyText.text = _preText + number.ToString(_numberFormat, CultureInfo.CreateSpecificCulture(_culture)) + _postText;
-        }
-        else
-        {
-            _dummyText.text = _preText + txt + _postText;
+            if (virtualLocationWidget != null)
+                virtualLocationWidget.transform.position = receivedPosition;
         }
     }
 
@@ -78,7 +56,12 @@ public class DummyWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
-
+        if (sentPosition != virtualLocationWidget.transform.position)
+        {
+            if (virtualLocationWidget != null)
+                sentPosition = virtualLocationWidget.transform.position;
+            ConnectedItemController.SetItemStateAsVector(sentPosition);
+        }
     }
 
     /// <summary>
@@ -86,6 +69,6 @@ public class DummyWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        _itemController.updateItem -= OnUpdate;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 }

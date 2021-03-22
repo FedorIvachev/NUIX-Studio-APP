@@ -58,20 +58,31 @@ class EventController : MonoBehaviour
         Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
 
 
-        if (SemanticModel.getInstance()._items.ContainsKey(ev.itemId))
+        if (SemanticModel.getInstance().items.ContainsKey(ev.itemId))
         {
-            foreach (GameObject itemWidget in SemanticModel.getInstance()._items[ev.itemId]._itemWidgets)
+            if (ev._eventType == EvtType.ItemRemovedEvent)
             {
-                if (itemWidget.GetComponent<ItemController>().GetItemSubType() == ev._eventType)
-                {
-                    itemWidget.GetComponent<ItemController>().ReceivedEvent(ev);
-                }
+                GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
             }
+            else if (ev._eventType == EvtType.None)
+            {
+                //print("EVTTYPE NONE PAYLOAD " + ev._Payload.type + " " + ev._Payload.value + " " + ev._Payload.status);
+                // Not sure why, but it seems that instead of itemremovedevent None is sent
+                //GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
+            }
+            else
+            {
+                SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
+            }
+        }
+        else if (ev._eventType == EvtType.ItemAddedEvent)
+        {
+            GetComponent<SemanticModelController>().GetItem(ev.itemId);
         }
 
         // This sends the event to all items.
         // It would be better if event is sent to specific item.
-        //newEvent?.Invoke(ev);
+        // newEvent?.Invoke(ev);
 
 
 

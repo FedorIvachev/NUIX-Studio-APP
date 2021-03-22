@@ -17,19 +17,7 @@ public class GroupWidget : ItemWidget
     /// </summary>
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
-
-        _itemController.Initialize(_Item, _SubscriptionType);
-
-        _itemController.updateItem += OnUpdate;
+        ConnectedItemController.updateItem += OnUpdate;
     }
 
     /// <summary>
@@ -41,7 +29,7 @@ public class GroupWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        string txt = _itemController.GetItemStateAsString();
+        string txt = ConnectedItemController.GetItemStateAsString();
         if (_isNumber)
         {
             float number = float.Parse(txt);
@@ -69,6 +57,6 @@ public class GroupWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        _itemController.updateItem -= OnUpdate;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 }

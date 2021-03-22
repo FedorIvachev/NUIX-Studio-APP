@@ -12,18 +12,7 @@ public class SwitchWidget : ItemWidget
     /// </summary>
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
-
-        _itemController.Initialize(_Item, _SubscriptionType);
-        _itemController.updateItem += OnUpdate;
+        ConnectedItemController.updateItem += OnUpdate;
         InitWidget();
 
     }
@@ -50,7 +39,7 @@ public class SwitchWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        _Toggle.IsToggled = _itemController.GetItemStateAsSwitch();
+        _Toggle.IsToggled = ConnectedItemController.GetItemStateAsSwitch();
     }
 
     /// <summary>
@@ -63,7 +52,7 @@ public class SwitchWidget : ItemWidget
     public void OnSetItem()
     {
         //_itemController.SetItemStateAsSwitch(_Toggle.isOn);
-        _itemController.SetItemStateAsSwitch(_Toggle.IsToggled);
+        ConnectedItemController.SetItemStateAsSwitch(_Toggle.IsToggled);
     }
 
     /// <summary>
@@ -71,6 +60,6 @@ public class SwitchWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        _itemController.updateItem -= OnUpdate;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 }

@@ -15,18 +15,8 @@ public class LocationWidget : ItemWidget
     /// </summary>
     void Start()
     {
-        // Add or get controller component
-        if (GetComponent<ItemController>() != null)
-        {
-            _itemController = GetComponent<ItemController>();
-        }
-        else
-        {
-            _itemController = gameObject.AddComponent<ItemController>();
-        }
-        _itemController.Initialize(_Item, _SubscriptionType);
 
-        _itemController.updateItem += OnUpdate;
+        ConnectedItemController.updateItem += OnUpdate;
 
         //VirtualLocationController.getInstance().locationSync += OnSetItem;
 
@@ -43,23 +33,23 @@ public class LocationWidget : ItemWidget
     private void InitWidget()
     {
         //transform.position = _itemController.GetItemStateAsVector();
-        _itemController.updateItem?.Invoke();
+        ConnectedItemController.updateItem?.Invoke();
         InvokeRepeating(nameof(OnSetItem), 1.0f, 0.064f);
-        if (SemanticModel.getInstance()._items.ContainsKey(_Item.Substring(0, _Item.Length - "VirtualLocation".Length)))
+        if (SemanticModel.getInstance().items.ContainsKey(item.Substring(0, item.Length - "VirtualLocation".Length)))
         {
             List<string> groupName = new List<string>();
-            groupName.Add(_Item);
-            SemanticModel.getInstance()._items[_Item.Substring(0, _Item.Length - "VirtualLocation".Length)]._itemModel.groupNames.Add(_Item);
+            groupName.Add(item);
+            SemanticModel.getInstance().items[item.Substring(0, item.Length - "VirtualLocation".Length)].ItemModel.groupNames.Add(item);
             int tempcount = 1;
-            if (GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " Widget") != null)
+            if (GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " Widget") != null)
             {
-                GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " Widget").transform.position = transform.position + Vector3.up / 5f * tempcount;
+                GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " Widget").transform.position = transform.position + Vector3.up / 5f * tempcount;
                 tempcount += 1;
             }
             // TODO : get rid of hardcode, rewrite to support every tag
-            if (GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " LightDimmerWidget") != null)
+            if (GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " LightDimmerWidget") != null)
             {
-                GameObject.Find(_Item.Substring(0, _Item.Length - "VirtualLocation".Length) + " LightDimmerWidget").transform.position = transform.position + Vector3.up / 5f * tempcount;
+                GameObject.Find(item.Substring(0, item.Length - "VirtualLocation".Length) + " LightDimmerWidget").transform.position = transform.position + Vector3.up / 5f * tempcount;
             }
         }
     }
@@ -73,7 +63,7 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void OnUpdate()
     {
-        Vector3 receivedPosition = _itemController.GetItemStateAsVector();
+        Vector3 receivedPosition = ConnectedItemController.GetItemStateAsVector();
         if (receivedPosition != sentPosition) transform.position = receivedPosition;
     }
 
@@ -85,16 +75,10 @@ public class LocationWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
-        if (_itemController._Item != null)
+        if (sentPosition != transform.position)
         {
-            if (_itemController._Item.state != transform.position.ToString())
-            {
-                if (sentPosition != transform.position)
-                {
-                    sentPosition = transform.position;
-                    _itemController.SetItemStateAsVector(sentPosition);
-                }           
-            }
+            sentPosition = transform.position;
+            ConnectedItemController.SetItemStateAsVector(sentPosition);
         }
     }
 
@@ -103,6 +87,6 @@ public class LocationWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        _itemController.updateItem -= OnUpdate;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 }

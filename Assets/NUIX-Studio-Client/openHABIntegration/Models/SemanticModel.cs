@@ -11,7 +11,7 @@ public class SemanticModel
         return instance;
     }
 
-    public Dictionary<string, Item> _items = new Dictionary<string, Item>();
+    public Dictionary<string, Item> items = new Dictionary<string, Item>();
 
     private Vector3 spawnPosition = Vector3.one;
     public Vector3 SpawnPosition
@@ -27,22 +27,41 @@ public class SemanticModel
         }
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="itemID"></param>
-    /// <param name="itemWidget"></param>
-    public void AddWidget(string itemID, GameObject itemWidget)
+    public void AddItem(EnrichedGroupItemDTO enrichedGroupItemDTO, List<GameObject> Widgets)
     {
-        if (_items.ContainsKey(itemID))
+        if (items.ContainsKey(enrichedGroupItemDTO.name))
         {
-            _items[itemID].AddWidget(itemWidget);
+            // We already have this item in the semanticmodel
+            return;
         }
         else
         {
-            Item item = new Item();
-            item.AddWidget(itemWidget);
-            //item._itemModel = itemWidget.GetComponent<ItemWidget>()
+            Item item = new Item
+            {
+                ItemModel = enrichedGroupItemDTO,
+                itemController = new ItemController
+                {
+                    _ItemId = enrichedGroupItemDTO.name
+                }
+            };
+
+            // Add the item widgets
+            foreach (GameObject itemWidget in Widgets)
+            {
+                item.AddWidget(itemWidget);
+            }
+
+            // Add the created item to the SemanticModel dict
+            items[enrichedGroupItemDTO.name] = item;
         }
     }
+
+    
+    public void RemoveItem(string itemId)
+    {
+        Debug.Log("REMOVING ITEM");
+        items[itemId].DestroyWidgets();
+        items.Remove(itemId);
+    }
+    
 }

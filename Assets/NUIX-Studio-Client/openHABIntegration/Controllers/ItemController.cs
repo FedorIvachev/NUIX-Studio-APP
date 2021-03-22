@@ -11,12 +11,11 @@ using System;
 /// Responsible for updating the state of the item
 /// Usually is attached to the ItemWidget
 /// </summary>
-public class ItemController : MonoBehaviour
+public class ItemController
 {
     public string _ItemId { get; set; } // name of item in openhab
     public EnrichedGroupItemDTO _Item; // The item this controller handles
     private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe
-    private EventController _EventController;
 
     public delegate void OnItemUpdate();
     public OnItemUpdate updateItem;
@@ -32,7 +31,8 @@ public class ItemController : MonoBehaviour
     {
         _ItemId = itemId;
         _SubscribeTo = subType;
-        GetItemFromServer();
+        //if (SemanticModel.getInstance().items.ContainsKey(itemId))
+        //GetItemFromServer();
     }
 
     /// <summary>
@@ -41,8 +41,8 @@ public class ItemController : MonoBehaviour
     /// <param name="evt">the event as eventmodel</param>
     public void ReceivedEvent(EventModel evt)
     {
-        if (_Item.state != evt._Payload.value) _Item.state = evt._Payload.value;
-        Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + _Item.state);
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state != evt._Payload.value) SemanticModel.getInstance().items[_ItemId].ItemModel.state = evt._Payload.value;
+        Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + SemanticModel.getInstance().items[_ItemId].ItemModel.state);
         updateItem?.Invoke(); // Send event to Widgets for UI updates
     }
 
@@ -51,25 +51,21 @@ public class ItemController : MonoBehaviour
     /// </summary>
     private void GetItemFromServer()
     {
-        if (SemanticModel.getInstance()._items.ContainsKey(_ItemId))
+        if (SemanticModel.getInstance().items.ContainsKey(_ItemId))
         {
-            _Item = SemanticModel.getInstance()._items[_ItemId]._itemModel;
+            SemanticModel.getInstance().items[_ItemId].ItemModel = SemanticModel.getInstance().items[_ItemId].ItemModel;
         }
         else
         {
-            print("No item " + _ItemId + "in semantic model");
+            Debug.Log("No item " + _ItemId + "in semantic model");
 
             RestClient.Get(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId)).Then(response =>
             {
                 if (response.StatusCode >= 200 && response.StatusCode < 300)
                 {
-                    _Item = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
-                    print("Rest GET status for Item: " + _Item.name + " was OK");
+                    SemanticModel.getInstance().items[_ItemId].ItemModel = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
+                    Debug.Log("Rest GET status for Item: " + SemanticModel.getInstance().items[_ItemId].ItemModel.name + " was OK");
                     updateItem?.Invoke(); // Send event to Widgets
-                                          //if (_Item.type == "Group") // TODO move away to invoke method
-                                          //{
-                                          //    CreateLocationItemOnServer();
-                                          //}
                     //SemanticModel.getInstance().AddWidget(_ItemId, _Item);
                     // ADD the widget to semantic model
                 }
@@ -114,70 +110,26 @@ public class ItemController : MonoBehaviour
             Body = item,
             Retries = 5,
             RetrySecondsDelay = 1,
-            RetryCallback = (err, retries) => {
+            RetryCallback = (err, retries) =>
+            {
                 Debug.Log(string.Format("Retry #{0} Status {1}\nError: {2}", retries, err.StatusCode, err));
             }
         };
 
-        RestClient.Put<string>(currentRequest, (err, res, body) => {
+        RestClient.Put<string>(currentRequest, (err, res, body) =>
+        {
             if (err != null)
             {
-                print("Error creating item on server");
-                print(err.Message);
+                Debug.Log("Error creating item on server");
+                Debug.Log(err.Message);
             }
             else
             {
-                print("Success " + res.StatusCode + JsonUtility.ToJson(body, true));
+                Debug.Log("Success " + res.StatusCode + JsonUtility.ToJson(body, true));
             }
             RestClient.ClearDefaultHeaders();
         });
-
     }
-
-    /// <summary>
-    /// Adds a location Item for current item on server
-    /// </summary>
-    public void CreateLocationItemOnServer()
-    {
-        List<string> asGroup = new List<string>();
-        asGroup.Add(_ItemId);
-
-        // TODO: get rid of Copypaste
-        GroupItemDTO locationItem = new GroupItemDTO
-        {
-            type = "Number",
-            name = _ItemId + "_X",
-            label = _ItemId + " X",
-            category = "Virtual Location",
-            groupNames = asGroup
-        };
-        CreateItemOnServer(locationItem);
-
-        // TODO: get rid of Copypaste
-        locationItem = new GroupItemDTO
-        {
-            type = "Number",
-            name = _ItemId + "_Y",
-            label = _ItemId + " Y",
-            category = "Virtual Location",
-            groupNames = asGroup
-        };
-        CreateItemOnServer(locationItem);
-
-        // TODO: get rid of Copypaste
-        locationItem = new GroupItemDTO
-        {
-            type = "Number",
-            name = _ItemId + "_Z",
-            label = _ItemId + " Z",
-            category = "Virtual Location",
-            groupNames = asGroup
-        };
-        CreateItemOnServer(locationItem);
-
-    }
-
-
 
 
     /// <summary>
@@ -186,7 +138,7 @@ public class ItemController : MonoBehaviour
     /// <returns>string with current state</returns>
     public string GetItemStateAsString()
     {
-        return _Item.state.ToString();
+        return SemanticModel.getInstance().items[_ItemId].ItemModel.state.ToString();
     }
 
     /// <summary>
@@ -205,7 +157,7 @@ public class ItemController : MonoBehaviour
     public float GetItemStateAsFloat()
     {
         float result;
-        float.TryParse(_Item.state, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out result);
+        float.TryParse(SemanticModel.getInstance().items[_ItemId].ItemModel.state, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out result);
         return result;
     }
 
@@ -216,9 +168,9 @@ public class ItemController : MonoBehaviour
     /// <returns>Dimmer as percent in integer</returns>
     public float GetItemStateAsDimmer()
     {
-        float value = 0;
-        if (_Item.state == "NULL") return -1f;
-        value = float.Parse(_Item.state);
+        float value;
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state == "NULL") return -1f;
+        value = float.Parse(SemanticModel.getInstance().items[_ItemId].ItemModel.state);
         //Debug.Log("Value parsed to: " + value);
         if (value >= 0f && value <= 100f)
         {
@@ -245,13 +197,13 @@ public class ItemController : MonoBehaviour
     /// <returns>Switch state as bool (ON = True, OFF=False)</returns>
     public bool GetItemStateAsSwitch()
     {
-        if (_Item.state == "ON") return true;
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state == "ON") return true;
         return false;
     }
     /*
     public Color GetItemStateAsColor()
     {
-        float[] HSB = Array.ConvertAll(_Item.state.Split(','), float.Parse);
+        float[] HSB = Array.ConvertAll(SemanticModel.getInstance().items[_ItemId].itemModel.state.Split(','), float.Parse);
         Color colorState = Color.HSVToRGB(HSB[0], HSB[1], HSB[2]);
     }*/
 
@@ -320,13 +272,13 @@ public class ItemController : MonoBehaviour
         float Brightness;
         Color.RGBToHSV(newColor, out Hue, out Saturation, out Brightness);
 
-        print(Hue.ToString() + ", " + Saturation.ToString() + ", " + Brightness.ToString());
+        Debug.Log(Hue.ToString() + ", " + Saturation.ToString() + ", " + Brightness.ToString());
         SetItemOnServer((Hue * 360).ToString() + "," + (Saturation * 100).ToString() + "," + (Brightness*100).ToString());
     }
 
     public Vector3 StringToVec(string s)
     {
-        print("Converting string to vector: " + s);
+        Debug.Log("Converting string to vector: " + s);
         if (s == "NULL") return SemanticModel.getInstance().SpawnPosition;
         string[] temp = s.Substring(1, s.Length - 2).Split(',');
         if (temp.Length == 3) return new Vector3(float.Parse(temp[0]), float.Parse(temp[1]), float.Parse(temp[2]));
@@ -334,7 +286,7 @@ public class ItemController : MonoBehaviour
     }
     public Vector3 GetItemStateAsVector()
     {
-        if (_Item.state != null) return StringToVec(_Item.state);
+        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state != null) return StringToVec(SemanticModel.getInstance().items[_ItemId].ItemModel.state);
         else return Vector3.zero;
     }
 

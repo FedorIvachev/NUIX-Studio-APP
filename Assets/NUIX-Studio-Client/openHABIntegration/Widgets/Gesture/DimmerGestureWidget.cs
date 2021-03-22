@@ -1,15 +1,9 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
-
+﻿
 using Tsinghua.HCI.IoThingsLab;
 
-public class GestureDimmerWidget : ItemWidget 
+public class DimmerGestureWidget : ItemWidget
 {
     public GestureThumbsUpRotated _Gesture;
-
-    GestureDimmerWidget()
-    {
-        _SubscriptionType = EvtType.None;
-    }
 
     /// <summary>
     /// Initialize ItemController
@@ -54,7 +48,7 @@ public class GestureDimmerWidget : ItemWidget
     {
         if (_Gesture.TryGetNormalizedValue(out uint value))
         {
-            ConnectedItemController.SetItemStateAsDimmer((int) value);
+            ConnectedItemController.SetItemStateAsDimmer((int)value);
         }
     }
 

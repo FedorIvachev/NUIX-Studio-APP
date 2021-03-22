@@ -56,12 +56,10 @@ class EventController : MonoBehaviour
         EventModel ev = JsonUtility.FromJson<EventModel>(e.Message);
         ev.Parse();
         Debug.Log("NewEvent!!!\nParsed new Object:\n" + ev.ToString());
-        Debug.Log("EventType: " + ev._eventType);
 
 
         if (SemanticModel.getInstance().items.ContainsKey(ev.itemId))
         {
-            print(ev._eventType);
             if (ev._eventType == EvtType.ItemRemovedEvent)
             {
                 GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
@@ -70,12 +68,11 @@ class EventController : MonoBehaviour
             {
                 //print("EVTTYPE NONE PAYLOAD " + ev._Payload.type + " " + ev._Payload.value + " " + ev._Payload.status);
                 // Not sure why, but it seems that instead of itemremovedevent None is sent
-                GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
+                //GetComponent<SemanticModelController>().RemoveItem(ev.itemId);
             }
             else
             {
                 SemanticModel.getInstance().items[ev.itemId].itemController.ReceivedEvent(ev);
-
             }
         }
         else if (ev._eventType == EvtType.ItemAddedEvent)

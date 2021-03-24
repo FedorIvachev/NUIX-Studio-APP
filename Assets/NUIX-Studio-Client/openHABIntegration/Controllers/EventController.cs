@@ -107,7 +107,7 @@ class EventController : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        //_evt.Dispose();
+        _evt.Dispose();
     }
 
 

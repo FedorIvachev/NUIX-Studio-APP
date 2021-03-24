@@ -20,9 +20,9 @@ class EventController : MonoBehaviour
     public OnConnectedEventBus connectedEventBus;
 
 
-    [Header("Logger")]
-    public TMPro.TextMeshPro logger;
-    private System.Diagnostics.Stopwatch watch;
+    //[Header("Logger")]
+    //public TMPro.TextMeshPro logger;
+    //private System.Diagnostics.Stopwatch watch;
 
     void Start()
     {
@@ -52,7 +52,7 @@ class EventController : MonoBehaviour
     /// <param name="e">event of type EvenSourceMessageEventArgs</param>
     private void NewEvent(EventSourceMessageEventArgs e)
     {
-        watch = System.Diagnostics.Stopwatch.StartNew();
+        //watch = System.Diagnostics.Stopwatch.StartNew();
 
         if (!_isConnected)
         {
@@ -87,10 +87,10 @@ class EventController : MonoBehaviour
             GetComponent<SemanticModelController>().GetItem(ev.itemId);
         }
 
-        watch.Stop();
-        var elapsedMs = watch.Elapsed;
-        print("System Init time: " + elapsedMs);
-        logger.text = elapsedMs.ToString();
+        //watch.Stop();
+        //var elapsedMs = watch.Elapsed;
+        //print("System Init time: " + elapsedMs);
+        //logger.text = elapsedMs.ToString();
 
         // This sends the event to all items.
         // It would be better if event is sent to specific item.

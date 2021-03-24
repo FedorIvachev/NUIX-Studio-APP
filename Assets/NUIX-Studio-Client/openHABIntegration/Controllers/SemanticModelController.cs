@@ -38,7 +38,7 @@ class SemanticModelController : MonoBehaviour
     public void StartSystem()
     {
         // ROD: WATCH HERE
-        //watch = System.Diagnostics.Stopwatch.StartNew();
+        watch = System.Diagnostics.Stopwatch.StartNew();
         print("Starting System");
         InitializeWidgetPrefabDictionary();
         GetModel();
@@ -72,6 +72,10 @@ class SemanticModelController : MonoBehaviour
                     Widgets.AddRange(CreateWidgetsByPrefab(equipmentItemModel));
                     SemanticModel.getInstance().AddItem(equipmentItemModel, Widgets);
                     // ROD: WATCH HERE
+                    watch.Stop();
+                    var elapsedMs = watch.Elapsed;
+                    print("System Init time: " + elapsedMs);
+                    logger.text = elapsedMs.ToString();
                 }
             }
             else

@@ -1,4 +1,4 @@
-# NUIXStudio-client
+# NUIX-Studio APP
 
 ## Table of contents
 * [General info](#general-info)

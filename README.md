@@ -15,7 +15,7 @@
 
 By using NUIX-Studio App researchers can connect real and virtual IoT devices, test new IoT devices inside VR environment (and don't even need to buy them!)
 
-![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/v0.6/Architecture.png)
+![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/v0.6/AppInstances.png)
 Currenly, the architecture can be represented by four layers:
 1. **IoT real world devices.**
 2. **openHAB server.** Provides:

@@ -1,10 +1,13 @@
 ﻿
+using System;
 using Tsinghua.HCI.IoThingsLab;
+using UnityEngine;
 
 public class DimmerGestureWidget : ItemWidget
 {
     public GestureThumbsUpRotated _Gesture;
 
+    int counter = 0;
     /// <summary>
     /// Initialize ItemController
     /// </summary>
@@ -26,6 +29,14 @@ public class DimmerGestureWidget : ItemWidget
         InvokeRepeating(nameof(OnSetItem), 1.0f, 0.1f);
     }
 
+    void Update()
+    {
+        counter = (counter + 1) % 5;
+        if (counter == 1) OnSetItem();
+        print("Frame timestamp: " + DateTime.Now.ToString("hh.mm.ss.ffffff"));
+    }
+
+
     /// <summary>
     /// When an item updates from server. This function is
     /// called from ItemController when Item is Updated on server.
@@ -33,9 +44,8 @@ public class DimmerGestureWidget : ItemWidget
     /// might get flickering as the state event is sent after update from
     /// UI. This will Sync as long as Event Stream is online.
     /// </summary>
-    public void OnUpdate()
+    public override void OnUpdate()
     {
-
     }
 
     /// <summary>
@@ -48,6 +58,11 @@ public class DimmerGestureWidget : ItemWidget
     {
         if (_Gesture.TryGetNormalizedValue(out uint value))
         {
+            if (value > 48 && value < 52)
+            {
+                print("DIMMER = 50; " + DateTime.Now.ToString("hh.mm.ss.ffffff"));
+                GameObject.Find("Speaker_Small").transform.localScale = GameObject.Find("Speaker_Small").transform.localScale * 2;
+            }
             ConnectedItemController.SetItemStateAsDimmer((int)value);
         }
     }

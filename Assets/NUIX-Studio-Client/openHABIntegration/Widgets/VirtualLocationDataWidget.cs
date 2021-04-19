@@ -38,7 +38,7 @@ public class VirtualLocationDataWidget : ItemWidget
     /// might get flickering as the state event is sent after update from
     /// UI. This will Sync as long as Event Stream is online.
     /// </summary>
-    public void OnUpdate()
+    public override void OnUpdate()
     {
         Vector3 receivedPosition = ConnectedItemController.GetItemStateAsVector();
         if (receivedPosition != sentPosition)

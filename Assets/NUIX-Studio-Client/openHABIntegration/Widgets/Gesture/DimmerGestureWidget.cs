@@ -11,10 +11,10 @@ public class DimmerGestureWidget : ItemWidget
     /// <summary>
     /// Initialize ItemController
     /// </summary>
-    void Start()
+    public override void Start()
     {
         // OnUpdate is not needed for Gestures only OnSetItem
-        ConnectedItemController.updateItem += OnUpdate;
+        base.Start();
         InitWidget();
     }
 

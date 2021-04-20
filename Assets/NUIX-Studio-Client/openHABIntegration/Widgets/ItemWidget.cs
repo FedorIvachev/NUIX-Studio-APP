@@ -24,4 +24,9 @@ public abstract class ItemWidget : MonoBehaviour
 
     public abstract void OnUpdate();
 
+    public virtual void Start()
+    {
+        if (connectedToServer) ConnectedItemController.updateItem += OnUpdate;
+    }
+
 }

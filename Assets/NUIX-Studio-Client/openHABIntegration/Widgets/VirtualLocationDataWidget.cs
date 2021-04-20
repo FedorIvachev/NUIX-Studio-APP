@@ -10,11 +10,9 @@ public class VirtualLocationDataWidget : ItemWidget
     /// <summary>
     /// Initialize ItemController
     /// </summary>
-    void Start()
+    public override void Start()
     {
-
-        ConnectedItemController.updateItem += OnUpdate;
-
+        base.Start();
         InitWidget();
     }
 

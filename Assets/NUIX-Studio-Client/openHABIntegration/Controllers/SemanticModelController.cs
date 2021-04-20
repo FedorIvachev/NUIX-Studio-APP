@@ -23,11 +23,6 @@ class SemanticModelController : MonoBehaviour
     [Header("Client config")]
     public bool InitOnStartup = false;
 
-
-    [Header("Logger")]
-    public TMPro.TextMeshPro logger;
-    private System.Diagnostics.Stopwatch watch;
-
     private void Start()
     {
         if (InitOnStartup)
@@ -37,8 +32,6 @@ class SemanticModelController : MonoBehaviour
     }
     public void StartSystem()
     {
-        // ROD: WATCH HERE
-        watch = System.Diagnostics.Stopwatch.StartNew();
         print("Starting System");
         InitializeWidgetPrefabDictionary();
         GetModel();
@@ -71,11 +64,6 @@ class SemanticModelController : MonoBehaviour
                     List<GameObject> Widgets = new List<GameObject>();
                     Widgets.AddRange(CreateWidgetsByPrefab(equipmentItemModel));
                     SemanticModel.getInstance().AddItem(equipmentItemModel, Widgets);
-                    // ROD: WATCH HERE
-                    watch.Stop();
-                    var elapsedMs = watch.Elapsed;
-                    print("System Init time: " + elapsedMs);
-                    logger.text = elapsedMs.ToString();
                 }
             }
             else

@@ -7,12 +7,11 @@ public class DimmerBrightnessWidget : ItemWidget
     /// <summary>
     /// Initialize ItemController
     /// </summary>
-    void Start()
+    public override void Start()
     {
 
         ConnectedItemController.Initialize(item, _SubscriptionType);
-
-        ConnectedItemController.updateItem += OnUpdate;
+        base.Start();
         InitWidget();
     }
 

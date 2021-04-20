@@ -26,14 +26,12 @@ public class DimmerGestureWidget : ItemWidget
     private void InitWidget()
     {
         if (_Gesture == null) _Gesture = GetComponent<GestureThumbsUpRotated>();
-        InvokeRepeating(nameof(OnSetItem), 1.0f, 0.1f);
     }
 
     void Update()
     {
         counter = (counter + 1) % 5;
         if (counter == 1) OnSetItem();
-        print("Frame timestamp: " + DateTime.Now.ToString("hh.mm.ss.ffffff"));
     }
 
 
@@ -58,11 +56,6 @@ public class DimmerGestureWidget : ItemWidget
     {
         if (_Gesture.TryGetNormalizedValue(out uint value))
         {
-            if (value > 48 && value < 52)
-            {
-                print("DIMMER = 50; " + DateTime.Now.ToString("hh.mm.ss.ffffff"));
-                GameObject.Find("Speaker_Small").transform.localScale = GameObject.Find("Speaker_Small").transform.localScale * 2;
-            }
             ConnectedItemController.SetItemStateAsDimmer((int)value);
         }
     }

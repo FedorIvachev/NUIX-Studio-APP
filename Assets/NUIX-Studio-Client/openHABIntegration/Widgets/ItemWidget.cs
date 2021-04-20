@@ -29,4 +29,16 @@ public abstract class ItemWidget : MonoBehaviour
         if (connectedToServer) ConnectedItemController.updateItem += OnUpdate;
     }
 
+    public void OnWidgetConnectedToServer()
+    {
+        connectedToServer = true;
+        ConnectedItemController.updateItem += OnUpdate;
+    }
+
+    public void OnWidgetDisconnectedFromServer()
+    {
+        connectedToServer = false;
+        ConnectedItemController.updateItem = null;
+    }
+
 }

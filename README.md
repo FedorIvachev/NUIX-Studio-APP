@@ -5,6 +5,7 @@
 * [Technologies](#technologies)
 * [Required software and hardware](#required-software-and-hardware)
 * [Setup](#setup)
+* [Documentation](#documentation)
 * [Contributing to the platform](#contributing-to-the-platform)
 
 ## General info
@@ -62,6 +63,7 @@ IoT device in VR = 3D mesh + sensors. Each sensor is a data item + interactable 
 2. Enhance these devices' functionality with extra virtual sensors by adding the [supported tags]().
 3. Add fully virtual IoT sensors by dragging the Widgets into the Scene in Unity (uncheck Connected to Server for work locally).
 4. Work simultaneously with the same IoT data by connecting to the same sever from different devices.
+5. [Watch tutorial videos](https://space.bilibili.com/698910893/channel/detail?cid=180284)
 
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)

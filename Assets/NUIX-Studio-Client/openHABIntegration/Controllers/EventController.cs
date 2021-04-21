@@ -19,6 +19,11 @@ class EventController : MonoBehaviour
     public delegate void OnConnectedEventBus(bool eventbusConnection);
     public OnConnectedEventBus connectedEventBus;
 
+
+    //[Header("Logger")]
+    //public TMPro.TextMeshPro logger;
+    //private System.Diagnostics.Stopwatch watch;
+
     void Start()
     {
         //StartListen();
@@ -47,6 +52,8 @@ class EventController : MonoBehaviour
     /// <param name="e">event of type EvenSourceMessageEventArgs</param>
     private void NewEvent(EventSourceMessageEventArgs e)
     {
+        //watch = System.Diagnostics.Stopwatch.StartNew();
+
         if (!_isConnected)
         {
             _isConnected = true;
@@ -80,6 +87,11 @@ class EventController : MonoBehaviour
             GetComponent<SemanticModelController>().GetItem(ev.itemId);
         }
 
+        //watch.Stop();
+        //var elapsedMs = watch.Elapsed;
+        //print("System Init time: " + elapsedMs);
+        //logger.text = elapsedMs.ToString();
+
         // This sends the event to all items.
         // It would be better if event is sent to specific item.
         // newEvent?.Invoke(ev);
@@ -95,7 +107,7 @@ class EventController : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        //_evt.Dispose();
+        _evt.Dispose();
     }
 
 

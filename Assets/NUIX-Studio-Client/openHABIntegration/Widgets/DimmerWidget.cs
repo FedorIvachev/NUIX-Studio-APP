@@ -14,9 +14,10 @@ public class DimmerWidget : ItemWidget
 
     void Start()
     {
-        ConnectedItemController.updateItem += OnUpdate;
+        if (connectedToServer) ConnectedItemController.updateItem += OnUpdate;
         InitWidget();
     }
+
 
     /// <summary>
     /// For public field initialization etc. This is to be able to use
@@ -46,7 +47,7 @@ public class DimmerWidget : ItemWidget
     /// might get flickering as the state event is sent after update from
     /// UI. This will Sync as long as Event Stream is online.
     /// </summary>
-    public void OnUpdate()
+    public override void OnUpdate()
     {
         float value = ConnectedItemController.GetItemStateAsDimmer();
         if (!Mathf.Approximately(value, sentValue))

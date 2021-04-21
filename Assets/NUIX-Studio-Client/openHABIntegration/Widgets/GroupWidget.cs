@@ -15,9 +15,9 @@ public class GroupWidget : ItemWidget
     /// <summary>
     /// Initialize ItemController
     /// </summary>
-    void Start()
+    public override void Start()
     {
-        ConnectedItemController.updateItem += OnUpdate;
+        base.Start();
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public class GroupWidget : ItemWidget
     /// might get flickering as the state event is sent after update from
     /// UI. This will Sync as long as Event Stream is online.
     /// </summary>
-    public void OnUpdate()
+    public override void OnUpdate()
     {
         string txt = ConnectedItemController.GetItemStateAsString();
         if (_isNumber)

@@ -45,3 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: 
   _SubscriptionType: 0
+  connectedToServer: 1

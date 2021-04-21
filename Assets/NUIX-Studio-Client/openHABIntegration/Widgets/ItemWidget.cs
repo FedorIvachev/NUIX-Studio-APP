@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ItemWidget : MonoBehaviour
+public abstract class ItemWidget : MonoBehaviour
 {
     [Header("Item & Server Setup")]
     [Tooltip("Item name in openhab. ie. gf_Hallway_Light")]
@@ -19,4 +19,26 @@ public class ItemWidget : MonoBehaviour
             SemanticModel.getInstance().items[item].itemController = value;
         }
     }
+
+    public bool connectedToServer = false;
+
+    public abstract void OnUpdate();
+
+    public virtual void Start()
+    {
+        if (connectedToServer) ConnectedItemController.updateItem += OnUpdate;
+    }
+
+    public void OnWidgetConnectedToServer()
+    {
+        connectedToServer = true;
+        ConnectedItemController.updateItem += OnUpdate;
+    }
+
+    public void OnWidgetDisconnectedFromServer()
+    {
+        connectedToServer = false;
+        ConnectedItemController.updateItem = null;
+    }
+
 }

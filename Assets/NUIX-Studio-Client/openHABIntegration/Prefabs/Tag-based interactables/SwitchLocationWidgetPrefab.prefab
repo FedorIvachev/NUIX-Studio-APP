@@ -219,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: 
   _SubscriptionType: 0
+  connectedToServer: 1
   _Toggle: {fileID: 8391325778983794434}
 --- !u!1 &8391325778946725571
 GameObject:

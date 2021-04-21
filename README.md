@@ -5,7 +5,6 @@
 * [Technologies](#technologies)
 * [Required software and hardware](#required-software-and-hardware)
 * [Setup](#setup)
-* [Known issues](#known-issues)
 * [Contributing to the platform](#contributing-to-the-platform)
 
 ## General info
@@ -55,22 +54,17 @@ Connection to real-world IoT devices is performed by REST API calls to [openHAB]
 4. Download [3DLivingRoom](https://github.com/VRSimulator/NUIX-Studio-Client/releases/download/v0.6-alpha1/3DLivingRoom.unitypackage) package, select Import package - Custom package and then import it.
 5. . Run the Scene from \Assets\NUIX-Studio-Client\openHABIntegration\Scenes
 
+## Documentation
+
+IoT device in VR = 3D mesh + sensors. Each sensor is a data item + interactable object in Unity. Data items are stored on the openHAB server, interactable objects (Widgets) are located in the Assets/NUIX-Studio-Client/openHABIntegration/Prefabs folder.
+
+1. Add real-world IoT devices into openHAB, and they will automatically appear in the NUIX-Studio App. 
+2. Enhance these devices' functionality with extra virtual sensors by adding the [supported tags]().
+3. Add fully virtual IoT sensors by dragging the Widgets into the Scene in Unity (uncheck Connected to Server for work locally).
+4. Work simultaneously with the same IoT data by connecting to the same sever from different devices.
+
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)
-
-## Known Issues
-1. If the camera is sticked to your head and is not moving **OR** if the following error occurs:
-![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/Bug.png)
-
-On the top of Unity Editor, select Mixed Reality Toolkit -> Utilities -> Oculus -> Integrate Oculus Integration Unity Modules;
-
-2. If the following error occurs when you try to run the project in input simulation:
-
-![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/ErrorLayout.png)
-
-Then you need to select the default layout:
-
-![](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/LayoutFix.png)
 
 
 ## Contributing to the platform

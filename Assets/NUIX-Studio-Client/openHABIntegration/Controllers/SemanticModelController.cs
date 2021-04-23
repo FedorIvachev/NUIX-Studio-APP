@@ -10,9 +10,6 @@ class SemanticModelController : MonoBehaviour
     [SerializeField] 
     public GameObject _dimmerWidgetPrefab;
     public GameObject _switchWidgetPrefab;
-    public GameObject _textWidgetPrefab;
-    public GameObject _equipmentWidgetPrefab;
-    public GameObject _colorWidgetPrefab;
 
     [Header("Tag-based interactables")]
     public GameObject _dimmerGestureControlPrefab;
@@ -35,6 +32,7 @@ class SemanticModelController : MonoBehaviour
         print("Starting System");
         InitializeWidgetPrefabDictionary();
         GetModel();
+        GameObject SwitchWidget = Instantiate(LoadPrefabFromFile("SwitchWidget"), this.transform.position, Quaternion.identity) as GameObject;
     }
 
     private void GetModel()
@@ -99,16 +97,6 @@ class SemanticModelController : MonoBehaviour
     {
         if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
         if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
-        if (_equipmentWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Group"] = _equipmentWidgetPrefab;
-        if (_colorWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Color"] = _colorWidgetPrefab;
-
-
-        // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html
-        // Not going to add a dict entry for each of them for now
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number:Time"] = _textWidgetPrefab;
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number"] = _textWidgetPrefab;
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["DateTime"] = _textWidgetPrefab;
 
 
         // Tag-Based interactables

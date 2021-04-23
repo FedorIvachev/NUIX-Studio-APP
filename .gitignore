@@ -69,3 +69,7 @@ crashlytics-build.properties
 
 # 3rdParty Assets
 /[Aa]ssets/_Barking_Dog/
+/Assets/JP_School classroom_V2.meta
+/Assets/JP_School classroom_V2/
+/Assets/com.tsinghua.iotvrp.meta
+/Assets/com.tsinghua.iotvrp/

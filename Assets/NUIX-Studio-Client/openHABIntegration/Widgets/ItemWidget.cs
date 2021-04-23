@@ -12,7 +12,8 @@ public abstract class ItemWidget : MonoBehaviour
     {
         get
         {
-            return SemanticModel.getInstance().items[item].itemController;
+            if (SemanticModel.getInstance().items.ContainsKey(item)) return SemanticModel.getInstance().items[item].itemController;
+            else return null;
         }
         set
         {
@@ -33,12 +34,13 @@ public abstract class ItemWidget : MonoBehaviour
     {
         connectedToServer = true;
         ConnectedItemController.updateItem += OnUpdate;
+        Debug.Log("Widget " + item + " connected to the server updates");
     }
 
     public void OnWidgetDisconnectedFromServer()
     {
         connectedToServer = false;
-        ConnectedItemController.updateItem = null;
+        ConnectedItemController.updateItem -= OnUpdate;
     }
 
 }

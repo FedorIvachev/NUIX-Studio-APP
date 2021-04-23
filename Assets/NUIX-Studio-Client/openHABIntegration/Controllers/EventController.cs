@@ -95,10 +95,6 @@ class EventController : MonoBehaviour
         // This sends the event to all items.
         // It would be better if event is sent to specific item.
         // newEvent?.Invoke(ev);
-
-
-
-
     }
 
 

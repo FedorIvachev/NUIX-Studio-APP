@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/NUIX-Studio-Client/openHABIntegration/Scenes/openHABIntegration.unity
+  - enabled: 0
+    path: Assets/NUIX-Studio-Client/openHABIntegration/Scenes/Apartment/openHABIntegration.unity
     guid: 09fbaf19d9a40454fb90dc538e780456
+  - enabled: 1
+    path: Assets/NUIX-Studio-Client/openHABIntegration/Scenes/Classroom/School_Classroom.unity
+    guid: 9f26dd275aee4cc49ba57ffe51fd4e6a
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: c7b03e25f09aa424bbac80b718a4302e, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 90ceec92d4fa39543a589faceb23aab3, type: 2}

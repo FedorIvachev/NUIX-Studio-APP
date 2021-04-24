@@ -39,16 +39,14 @@ public class SemanticModel
             Item item = new Item
             {
                 ItemModel = enrichedGroupItemDTO,
-                itemController = new ItemController
-                {
-                    _ItemId = enrichedGroupItemDTO.name
-                }
+                itemController = new ItemController(enrichedGroupItemDTO.name, EvtType.ItemStateChangedEvent)
             };
 
             // Add the item widgets
             foreach (GameObject itemWidget in Widgets)
             {
                 item.AddWidget(itemWidget);
+                itemWidget.GetComponent<ItemWidget>().SetItemController(item.itemController);
             }
 
             // Add the created item to the SemanticModel dict

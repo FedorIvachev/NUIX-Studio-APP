@@ -17,29 +17,24 @@ public class SwitchWidget : ItemWidget
 
     }
 
-    /// <summary>
-    /// For public field initialization etc. This is to be able to use
-    /// a generic start function for all widgets. This function is called for
-    /// at end of Start()
-    /// </summary>
     private void InitWidget()
     {
         if (_Toggle == null)
         {
             _Toggle = GetComponent<Interactable>();
         }
+        itemController.updateItem?.Invoke();
     }
 
     /// <summary>
-    /// When an item updates from server. This function is
-    /// called from ItemController when Item is Updated on server.
+    /// This function is called from ItemController when Item is Updated on server.
     /// Begin with a check if Item and UI state is equal. Otherwise we
     /// might get flickering as the state event is sent after update from
     /// UI. This will Sync as long as Event Stream is online.
     /// </summary>
     public override void OnUpdate()
     {
-        _Toggle.IsToggled = ConnectedItemController.GetItemStateAsSwitch();
+        _Toggle.IsToggled = itemController.GetItemStateAsSwitch();
     }
 
     /// <summary>
@@ -51,8 +46,7 @@ public class SwitchWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
-        //_itemController.SetItemStateAsSwitch(_Toggle.isOn);
-        ConnectedItemController.SetItemStateAsSwitch(_Toggle.IsToggled);
+        itemController.SetItemStateAsSwitch(_Toggle.IsToggled);
     }
 
     /// <summary>
@@ -60,6 +54,6 @@ public class SwitchWidget : ItemWidget
     /// </summary>
     void OnDisable()
     {
-        ConnectedItemController.updateItem -= OnUpdate;
+        itemController.updateItem -= OnUpdate;
     }
 }

@@ -13,27 +13,17 @@ using System;
 /// </summary>
 public class ItemController
 {
-    public string _ItemId { get; set; } // name of item in openhab
-    public EnrichedGroupItemDTO _Item; // The item this controller handles
-    private EvtType _SubscribeTo; //Subscribe to this eventtype or if none, don't subscribe
+    public string ItemId { get; set; } // name of item in openhab
+    public EvtType SubscriptionType { get; set; } //Subscribe to this eventtype or if none, don't subscribe
+
+    public ItemController(string itemID = "None", EvtType evtType = EvtType.None)
+    {
+        ItemId = itemID;
+        SubscriptionType = evtType;
+    }
 
     public delegate void OnItemUpdate();
     public OnItemUpdate updateItem;
-
-
-    /// <summary>
-    /// Initialize the ItemController.
-    /// </summary>
-    /// <param name="serverUrl">server url from widget</param>
-    /// <param name="itemId">item name from widget</param>
-    /// <param name="subType">subscription type from widget</param>
-    public void Initialize(string itemId, EvtType subType)
-    {
-        _ItemId = itemId;
-        _SubscribeTo = subType;
-        //if (SemanticModel.getInstance().items.ContainsKey(itemId))
-        //GetItemFromServer();
-    }
 
     /// <summary>
     /// Eventcontroller passes an event to ItemController
@@ -41,8 +31,8 @@ public class ItemController
     /// <param name="evt">the event as eventmodel</param>
     public void ReceivedEvent(EventModel evt)
     {
-        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state != evt._Payload.value) SemanticModel.getInstance().items[_ItemId].ItemModel.state = evt._Payload.value;
-        Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + SemanticModel.getInstance().items[_ItemId].ItemModel.state);
+        if (SemanticModel.getInstance().items[ItemId].ItemModel.state != evt._Payload.value) SemanticModel.getInstance().items[ItemId].ItemModel.state = evt._Payload.value;
+        Debug.Log("Event value: " + evt._Payload.value + " New Item state value: " + SemanticModel.getInstance().items[ItemId].ItemModel.state);
         updateItem?.Invoke(); // Send event to Widgets for UI updates
     }
 
@@ -51,27 +41,27 @@ public class ItemController
     /// </summary>
     private void GetItemFromServer()
     {
-        if (SemanticModel.getInstance().items.ContainsKey(_ItemId))
+        if (SemanticModel.getInstance().items.ContainsKey(ItemId))
         {
-            SemanticModel.getInstance().items[_ItemId].ItemModel = SemanticModel.getInstance().items[_ItemId].ItemModel;
+            SemanticModel.getInstance().items[ItemId].ItemModel = SemanticModel.getInstance().items[ItemId].ItemModel;
         }
         else
         {
-            Debug.Log("No item " + _ItemId + "in semantic model");
+            Debug.Log("No item " + ItemId + "in semantic model");
 
-            RestClient.Get(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId)).Then(response =>
+            RestClient.Get(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, ItemId)).Then(response =>
             {
                 if (response.StatusCode >= 200 && response.StatusCode < 300)
                 {
-                    SemanticModel.getInstance().items[_ItemId].ItemModel = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
-                    Debug.Log("Rest GET status for Item: " + SemanticModel.getInstance().items[_ItemId].ItemModel.name + " was OK");
+                    SemanticModel.getInstance().items[ItemId].ItemModel = JsonUtility.FromJson<EnrichedGroupItemDTO>(response.Text);
+                    Debug.Log("Rest GET status for Item: " + SemanticModel.getInstance().items[ItemId].ItemModel.name + " was OK");
                     updateItem?.Invoke(); // Send event to Widgets
-                    //SemanticModel.getInstance().AddWidget(_ItemId, _Item);
+                    //SemanticModel.getInstance().AddWidget(itemId, _Item);
                     // ADD the widget to semantic model
                 }
                 else
                 {
-                    Debug.Log("Rest GET status for Item: " + _ItemId + " was not in OK span. (" + response.StatusCode + ")\n" + response.Error);
+                    Debug.Log("Rest GET status for Item: " + ItemId + " was not in OK span. (" + response.StatusCode + ")\n" + response.Error);
                 }
             });
         }
@@ -86,8 +76,8 @@ public class ItemController
         //OnItemUpdated = false;
         Debug.Log("New state: " + newState);
         RestClient.DefaultRequestHeaders["content-type"] = "text/plain";
-        RestClient.Post(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, _ItemId), newState).Then(response => {
-            Debug.Log("Posted " + newState + " to " + _ItemId + ". With responsecode " + response.StatusCode);
+        RestClient.Post(UriBuilder.GetItemUri(ClientConfig.getInstance()._ServerURL, ItemId), newState).Then(response => {
+            Debug.Log("Posted " + newState + " to " + ItemId + ". With responsecode " + response.StatusCode);
             //OnItemUpdated = true;
             RestClient.ClearDefaultHeaders();
         });
@@ -138,7 +128,7 @@ public class ItemController
     /// <returns>string with current state</returns>
     public string GetItemStateAsString()
     {
-        return SemanticModel.getInstance().items[_ItemId].ItemModel.state.ToString();
+        return SemanticModel.getInstance().items[ItemId].ItemModel.state.ToString();
     }
 
     /// <summary>
@@ -157,7 +147,7 @@ public class ItemController
     public float GetItemStateAsFloat()
     {
         float result;
-        float.TryParse(SemanticModel.getInstance().items[_ItemId].ItemModel.state, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out result);
+        float.TryParse(SemanticModel.getInstance().items[ItemId].ItemModel.state, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out result);
         return result;
     }
 
@@ -169,8 +159,8 @@ public class ItemController
     public float GetItemStateAsDimmer()
     {
         float value;
-        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state == "NULL") return -1f;
-        value = float.Parse(SemanticModel.getInstance().items[_ItemId].ItemModel.state);
+        if (SemanticModel.getInstance().items[ItemId].ItemModel.state == "NULL") return -1f;
+        value = float.Parse(SemanticModel.getInstance().items[ItemId].ItemModel.state);
         //Debug.Log("Value parsed to: " + value);
         if (value >= 0f && value <= 100f)
         {
@@ -197,13 +187,13 @@ public class ItemController
     /// <returns>Switch state as bool (ON = True, OFF=False)</returns>
     public bool GetItemStateAsSwitch()
     {
-        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state == "ON") return true;
+        if (SemanticModel.getInstance().items[ItemId].ItemModel.state == "ON") return true;
         return false;
     }
     /*
     public Color GetItemStateAsColor()
     {
-        float[] HSB = Array.ConvertAll(SemanticModel.getInstance().items[_ItemId].itemModel.state.Split(','), float.Parse);
+        float[] HSB = Array.ConvertAll(SemanticModel.getInstance().items[itemId].itemModel.state.Split(','), float.Parse);
         Color colorState = Color.HSVToRGB(HSB[0], HSB[1], HSB[2]);
     }*/
 
@@ -286,7 +276,7 @@ public class ItemController
     }
     public Vector3 GetItemStateAsVector()
     {
-        if (SemanticModel.getInstance().items[_ItemId].ItemModel.state != null) return StringToVec(SemanticModel.getInstance().items[_ItemId].ItemModel.state);
+        if (SemanticModel.getInstance().items[ItemId].ItemModel.state != null) return StringToVec(SemanticModel.getInstance().items[ItemId].ItemModel.state);
         else return Vector3.zero;
     }
 
@@ -305,7 +295,7 @@ public class ItemController
     /// <returns></returns>
     public string GetItemID()
     {
-        return _ItemId;
+        return ItemId;
     }
 
     /// <summary>
@@ -314,7 +304,7 @@ public class ItemController
     /// <returns></returns>
     public EvtType GetItemSubType()
     {
-        return _SubscribeTo;
+        return SubscriptionType;
     }
 }
 /// <summary>

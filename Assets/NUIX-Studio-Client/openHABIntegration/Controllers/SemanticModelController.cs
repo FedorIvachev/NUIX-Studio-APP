@@ -7,16 +7,6 @@ using UnityEngine.Rendering;
 
 class SemanticModelController : MonoBehaviour
 {
-    [SerializeField] 
-    public GameObject _dimmerWidgetPrefab;
-    public GameObject _switchWidgetPrefab;
-
-    [Header("Tag-based interactables")]
-    public GameObject _dimmerGestureControlPrefab;
-    public GameObject _dimmerBrightnessWidgetPrefab;
-
-    public GameObject _stringVirtualLocationDataPrefab;
-
     [Header("Client config")]
     public bool InitOnStartup = false;
 
@@ -30,9 +20,7 @@ class SemanticModelController : MonoBehaviour
     public void StartSystem()
     {
         print("Starting System");
-        InitializeWidgetPrefabDictionary();
         GetModel();
-        GameObject SwitchWidget = Instantiate(LoadPrefabFromFile("SwitchWidget"), this.transform.position, Quaternion.identity) as GameObject;
     }
 
     private void GetModel()
@@ -93,25 +81,22 @@ class SemanticModelController : MonoBehaviour
         SemanticModel.getInstance().RemoveItem(itemId);
     }
 
-    private void InitializeWidgetPrefabDictionary()
-    {
-        if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
-        if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
-
-
-        // Tag-Based interactables
-        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer_NUIXGestureControl"] = _dimmerGestureControlPrefab;
-        if (_dimmerBrightnessWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer_NUIXBrightness"] = _dimmerBrightnessWidgetPrefab;
-
-        if (_stringVirtualLocationDataPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String_VirtualLocationData"] = _stringVirtualLocationDataPrefab;
-        
-    }
-
 
     public List<GameObject> CreateWidgetsByPrefab(EnrichedGroupItemDTO item)
     {
         List<GameObject> itemWidgets = new List<GameObject>();
 
+        GameObject itemWidgetPrefab = LoadPrefabFromFile(item.type);
+
+        if (itemWidgetPrefab != null)
+        {
+            GameObject itemWidget = Instantiate(itemWidgetPrefab, this.transform.position, Quaternion.identity) as GameObject;
+            itemWidget.GetComponent<ItemWidget>().item = item.name;
+            itemWidget.name = item.name + " Widget";
+            itemWidgets.Add(itemWidget);
+        }
+
+        /*
         // Need to delete it and only create if there is no item based on tag created
         if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
         {
@@ -139,6 +124,7 @@ class SemanticModelController : MonoBehaviour
                 }
             }
         }
+        */
         return itemWidgets;
     }
 
@@ -252,7 +238,8 @@ class SemanticModelController : MonoBehaviour
         var loadedObject = Resources.Load(filename);
         if (loadedObject == null)
         {
-            throw new FileNotFoundException("...no file found - please check the configuration");
+            return null;
+            //throw new FileNotFoundException("...no file found - please check the configuration");
         }
         return loadedObject as GameObject;
     }

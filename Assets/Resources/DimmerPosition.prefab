@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2538223749506183971}
   - component: {fileID: 2538223749506184027}
   m_Layer: 0
-  m_Name: DimmerLocationWidgetPrefab
+  m_Name: DimmerPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: 
-  _SubscriptionType: 0
   _PinchSlider: {fileID: 6464215906437959124}
 --- !u!1 &6464215905812771811
 GameObject:
@@ -585,7 +584,7 @@ GameObject:
   - component: {fileID: 6464215906437959124}
   - component: {fileID: 6464215906437959127}
   m_Layer: 0
-  m_Name: DimmerWidgetPrefab
+  m_Name: PinchSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

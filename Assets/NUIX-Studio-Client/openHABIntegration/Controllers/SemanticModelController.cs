@@ -86,8 +86,12 @@ class SemanticModelController : MonoBehaviour
     {
         List<GameObject> itemWidgets = new List<GameObject>();
 
-        
-        GameObject itemWidgetPrefab = LoadPrefabFromFile((item.type.Contains("Number") ? "Number" : item.type)); //Number:Dimension -> Number
+
+        string itemtype = (item.type.Contains("Number") ? "Number" : item.type);
+
+
+
+        GameObject itemWidgetPrefab = LoadPrefabFromFile(itemtype); //Number:Dimension -> Number
 
         if (itemWidgetPrefab != null)
         {
@@ -95,6 +99,19 @@ class SemanticModelController : MonoBehaviour
             itemWidget.GetComponent<ItemWidget>().item = item.name;
             itemWidget.name = item.name + " Widget";
             itemWidgets.Add(itemWidget);
+        }
+
+        foreach (string itemTag in item.tags)
+        {
+            GameObject itemTagWidgetPrefab = LoadPrefabFromFile(itemtype + itemTag); //Number:Dimension -> Number
+
+            if (itemTagWidgetPrefab != null)
+            {
+                GameObject itemWidget = Instantiate(itemTagWidgetPrefab, this.transform.position, Quaternion.identity) as GameObject;
+                itemWidget.GetComponent<ItemWidget>().item = item.name;
+                itemWidget.name = item.name + itemTag + " Widget";
+                itemWidgets.Add(itemWidget);
+            }
         }
 
         /*

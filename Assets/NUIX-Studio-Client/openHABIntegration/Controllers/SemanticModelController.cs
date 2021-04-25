@@ -86,7 +86,8 @@ class SemanticModelController : MonoBehaviour
     {
         List<GameObject> itemWidgets = new List<GameObject>();
 
-        GameObject itemWidgetPrefab = LoadPrefabFromFile(item.type);
+        
+        GameObject itemWidgetPrefab = LoadPrefabFromFile((item.type.Contains("Number") ? "Number" : item.type)); //Number:Dimension -> Number
 
         if (itemWidgetPrefab != null)
         {

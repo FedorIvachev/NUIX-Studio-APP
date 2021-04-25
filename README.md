@@ -1,5 +1,7 @@
 # NUIX-Studio App
 
+[Link to Tsinghua Gitlab repo](https://git.tsinghua.edu.cn/feij19/NUIX-Studio-APP)
+
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)

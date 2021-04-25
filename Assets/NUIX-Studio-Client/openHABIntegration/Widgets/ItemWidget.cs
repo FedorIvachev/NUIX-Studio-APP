@@ -4,41 +4,23 @@ public abstract class ItemWidget : MonoBehaviour
 {
     [Header("Item & Server Setup")]
     [Tooltip("Item name in openhab. ie. gf_Hallway_Light")]
-    public string item;
+    public string item = "None";
     [Tooltip("If you wan't to subscribe to events on this item. What event. Usually StateChanged")]
-    public EvtType _SubscriptionType = EvtType.ItemStateChangedEvent;
+    protected ItemController itemController;
 
-    protected ItemController ConnectedItemController
-    {
-        get
-        {
-            return SemanticModel.getInstance().items[item].itemController;
-        }
-        set
-        {
-            SemanticModel.getInstance().items[item].itemController = value;
-        }
-    }
-
-    public bool connectedToServer = false;
 
     public abstract void OnUpdate();
 
     public virtual void Start()
     {
-        if (connectedToServer) ConnectedItemController.updateItem += OnUpdate;
     }
 
-    public void OnWidgetConnectedToServer()
+    public void SetItemController(ItemController setItemComtroller)
     {
-        connectedToServer = true;
-        ConnectedItemController.updateItem += OnUpdate;
-    }
+        //itemController = SemanticModel.getInstance().items[item].itemController;
+        //itemController.ItemId = item;
 
-    public void OnWidgetDisconnectedFromServer()
-    {
-        connectedToServer = false;
-        ConnectedItemController.updateItem = null;
+        itemController = setItemComtroller;
+        itemController.updateItem += OnUpdate;
     }
-
 }

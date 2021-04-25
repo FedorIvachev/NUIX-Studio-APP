@@ -7,19 +7,6 @@ using UnityEngine.Rendering;
 
 class SemanticModelController : MonoBehaviour
 {
-    [SerializeField] 
-    public GameObject _dimmerWidgetPrefab;
-    public GameObject _switchWidgetPrefab;
-    public GameObject _textWidgetPrefab;
-    public GameObject _equipmentWidgetPrefab;
-    public GameObject _colorWidgetPrefab;
-
-    [Header("Tag-based interactables")]
-    public GameObject _dimmerGestureControlPrefab;
-    public GameObject _dimmerBrightnessWidgetPrefab;
-
-    public GameObject _stringVirtualLocationDataPrefab;
-
     [Header("Client config")]
     public bool InitOnStartup = false;
 
@@ -33,7 +20,6 @@ class SemanticModelController : MonoBehaviour
     public void StartSystem()
     {
         print("Starting System");
-        InitializeWidgetPrefabDictionary();
         GetModel();
     }
 
@@ -95,35 +81,40 @@ class SemanticModelController : MonoBehaviour
         SemanticModel.getInstance().RemoveItem(itemId);
     }
 
-    private void InitializeWidgetPrefabDictionary()
-    {
-        if (_dimmerWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer"] = _dimmerWidgetPrefab;
-        if (_switchWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Switch"] = _switchWidgetPrefab;
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String"] = _textWidgetPrefab;
-        if (_equipmentWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Group"] = _equipmentWidgetPrefab;
-        if (_colorWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Color"] = _colorWidgetPrefab;
-
-
-        // There are plenty of Number:<dimension> units https://www.openhab.org/docs/concepts/units-of-measurement.html
-        // Not going to add a dict entry for each of them for now
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number:Time"] = _textWidgetPrefab;
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Number"] = _textWidgetPrefab;
-        if (_textWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["DateTime"] = _textWidgetPrefab;
-
-
-        // Tag-Based interactables
-        if (_dimmerGestureControlPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer_NUIXGestureControl"] = _dimmerGestureControlPrefab;
-        if (_dimmerBrightnessWidgetPrefab != null) ClientConfig.getInstance()._widgetPrefabs["Dimmer_NUIXBrightness"] = _dimmerBrightnessWidgetPrefab;
-
-        if (_stringVirtualLocationDataPrefab != null) ClientConfig.getInstance()._widgetPrefabs["String_VirtualLocationData"] = _stringVirtualLocationDataPrefab;
-        
-    }
-
 
     public List<GameObject> CreateWidgetsByPrefab(EnrichedGroupItemDTO item)
     {
         List<GameObject> itemWidgets = new List<GameObject>();
 
+
+        string itemtype = (item.type.Contains("Number") ? "Number" : item.type);
+
+
+
+        GameObject itemWidgetPrefab = LoadPrefabFromFile(itemtype); //Number:Dimension -> Number
+
+        if (itemWidgetPrefab != null)
+        {
+            GameObject itemWidget = Instantiate(itemWidgetPrefab, this.transform.position, Quaternion.identity) as GameObject;
+            itemWidget.GetComponent<ItemWidget>().item = item.name;
+            itemWidget.name = item.name + " Widget";
+            itemWidgets.Add(itemWidget);
+        }
+
+        foreach (string itemTag in item.tags)
+        {
+            GameObject itemTagWidgetPrefab = LoadPrefabFromFile(itemtype + itemTag); //Number:Dimension -> Number
+
+            if (itemTagWidgetPrefab != null)
+            {
+                GameObject itemWidget = Instantiate(itemTagWidgetPrefab, this.transform.position, Quaternion.identity) as GameObject;
+                itemWidget.GetComponent<ItemWidget>().item = item.name;
+                itemWidget.name = item.name + itemTag + " Widget";
+                itemWidgets.Add(itemWidget);
+            }
+        }
+
+        /*
         // Need to delete it and only create if there is no item based on tag created
         if (ClientConfig.getInstance()._widgetPrefabs.ContainsKey(item.type))
         {
@@ -151,6 +142,7 @@ class SemanticModelController : MonoBehaviour
                 }
             }
         }
+        */
         return itemWidgets;
     }
 
@@ -264,7 +256,8 @@ class SemanticModelController : MonoBehaviour
         var loadedObject = Resources.Load(filename);
         if (loadedObject == null)
         {
-            throw new FileNotFoundException("...no file found - please check the configuration");
+            return null;
+            //throw new FileNotFoundException("...no file found - please check the configuration");
         }
         return loadedObject as GameObject;
     }

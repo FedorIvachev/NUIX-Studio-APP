@@ -65,6 +65,23 @@ IoT device in VR = 3D mesh + sensors. Each sensor is a data item + interactable 
 4. Work simultaneously with the same IoT data by connecting to the same sever from different devices.
 5. [Watch tutorial videos](https://space.bilibili.com/698910893/channel/detail?cid=180284)
 
+Item Basic Widgets:
+| Item | Widget |
+| --- | --- |
+| Color | Color information (RGB) |
+| Contact | Status of contacts, e.g. door/window contacts. Does not accept commands, only status updates. |
+| DateTime | Stores date and time |
+| Dimmer | Percentage value for dimmers |
+| Group | Nest other items / collect them in groups |
+| Image | Binary data of an image |
+| Location | GPS coordinates |
+| Number | Values in number format |
+| Player | Allows control of players (e.g. audio players) |
+| Rollershutter | Roller shutter Item, typically used for blinds |
+| String | Stores texts |
+| Switch | Switch Item, used for anything that needs to be switched ON and OFF |
+
+
 ### Input simulation
 [Input simulation service Documentation](https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/InputSimulation/InputSimulationService.html)
 

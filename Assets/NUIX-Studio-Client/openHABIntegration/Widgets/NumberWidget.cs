@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
+/// <summary>
+/// A widget representing a Number item.
+/// Does not take dimensions into account, thus it is stored in String.
+/// User needs to parse the number in number widget himself.
+/// </summary>
 public class NumberWidget : ItemWidget
 {
     [Header("Widget Setup")]
     public TextMeshPro text;
 
-
-    /// <summary>
-    /// Initialize ItemController
-    /// </summary>
     public override void Start()
     {
         base.Start();
@@ -41,7 +41,7 @@ public class NumberWidget : ItemWidget
     }
 
     /// <summary>
-    /// Call this from ie OnButtonClicked() event in Unity UI
+    /// Call this from ie OnButtonClicked() or other events in Unity UI
     /// Update item from UI. Call itemcontroller and update Item on server.
     /// If update is true, an event will be recieved. If state is equal no
     /// new UI update is necesarry. If not equal the PUT has failed and we need
@@ -49,6 +49,7 @@ public class NumberWidget : ItemWidget
     /// </summary>
     public void OnSetItem()
     {
+        itemController.SetItemStateAsString(text.text);
     }
 
     /// <summary>

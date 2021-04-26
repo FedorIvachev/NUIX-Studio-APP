@@ -91,7 +91,7 @@ class SemanticModelController : MonoBehaviour
 
 
 
-        GameObject itemWidgetPrefab = LoadPrefabFromFile(itemtype); //Number:Dimension -> Number
+        GameObject itemWidgetPrefab = LoadPrefabFromFile("Widgets/" + itemtype); //Number:Dimension -> Number
 
         if (itemWidgetPrefab != null)
         {

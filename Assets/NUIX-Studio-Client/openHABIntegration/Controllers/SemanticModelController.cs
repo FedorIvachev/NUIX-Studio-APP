@@ -103,7 +103,7 @@ class SemanticModelController : MonoBehaviour
 
         foreach (string itemTag in item.tags)
         {
-            GameObject itemTagWidgetPrefab = LoadPrefabFromFile(itemtype + itemTag); //Number:Dimension -> Number
+            GameObject itemTagWidgetPrefab = LoadPrefabFromFile("Widgets/Tags/" + itemTag); //Number:Dimension -> Number
 
             if (itemTagWidgetPrefab != null)
             {
@@ -234,7 +234,7 @@ class SemanticModelController : MonoBehaviour
 
     public void SetServerIPAdress()
     {
-        string adr = GameObject.Find("NativeKeyboardOutputIPAdress").GetComponent<TMPro.TextMeshPro>().text;
+        string adr = GameObject.Find("ServerIPAdress").GetComponent<TMPro.TextMeshPro>().text;
         //string adr = GameObject.Find("KeyboardOutputIPAdress").GetComponent<TMP_InputField>().text;
         print(adr);
         if (System.Net.IPAddress.TryParse(adr, out var _))

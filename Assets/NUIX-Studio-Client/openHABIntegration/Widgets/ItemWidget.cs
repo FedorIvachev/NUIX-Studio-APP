@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using UnityEngine;
 
 public abstract class ItemWidget : MonoBehaviour
 {
@@ -13,13 +14,16 @@ public abstract class ItemWidget : MonoBehaviour
 
     public virtual void Start()
     {
+        // If there is bo itemController attached, it means that this widget was created outside the SemanticModelController
+        // In this case synchronizing the data requires ItemDTo (including item.state), which need to be created additionaly
+        if (itemController == null)
+        {
+            itemController = new ItemController(item, EvtType.None);
+        }
     }
 
     public void SetItemController(ItemController setItemComtroller)
     {
-        //itemController = SemanticModel.getInstance().items[item].itemController;
-        //itemController.ItemId = item;
-
         itemController = setItemComtroller;
         itemController.updateItem += OnUpdate;
     }

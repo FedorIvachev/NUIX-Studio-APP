@@ -10,7 +10,7 @@ using UnityEngine.Events;
 /// A Widget which operates with two events:
 /// Sensor trigger and untrigger
 /// </summary>
-public class SensorWidget : ItemWidget
+public abstract class SensorWidget : ItemWidget
 {
     [SerializeField]
     [Tooltip("Action performed after sensor is triggered")]
@@ -51,10 +51,5 @@ public class SensorWidget : ItemWidget
     public void SensorUntrigger()
     {
         if (_isSensorTriggered) SensorUntriggered();
-    }
-
-    public override void OnUpdate()
-    {
-        //throw new System.NotImplementedException();
     }
 }

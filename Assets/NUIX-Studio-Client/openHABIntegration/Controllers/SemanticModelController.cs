@@ -95,7 +95,7 @@ class SemanticModelController : MonoBehaviour
 
         if (itemWidgetPrefab != null)
         {
-            GameObject itemWidget = Instantiate(itemWidgetPrefab, this.transform.position, Quaternion.identity) as GameObject;
+            GameObject itemWidget = Instantiate(itemWidgetPrefab, SemanticModel.getInstance().SpawnPosition, Quaternion.identity) as GameObject;
             itemWidget.GetComponent<ItemWidget>().item = item.name;
             itemWidget.name = item.name;
             itemWidgets.Add(itemWidget);
@@ -107,7 +107,7 @@ class SemanticModelController : MonoBehaviour
 
             if (itemTagWidgetPrefab != null)
             {
-                GameObject itemWidget = Instantiate(itemTagWidgetPrefab, this.transform.position, Quaternion.identity) as GameObject;
+                GameObject itemWidget = Instantiate(itemTagWidgetPrefab, SemanticModel.getInstance().SpawnPosition, Quaternion.identity) as GameObject;
                 itemWidget.GetComponent<ItemWidget>().item = item.name;
                 itemWidget.GetComponent<ItemWidget>().itemTag = itemTag;
                 itemWidget.name = item.name + itemTag;
@@ -235,7 +235,7 @@ class SemanticModelController : MonoBehaviour
 
     public void SetServerIPAdress()
     {
-        string adr = GameObject.Find("ServerIPAdress").GetComponent<TMPro.TextMeshPro>().text;
+        string adr = GameObject.Find("ServerIPAddress").GetComponent<TMPro.TextMeshPro>().text;
         //string adr = GameObject.Find("KeyboardOutputIPAdress").GetComponent<TMP_InputField>().text;
         print(adr);
         if (System.Net.IPAddress.TryParse(adr, out var _))

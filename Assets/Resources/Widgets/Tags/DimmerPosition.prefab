@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: 
+  StoreVirtualPosition: 1
   _PinchSlider: {fileID: 6464215906437959124}
 --- !u!1 &6464215905812771811
 GameObject:

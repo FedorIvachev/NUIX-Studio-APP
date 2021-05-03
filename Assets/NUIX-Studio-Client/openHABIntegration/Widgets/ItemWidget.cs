@@ -1,4 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ItemWidget : MonoBehaviour
@@ -9,6 +10,11 @@ public abstract class ItemWidget : MonoBehaviour
     [Tooltip("If you wan't to subscribe to events on this item. What event. Usually StateChanged")]
     protected ItemController itemController;
 
+    [Header("Widget parameters")]
+    [Tooltip("Store & synchronize virtual position with openHAB server")]
+    public bool StoreVirtualPosition;
+
+    public string itemTag = "";
 
     public abstract void OnUpdate();
 
@@ -19,6 +25,27 @@ public abstract class ItemWidget : MonoBehaviour
         if (itemController == null)
         {
             itemController = new ItemController(item, EvtType.None);
+        }
+        if (StoreVirtualPosition)
+        {
+
+            List<string> groups = new List<string>
+            {
+
+            };
+            List<string> virtualPositionTag = new List<string>
+                        {
+                            "VirtualPosition"
+                        };
+
+            GroupItemDTO virtualPositionDataItem = new GroupItemDTO
+            {
+                type = "String",
+                name = item + itemTag + "_" + "VirtualPosition",
+                tags = virtualPositionTag,
+                groupNames = groups
+            };
+            itemController.CreateItemOnServer(virtualPositionDataItem);
         }
     }
 

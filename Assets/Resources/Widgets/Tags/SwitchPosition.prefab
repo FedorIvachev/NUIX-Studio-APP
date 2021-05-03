@@ -717,6 +717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: None
+  StoreVirtualPosition: 1
   _Toggle: {fileID: 5659224239429093869}
 --- !u!1 &5903035258514917294
 GameObject:

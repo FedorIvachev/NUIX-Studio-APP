@@ -67,10 +67,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# Environment files
-/Environments/
-/Environments.meta
-
 # Visual Studio Config files
 *.vsconfig
 

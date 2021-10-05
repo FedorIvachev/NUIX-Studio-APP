@@ -1,0 +1,326 @@
+fileFormatVersion: 2
+guid: 394becac6cd00464aa334434422d4485
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Pot
+    100002: Table02
+    100004: Magnetoscope
+    100006: Enceintes
+    100008: Television
+    100010: Bouquins
+    100012: Lampe03
+    100014: Table01
+    100016: Lampe02
+    100018: Floor
+    100020: Rideaux
+    100022: Plafond001
+    100024: Canape
+    100026: //RootNode
+    100028: Cadres
+    100030: Etageres01
+    100032: Lights
+    100034: LCD
+    100036: Wall
+    100038: Object001
+    100040: Roof
+    100042: Wall_A
+    100044: Wall_B
+    100046: Wall_C
+    100048: Wall_D
+    100050: Wall_E
+    100052: Wall_F
+    100054: Wall_G
+    100056: Object002
+    100058: Object003
+    100060: Wall_Border
+    100062: Object004
+    100064: Wall_Exterior
+    100066: Window_Double
+    100068: Window_Left
+    100070: Window_Right
+    100072: Glass_A
+    100074: Windows_Triple
+    100076: SlidingWindow001
+    100078: Shape01
+    400000: Pot
+    400002: Table02
+    400004: Magnetoscope
+    400006: Enceintes
+    400008: Television
+    400010: Bouquins
+    400012: Lampe03
+    400014: Table01
+    400016: Lampe02
+    400018: Floor
+    400020: Rideaux
+    400022: Plafond001
+    400024: Canape
+    400026: //RootNode
+    400028: Cadres
+    400030: Etageres01
+    400032: Lights
+    400034: LCD
+    400036: Wall
+    400038: Object001
+    400040: Roof
+    400042: Wall_A
+    400044: Wall_B
+    400046: Wall_C
+    400048: Wall_D
+    400050: Wall_E
+    400052: Wall_F
+    400054: Wall_G
+    400056: Object002
+    400058: Object003
+    400060: Wall_Border
+    400062: Object004
+    400064: Wall_Exterior
+    400066: Window_Double
+    400068: Window_Left
+    400070: Window_Right
+    400072: Glass_A
+    400074: Windows_Triple
+    400076: SlidingWindow001
+    400078: Shape01
+    2300000: Pot
+    2300002: Table02
+    2300004: Magnetoscope
+    2300006: Enceintes
+    2300008: Television
+    2300010: Bouquins
+    2300012: Lampe03
+    2300014: Table01
+    2300016: Lampe02
+    2300018: Floor
+    2300020: Rideaux
+    2300022: Plafond001
+    2300024: Canape
+    2300026: Cadres
+    2300028: Etageres01
+    2300030: Lights
+    2300032: LCD
+    2300034: Wall
+    2300036: Object001
+    2300038: Roof
+    2300040: Wall_A
+    2300042: Wall_B
+    2300044: Wall_C
+    2300046: Wall_D
+    2300048: Wall_E
+    2300050: Wall_F
+    2300052: Wall_G
+    2300054: Object002
+    2300056: Object003
+    2300058: Wall_Border
+    2300060: Wall_Exterior
+    2300062: Window_Double
+    2300064: Window_Left
+    2300066: Window_Right
+    2300068: Glass_A
+    2300070: Windows_Triple
+    2300072: SlidingWindow001
+    3300000: Pot
+    3300002: Table02
+    3300004: Magnetoscope
+    3300006: Enceintes
+    3300008: Television
+    3300010: Bouquins
+    3300012: Lampe03
+    3300014: Table01
+    3300016: Lampe02
+    3300018: Floor
+    3300020: Rideaux
+    3300022: Plafond001
+    3300024: Canape
+    3300026: Cadres
+    3300028: Etageres01
+    3300030: Lights
+    3300032: LCD
+    3300034: Wall
+    3300036: Object001
+    3300038: Roof
+    3300040: Wall_A
+    3300042: Wall_B
+    3300044: Wall_C
+    3300046: Wall_D
+    3300048: Wall_E
+    3300050: Wall_F
+    3300052: Wall_G
+    3300054: Object002
+    3300056: Object003
+    3300058: Wall_Border
+    3300060: Wall_Exterior
+    3300062: Window_Double
+    3300064: Window_Left
+    3300066: Window_Right
+    3300068: Glass_A
+    3300070: Windows_Triple
+    3300072: SlidingWindow001
+    4300000: Table02
+    4300002: Etageres01
+    4300004: Cadres
+    4300006: Canape
+    4300008: Plafond
+    4300010: Rideaux
+    4300012: Floor
+    4300014: Lampe02
+    4300016: Table01
+    4300018: Pot
+    4300020: Lampe03
+    4300022: Bouquins
+    4300024: Television
+    4300026: Enceintes
+    4300028: Magnetoscope
+    4300030: Lights
+    4300032: LCD
+    4300034: Wall
+    4300036: Plafond001
+    4300038: Roof
+    4300040: Object001
+    4300042: Wall_A
+    4300044: Wall_B
+    4300046: Wall_C
+    4300048: Wall_D
+    4300050: Wall_E
+    4300052: Wall_F
+    4300054: Wall_G
+    4300056: Object002
+    4300058: Object003
+    4300060: Wall_Border
+    4300062: Wall_Exterior
+    4300064: Window_Double
+    4300066: Window_Left
+    4300068: Window_Right
+    4300070: Glass_A
+    4300072: Windows_Triple
+    4300074: SlidingWindow001
+    7400000: Take 001
+    11100000: //RootNode
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chrome
+    second: {fileID: 2100000, guid: 15715f31b8568404b888daf416351f7d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Floor_Wood
+    second: {fileID: 2100000, guid: 309ee16fcfb514bb1aebfef0a8f8b7e2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: 69837e49fa96641b8ab28a33d493b812, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 9e22756989fb446e9b83305bcdb917be, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Plastic_White
+    second: {fileID: 2100000, guid: f2c2e64d6679f4dbf9850d467b5b1d00, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tissue_Green
+    second: {fileID: 2100000, guid: 8e0ad5d232dc745449a3552e51de13a1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall_Border
+    second: {fileID: 2100000, guid: b7a51de04e2bb41c8aa874afeb687417, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall_White
+    second: {fileID: 2100000, guid: dc74fee00e83c42e58c47841e2c9644e, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 2
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 0
+    keepQuads: 0
+    weldVertices: 0
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

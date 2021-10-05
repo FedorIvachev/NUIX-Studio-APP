@@ -67,9 +67,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# 3rdParty Assets
-/[Aa]ssets/NUIX-Studio/Environments/
-/[Aa]ssets/NUIX-Studio/Environments.meta
+# Environment files
+/Environments/
+/Environments.meta
 
 # macOS files
 .DS_Store

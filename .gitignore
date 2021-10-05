@@ -71,5 +71,8 @@ crashlytics-build.properties
 /Environments/
 /Environments.meta
 
+# Visual Studio Config files
+*.vsconfig
+
 # macOS files
 .DS_Store

@@ -15,4 +15,4 @@ MonoBehaviour:
   home_Scene_Location: NUIX-Studio-APP/Environments/Environments/Living_Room
   classroom_Scene_Location: NUIX-Studio-APP/Environments/Environments/School_Classroom
   car_Scene_Location: NUIX-Studio-APP/Environments/Environments/Car
-  main_scene_location: NUIX-Studio-APP/Environments/Main
+  main_scene_location: NUIX-Studio-APP/Environments/Environments/Main/Main

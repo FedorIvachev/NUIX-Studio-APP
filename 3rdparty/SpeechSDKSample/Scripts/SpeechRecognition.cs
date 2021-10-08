@@ -41,10 +41,6 @@ public class SpeechRecognition : MonoBehaviour
     public Toggle TranslationEnabled;
     [Tooltip("Target language #1 for translation (if enabled).")]
     public Dropdown Languages1;
-    [Tooltip("Target language #2 for translation (if enabled).")]
-    public Dropdown Languages2;
-    [Tooltip("Target language #3 for translation (if enabled).")]
-    public Dropdown Languages3;
 
     // Used to show live messages on screen, must be locked to avoid threading deadlocks since
     // the recognition events are raised in a separate thread
@@ -267,10 +263,6 @@ public class SpeechRecognition : MonoBehaviour
             config.SpeechRecognitionLanguage = fromLanguage;
             if (Languages1.captionText.text.Length > 0)
                 config.AddTargetLanguage(ExtractLanguageCode(Languages1.captionText.text));
-            if (Languages2.captionText.text.Length > 0)
-                config.AddTargetLanguage(ExtractLanguageCode(Languages2.captionText.text));
-            if (Languages3.captionText.text.Length > 0)
-                config.AddTargetLanguage(ExtractLanguageCode(Languages3.captionText.text));
             translator = new TranslationRecognizer(config);
 
             if (translator != null)

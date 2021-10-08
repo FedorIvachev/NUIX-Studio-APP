@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68da2daf0244e58489834e4464efcb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nuixSpeechRecognition: {fileID: 0}
+  nuixSpeechRecognition: {fileID: 1892050351966699856}
   RecognizedText: {fileID: 8025788467388595127}
   ErrorText: {fileID: 8025788466570675176}
   TranslationEnabled: {fileID: 8025788466851794044}

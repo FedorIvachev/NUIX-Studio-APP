@@ -15,8 +15,6 @@ using Microsoft.CognitiveServices.Speech;
 public class UIManager : MonoBehaviour {
 
     public Dropdown LanguageList1;
-    public Dropdown LanguageList2;
-    public Dropdown LanguageList3;
 
     // Use this for initialization
     void Start () {
@@ -27,12 +25,8 @@ public class UIManager : MonoBehaviour {
             languages.Add(language.ToString());
         }
         LanguageList1.AddOptions(languages);
-        LanguageList2.AddOptions(languages);
-        LanguageList3.AddOptions(languages);
         // Pick some default languages for translation, users can change this
-        LanguageList1.value = (int)TranslationLanguages.fr_French;
-        LanguageList2.value = (int)TranslationLanguages.es_Spanish;
-        LanguageList3.value = (int)TranslationLanguages.de_German;
+        LanguageList1.value = (int)TranslationLanguages.en_English;
     }
 
     // The first two letters of each enum value converted to a string are used

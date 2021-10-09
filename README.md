@@ -1,5 +1,6 @@
 # NUIX-Studio-APP
 NUIX-Studio App helps developers to create devices for VR-IoT environment.
+[![Video demo](https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Readme/Files/NUIX-LOGO.png)](https://cloud.tsinghua.edu.cn/f/f8c0ed8269b14dce977d/)
 
 ## Table of contents
 * [General info](#general-info)

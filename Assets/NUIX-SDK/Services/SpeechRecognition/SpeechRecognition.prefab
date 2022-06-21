@@ -1395,8 +1395,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3822275881076795563}
-  m_LocalRotation: {x: -0, y: -0.14242762, z: -0, w: 0.9898053}
-  m_LocalPosition: {x: 0, y: 0, z: -1.4750379}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.002102886, y: 0.0021028859, z: 0.002102886}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1409,10 +1409,10 @@ RectTransform:
   - {fileID: 3822275882527543688}
   m_Father: {fileID: 3822275882411720234}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -51.942, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.5743977, y: 0.6240001}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1024, y: 712.053}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3822275881076795572
@@ -2358,7 +2358,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3822275881663219034}
-  m_LocalRotation: {x: -0, y: 0.30540472, z: -0, w: 0.95222265}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2388,7 +2388,7 @@ MonoBehaviour:
   ErrorText: {fileID: 3822275881730218457}
   TranslationEnabled: {fileID: 3822275882021361229}
   Languages1: {fileID: 3822275880696216972}
-  SpeechServiceAPIKey: insert your key
+  SpeechServiceAPIKey: 132dcffabade4f608c403e1428de14db
   SpeechServiceRegion: eastasia
 --- !u!114 &3767263760889610141
 MonoBehaviour:
@@ -3891,8 +3891,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3822275882411720235}
-  m_LocalRotation: {x: -0, y: -0.30540472, z: -0, w: 0.95222265}
-  m_LocalPosition: {x: -2.927, y: 1.226, z: -0.079}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3901,7 +3901,7 @@ Transform:
   - {fileID: 3822275881224615172}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -35.565, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4624016465847982945
 MonoBehaviour:
   m_ObjectHideFlags: 0

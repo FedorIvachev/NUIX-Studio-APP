@@ -32,10 +32,10 @@ public class SpeechRecognition : MonoBehaviour
     public NUIXSpeechRecognition nuixSpeechRecognition;
 
     // Public fields in the Unity inspector
-    [Tooltip("Unity UI Text component used to report potential errors on screen.")]
-    public Text RecognizedText;
-    [Tooltip("Unity UI Text component used to post recognition results on screen.")]
-    public Text ErrorText;
+    [Tooltip("TMPro.TMP_Text component used to post recognition results on screen.")]
+    public TMPro.TMP_Text RecognizedText;
+    [Tooltip("TMPro.TMP_Text component used to report potential errors on screen.")]
+    public TMPro.TMP_Text ErrorText;
 
     // Dropdown lists used to select translation languages, if enabled
     public Toggle TranslationEnabled;

@@ -38,9 +38,11 @@ public class SpeechRecognition : MonoBehaviour
     public TMPro.TMP_Text ErrorText;
 
     // Dropdown lists used to select translation languages, if enabled
-    public Toggle TranslationEnabled;
-    [Tooltip("Target language #1 for translation (if enabled).")]
-    public Dropdown Languages1;
+    // public Toggle TranslationEnabled; FEDOR
+    // [Tooltip("Target language #1 for translation (if enabled).")]
+    // public Dropdown Languages1;
+    // FEDOR: Set to Languages1 to private 
+    private Dropdown Languages1;
 
     // Used to show live messages on screen, must be locked to avoid threading deadlocks since
     // the recognition events are raised in a separate thread
@@ -105,6 +107,7 @@ public class SpeechRecognition : MonoBehaviour
         errorString = "";
         if (micPermissionGranted || true)
         {
+            /* FEDOR
             if (TranslationEnabled.isOn)
             {
                 StartContinuousTranslation();
@@ -113,6 +116,9 @@ public class SpeechRecognition : MonoBehaviour
             {
                 StartContinuousRecognition();
             }
+            */
+            // STARTING RECOGNITION BY DEFAULT
+            StartContinuousRecognition();
         }
         else
         {

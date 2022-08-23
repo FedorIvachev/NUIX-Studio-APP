@@ -1,5 +1,5 @@
 # NUIX-Rooms
-NUIX-Studio Rooms helps developers to create devices for VR-IoT environment.
+NUIX-Rooms helps developers to create devices for VR-IoT environment.
 
 ## Table of contents
 * [General info](#general-info)

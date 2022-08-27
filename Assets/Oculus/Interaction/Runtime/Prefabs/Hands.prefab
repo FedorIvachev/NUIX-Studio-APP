@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 1262389339757622698}
   - component: {fileID: 5018254125694249274}
   - component: {fileID: 2375080936181159148}
+  - component: {fileID: 8883508471583865340}
   m_Layer: 0
   m_Name: HandDataSource
   m_TagString: Untagged
@@ -114,6 +115,24 @@ MonoBehaviour:
   _iModifyDataFromSourceMono: {fileID: 5018254125694249274}
   _applyModifier: 1
   _aspects: []
+--- !u!114 &8883508471583865340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258151580205763149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fcebab82b3c5dd4fac023079b7fed29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _updateMode: 8
+  _updateAfter: {fileID: 2375080936181159148}
+  _iModifyDataFromSourceMono: {fileID: 2375080936181159148}
+  _applyModifier: 1
+  _aspects: []
+  _filterParameters: {fileID: 0}
 --- !u!1 &1367575963433742180
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,8 +268,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _updateMode: 8
-  _updateAfter: {fileID: 2375080936181159148}
-  _iModifyDataFromSourceMono: {fileID: 2375080936181159148}
+  _updateAfter: {fileID: 8883508471583865340}
+  _iModifyDataFromSourceMono: {fileID: 8883508471583865340}
   _applyModifier: 0
   _aspects:
   - {fileID: 3363867108309951679}
@@ -451,8 +470,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _updateMode: 8
-  _updateAfter: {fileID: 4680072515046522352}
-  _iModifyDataFromSourceMono: {fileID: 4680072515046522352}
+  _updateAfter: {fileID: 7256441808724174043}
+  _iModifyDataFromSourceMono: {fileID: 7256441808724174043}
   _applyModifier: 0
   _aspects:
   - {fileID: 15374482768660141}
@@ -529,6 +548,7 @@ GameObject:
   - component: {fileID: 8253937093113391485}
   - component: {fileID: 7123230439704865122}
   - component: {fileID: 4680072515046522352}
+  - component: {fileID: 7256441808724174043}
   m_Layer: 0
   m_Name: HandDataSource
   m_TagString: Untagged
@@ -587,6 +607,24 @@ MonoBehaviour:
   _iModifyDataFromSourceMono: {fileID: 7123230439704865122}
   _applyModifier: 1
   _aspects: []
+--- !u!114 &7256441808724174043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5063159785305773018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fcebab82b3c5dd4fac023079b7fed29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _updateMode: 8
+  _updateAfter: {fileID: 4680072515046522352}
+  _iModifyDataFromSourceMono: {fileID: 4680072515046522352}
+  _applyModifier: 1
+  _aspects: []
+  _filterParameters: {fileID: 0}
 --- !u!1001 &4171941866734304457
 PrefabInstance:
   m_ObjectHideFlags: 0

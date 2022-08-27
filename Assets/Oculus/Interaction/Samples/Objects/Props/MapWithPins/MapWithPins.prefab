@@ -239,6 +239,11 @@ PrefabInstance:
       propertyPath: _snapType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2426598166598677939, guid: cc68667a9a6b3d346b7035f6ae372ff7,
+        type: 3}
+      propertyPath: _handAligment
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7972982140355018946, guid: cc68667a9a6b3d346b7035f6ae372ff7,
         type: 3}
       propertyPath: m_RootOrder
@@ -319,6 +324,11 @@ PrefabInstance:
       propertyPath: _snapType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2426598166598677939, guid: cc68667a9a6b3d346b7035f6ae372ff7,
+        type: 3}
+      propertyPath: _handAligment
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7972982140355018946, guid: cc68667a9a6b3d346b7035f6ae372ff7,
         type: 3}
       propertyPath: m_RootOrder
@@ -398,6 +408,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _snapType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2426598166598677939, guid: cc68667a9a6b3d346b7035f6ae372ff7,
+        type: 3}
+      propertyPath: _handAligment
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7972982140355018946, guid: cc68667a9a6b3d346b7035f6ae372ff7,
         type: 3}

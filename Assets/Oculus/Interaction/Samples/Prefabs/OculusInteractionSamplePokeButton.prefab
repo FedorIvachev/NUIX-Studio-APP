@@ -301,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4171210596153234763}
   - component: {fileID: 3494393462330821194}
-  - component: {fileID: 1784097173527018851}
+  - component: {fileID: 3718601612112823234}
   m_Layer: 0
   m_Name: OculusInteractionSamplePokeButton
   m_TagString: Untagged
@@ -349,7 +349,10 @@ MonoBehaviour:
   _horizontalDragThreshold: 0.1
   _verticalDragThreshold: 0.1
   _volumeMask: {fileID: 0}
---- !u!114 &1784097173527018851
+  _positionPinning:
+    Enabled: 0
+    MaxPinDistance: 0
+--- !u!114 &3718601612112823234
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -358,10 +361,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4171210596153234762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1464721f2283eb14e94a33e812b47be4, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f8f6e9e6f3e114b9bf9a57c2160615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactableView: {fileID: 3494393462330821194}
+  _pointable: {fileID: 3494393462330821194}
+  _whenRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3599234313286101947}
+        m_TargetAssemblyTypeName: Oculus.Interaction.AudioTrigger, Oculus.Interaction.Samples
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _whenHover:
     m_PersistentCalls:
       m_Calls: []
@@ -385,23 +403,11 @@ MonoBehaviour:
         m_CallState: 2
   _whenUnselect:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3599234313286101947}
-        m_TargetAssemblyTypeName: Oculus.Interaction.AudioTrigger, Oculus.Interaction.Samples
-        m_MethodName: PlayAudio
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _whenInteractorsCountUpdated:
+      m_Calls: []
+  _whenMove:
     m_PersistentCalls:
       m_Calls: []
-  _whenSelectingInteractorsCountUpdated:
+  _whenCancel:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6124062343383677172

@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #if USING_XR_MANAGEMENT && (USING_XR_SDK_OCULUS || USING_XR_SDK_OPENXR)
 #define USING_XR_SDK
@@ -30,6 +38,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 // Internal C# wrapper for OVRPlugin.
 
@@ -44,7 +54,7 @@ public static partial class OVRPlugin
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
 	public static readonly System.Version wrapperVersion = _versionZero;
 #else
-	public static readonly System.Version wrapperVersion = OVRP_1_72_0.version;
+	public static readonly System.Version wrapperVersion = OVRP_1_75_0.version;
 #endif
 
 #if !OVRPLUGIN_UNSUPPORTED_PLATFORM
@@ -379,6 +389,7 @@ public static partial class OVRPlugin
 		SurfaceProjectedPassthrough = 8,
 		Fisheye = 9,
 		KeyboardHandsPassthrough = 10,
+		KeyboardMaskedHandsPassthrough = 11,
 	}
 
 	public enum Step
@@ -431,6 +442,7 @@ public static partial class OVRPlugin
 		EnumSize = 0x7FFFFFFF
 	}
 
+	public static int MAX_CPU_CORES = 8;
 	public enum PerfMetrics
 	{
 		App_CpuTime_Float = 0,
@@ -449,6 +461,18 @@ public static partial class OVRPlugin
 		Device_GpuClockFrequencyInMHz_Float = 11, // Deprecated 1.68.0
 		Device_CpuClockLevel_Int = 12, // Deprecated 1.68.0
 		Device_GpuClockLevel_Int = 13, // Deprecated 1.68.0
+
+		Compositor_SpaceWarp_Mode_Int = 14,
+
+		Device_CpuCore0UtilPercentage_Float = 32,
+		Device_CpuCore1UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 1,
+		Device_CpuCore2UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 2,
+		Device_CpuCore3UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 3,
+		Device_CpuCore4UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 4,
+		Device_CpuCore5UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 5,
+		Device_CpuCore6UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 6,
+		Device_CpuCore7UtilPercentage_Float = Device_CpuCore0UtilPercentage_Float + 7,
+		// Enum value 32~63 are reserved for CPU Cores' utilization (assuming at most 32 cores).
 
 		Count,
 		EnumSize = 0x7FFFFFFF
@@ -491,6 +515,10 @@ public static partial class OVRPlugin
 		HeadLocked = unchecked((int)0x00000002),
 		NoDepth = unchecked((int)0x00000004),
 		ExpensiveSuperSample = unchecked((int)0x00000008),
+		EfficientSuperSample = unchecked((int)0x00000010),
+		EfficientSharpen = unchecked((int)0x00000020),
+		BicubicFiltering = unchecked((int)0x00000040),
+		ExpensiveSharpen = unchecked((int)0x00000080),
 
 		// Using the 5-8 bits for shapes, total 16 potential shapes can be supported 0x000000[0]0 ->  0x000000[F]0
 		ShapeFlag_Quad = unchecked((int)OverlayShape.Quad << OverlayShapeFlagShift),
@@ -1000,9 +1028,7 @@ public static partial class OVRPlugin
 		public int LayerFlags;
 
 		//Eye FOV-only members.
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 		public Fovf[] Fov;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 		public Rectf[] VisibleRect;
 		public Sizei MaxViewportSize;
 		public EyeTextureFormat DepthFormat;
@@ -1021,6 +1047,80 @@ public static partial class OVRPlugin
 				+ delim + SampleCount.ToString()
 				+ delim + Format.ToString()
 				+ delim + LayerFlags.ToString();
+		}
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	private struct LayerDescInternal
+	{
+		public OverlayShape Shape;
+		public LayerLayout Layout;
+		public Sizei TextureSize;
+		public int MipLevels;
+		public int SampleCount;
+		public EyeTextureFormat Format;
+		public int LayerFlags;
+
+		public Fovf Fov0;
+		public Fovf Fov1;
+		public Rectf VisibleRect0;
+		public Rectf VisibleRect1;
+		public Sizei MaxViewportSize;
+		public EyeTextureFormat DepthFormat;
+
+		public EyeTextureFormat MotionVectorFormat;
+		public EyeTextureFormat MotionVectorDepthFormat;
+		public Sizei MotionVectorTextureSize;
+
+		public LayerDescInternal(LayerDesc layerDesc)
+		{
+			Shape = layerDesc.Shape;
+			Layout = layerDesc.Layout;
+			TextureSize = layerDesc.TextureSize;
+			MipLevels = layerDesc.MipLevels;
+			SampleCount = layerDesc.SampleCount;
+			Format = layerDesc.Format;
+			LayerFlags = layerDesc.LayerFlags;
+
+			Fov0 = layerDesc.Fov[0];
+			Fov1 = layerDesc.Fov[1];
+			VisibleRect0 = layerDesc.VisibleRect[0];
+			VisibleRect1 = layerDesc.VisibleRect[1];
+
+			MaxViewportSize = layerDesc.MaxViewportSize;
+			DepthFormat = layerDesc.DepthFormat;
+			MotionVectorFormat = layerDesc.MotionVectorFormat;
+			MotionVectorDepthFormat = layerDesc.MotionVectorDepthFormat;
+			MotionVectorTextureSize = layerDesc.MotionVectorTextureSize;
+		}
+
+		public LayerDesc ToLayerDesc()
+		{
+			LayerDesc layerDesc = new LayerDesc();
+			layerDesc.Shape = Shape;
+			layerDesc.Layout = Layout;
+			layerDesc.TextureSize = TextureSize;
+			layerDesc.MipLevels = MipLevels;
+			layerDesc.SampleCount = SampleCount;
+			layerDesc.Format = Format;
+			layerDesc.LayerFlags = LayerFlags;
+
+			Array.Resize(ref layerDesc.Fov, 2);
+			layerDesc.Fov[0] = Fov0;
+			layerDesc.Fov[1] = Fov1;
+
+
+			Array.Resize(ref layerDesc.VisibleRect, 2);
+			layerDesc.VisibleRect[0] = VisibleRect0;
+			layerDesc.VisibleRect[1] = VisibleRect1;
+
+			layerDesc.MaxViewportSize = MaxViewportSize;
+			layerDesc.DepthFormat = DepthFormat;
+			layerDesc.MotionVectorFormat = MotionVectorFormat;
+			layerDesc.MotionVectorDepthFormat = MotionVectorDepthFormat;
+			layerDesc.MotionVectorTextureSize = MotionVectorTextureSize;
+
+			return layerDesc;
 		}
 	}
 
@@ -1464,6 +1564,8 @@ public static partial class OVRPlugin
 
 
 		SceneCaptureComplete = 100,
+
+
 	}
 
 	private const int EventDataBufferSize = 4000;
@@ -1496,6 +1598,14 @@ public static partial class OVRPlugin
 		public uint VendorId;
 		public uint ModelVersion;
 	}
+
+	[Flags]
+	public enum RenderModelFlags
+	{
+		SupportsGltf20Subset1 = 1,
+		SupportsGltf20Subset2 = 2,
+	}
+
 
 
 	public enum InsightPassthroughColorMapType
@@ -1623,6 +1733,10 @@ public static partial class OVRPlugin
 		public Guid uuid;
 	}
 
+
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
 	public static bool initialized
 	{
 		get {
@@ -2345,7 +2459,7 @@ public static partial class OVRPlugin
 
 	public static bool EnqueueSubmitLayer(bool onTop, bool headLocked, bool noDepthBufferTesting, IntPtr leftTexture, IntPtr rightTexture, int layerId, int frameIndex, Posef pose, Vector3f scale, int layerIndex = 0, OverlayShape shape = OverlayShape.Quad,
 										bool overrideTextureRectMatrix = false, TextureRectMatrixf textureRectMatrix = default(TextureRectMatrixf), bool overridePerLayerColorScaleAndOffset = false, Vector4 colorScale = default(Vector4), Vector4 colorOffset = default(Vector4),
-										bool expensiveSuperSample = false, bool hidden = false)
+										bool expensiveSuperSample = false, bool bicubic = false, bool efficientSuperSample = false, bool efficientSharpen = false, bool expensiveSharpen = false, bool hidden = false)
 	{
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
 		return false;
@@ -2366,6 +2480,14 @@ public static partial class OVRPlugin
 				flags |= (uint)OverlayFlag.ExpensiveSuperSample;
 			if (hidden)
 				flags |= (uint)OverlayFlag.Hidden;
+			if (efficientSuperSample)
+				flags |= (uint)OverlayFlag.EfficientSuperSample;
+			if (expensiveSharpen)
+				flags |= (uint)OverlayFlag.ExpensiveSharpen;
+			if (efficientSharpen)
+				flags |= (uint)OverlayFlag.EfficientSharpen;
+			if (bicubic)
+				flags |= (uint)OverlayFlag.BicubicFiltering;
 
 			if (shape == OverlayShape.Cylinder || shape == OverlayShape.Cubemap)
 			{
@@ -2434,17 +2556,16 @@ public static partial class OVRPlugin
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
 		return new LayerDesc();
 #else
-		LayerDesc layerDesc = new LayerDesc();
-		if (!initialized)
-			return layerDesc;
-
-		if (version >= OVRP_1_15_0.version)
+		if (!initialized || version < OVRP_1_15_0.version)
 		{
-			OVRP_1_15_0.ovrp_CalculateLayerDesc(shape, layout, ref textureSize,
-				mipLevels, sampleCount, format, layerFlags, ref layerDesc);
+			return new LayerDesc();
 		}
 
-		return layerDesc;
+		LayerDescInternal layerDescInternal = new LayerDescInternal();
+		OVRP_1_15_0.ovrp_CalculateLayerDesc(shape, layout, ref textureSize, mipLevels, sampleCount,
+			format, layerFlags, ref layerDescInternal);
+
+		return layerDescInternal.ToLayerDesc();
 #endif
 	}
 
@@ -2456,17 +2577,19 @@ public static partial class OVRPlugin
 		if (!initialized)
 			return false;
 
-		if (version >= OVRP_1_28_0.version)
-			return OVRP_1_28_0.ovrp_EnqueueSetupLayer2(ref desc, compositionDepth, layerID) == Result.Success;
-		else if (version >= OVRP_1_15_0.version)
+		LayerDescInternal layerDescInternal = new LayerDescInternal(desc);
+		if (version >= OVRP_1_28_0.version) {
+			return OVRP_1_28_0.ovrp_EnqueueSetupLayer2(ref layerDescInternal, compositionDepth, layerID) == Result.Success;
+		}
+
+		if (version >= OVRP_1_15_0.version)
 		{
 			if (compositionDepth != 0)
 			{
 				Debug.LogWarning("Use Oculus Plugin 1.28.0 or above to support non-zero compositionDepth");
 			}
-			return OVRP_1_15_0.ovrp_EnqueueSetupLayer(ref desc, layerID) == Result.Success;
+			return OVRP_1_15_0.ovrp_EnqueueSetupLayer(ref layerDescInternal, layerID) == Result.Success;
 		}
-
 		return false;
 #endif
 	}
@@ -5944,6 +6067,9 @@ public static partial class OVRPlugin
 	}
 
 
+// Virtual keyboard calls
+
+
 
     public static int GetLocalTrackingSpaceRecenterCount()
 	{
@@ -6229,6 +6355,16 @@ public static partial class OVRPlugin
 #endif
 	}
 
+	public static bool GetSpaceUuid(UInt64 space, out Guid uuid) {
+		uuid = default;
+#if OVRPLUGIN_UNSUPPORTED_PLATFORM
+		return false;
+#else
+		return version >= OVRP_1_74_0.version &&
+		       OVRP_1_74_0.ovrp_GetSpaceUuid(in space, out uuid) == Result.Success;
+#endif
+	}
+
 	public static bool QuerySpaces(SpaceQueryInfo queryInfo, out UInt64 requestId) {
 		requestId = 0;
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
@@ -6317,6 +6453,7 @@ public static partial class OVRPlugin
 		}
 #endif
 	}
+
 
 
 	public static bool TryLocateSpace(UInt64 space, TrackingOrigin baseOrigin, out Posef pose)
@@ -6574,6 +6711,7 @@ public static partial class OVRPlugin
 #endif
 	}
 
+
 	public static string[] GetRenderModelPaths()
 	{
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
@@ -6604,23 +6742,32 @@ public static partial class OVRPlugin
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
 		return false;
 #else
-		if (version >= OVRP_1_68_0.version)
+		Result result;
+		RenderModelPropertiesInternal props;
+		if (version >= OVRP_1_74_0.version)
 		{
-			RenderModelPropertiesInternal props;
-			Result result = OVRP_1_68_0.ovrp_GetRenderModelProperties(modelPath, out props);
-			if (result != Result.Success)
-				return false;
-
-			modelProperties.ModelName = System.Text.Encoding.Default.GetString(props.ModelName);
-			modelProperties.ModelKey = props.ModelKey;
-			modelProperties.VendorId = props.VendorId;
-			modelProperties.ModelVersion = props.ModelVersion;
-			return true;
+			result = OVRP_1_74_0.ovrp_GetRenderModelProperties2(
+				modelPath,
+				RenderModelFlags.SupportsGltf20Subset2,
+				out props);
+		}
+		else if (version >= OVRP_1_68_0.version)
+		{
+			result = OVRP_1_68_0.ovrp_GetRenderModelProperties(modelPath, out props);
 		}
 		else
 		{
 			return false;
 		}
+
+		if (result != Result.Success)
+			return false;
+
+		modelProperties.ModelName = System.Text.Encoding.Default.GetString(props.ModelName);
+		modelProperties.ModelKey = props.ModelKey;
+		modelProperties.VendorId = props.VendorId;
+		modelProperties.ModelVersion = props.ModelVersion;
+		return true;
 #endif
 	}
 
@@ -6805,6 +6952,7 @@ public static partial class OVRPlugin
 #endif
 		}
 	}
+
 
 
 	public class UnityOpenXR
@@ -7359,10 +7507,10 @@ public static partial class OVRPlugin
 
 		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern Result ovrp_CalculateLayerDesc(OverlayShape shape, LayerLayout layout, ref Sizei textureSize,
-			int mipLevels, int sampleCount, EyeTextureFormat format, int layerFlags, ref LayerDesc layerDesc);
+			int mipLevels, int sampleCount, EyeTextureFormat format, int layerFlags, ref LayerDescInternal layerDesc);
 
 		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern Result ovrp_EnqueueSetupLayer(ref LayerDesc desc, IntPtr layerId);
+		public static extern Result ovrp_EnqueueSetupLayer(ref LayerDescInternal desc, IntPtr layerId);
 
 		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern Result ovrp_EnqueueDestroyLayer(IntPtr layerId);
@@ -7523,7 +7671,7 @@ public static partial class OVRPlugin
 		public static extern Result ovrp_SendEvent(string name, string param);
 
 		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern Result ovrp_EnqueueSetupLayer2(ref LayerDesc desc, int compositionDepth, IntPtr layerId);
+		public static extern Result ovrp_EnqueueSetupLayer2(ref LayerDescInternal desc, int compositionDepth, IntPtr layerId);
 	}
 
 	private static class OVRP_1_29_0
@@ -8203,5 +8351,29 @@ public static partial class OVRPlugin
 
 	}
 
+  private static class OVRP_1_73_0
+	{
+		public static readonly System.Version version = new System.Version(1, 73, 0);
+
+	}
+
+	private static class OVRP_1_74_0
+	{
+		public static readonly System.Version version = new System.Version(1, 74, 0);
+
+		public const int OVRP_MAX_VIRTUAL_KEYBOARD_KEY_LABEL_SIZE = 32;
+
+		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern Result ovrp_GetSpaceUuid(in UInt64 space, out Guid uuid);
+
+
+		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern Result ovrp_GetRenderModelProperties2(string path, RenderModelFlags flags, out RenderModelPropertiesInternal properties);
+	}
+
+	private static class OVRP_1_75_0
+	{
+		public static readonly System.Version version = new System.Version(1, 75, 0);
+	}
 	/* INSERT NEW OVRP CLASS ABOVE THIS LINE */
 }

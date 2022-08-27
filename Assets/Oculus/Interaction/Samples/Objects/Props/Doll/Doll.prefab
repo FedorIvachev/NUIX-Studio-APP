@@ -47,7 +47,6 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _pointableElement: {fileID: 4562865803523772795}
-  _relativeTo: {fileID: 4562865803389756423}
   _rigidbody: {fileID: 4562865803523772798}
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 4562865803523772796}
@@ -69,37 +68,9 @@ MonoBehaviour:
     _ringRequirement: 2
     _pinkyRequirement: 1
     _unselectMode: 0
-  _snapType: 3
-  _customAligner: {fileID: 0}
-  _travellingData:
-    _travelSpeed: 1
-    _useFixedTravelTime: 0
-    _travelCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  _handAligment: 0
-  _handGrabPoints: []
+  _movementProvider: {fileID: 0}
+  _handAligment: 1
+  _handGrabPoses: []
 --- !u!114 &517181019
 MonoBehaviour:
   m_ObjectHideFlags: 0

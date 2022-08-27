@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System.Collections;
 using System.Collections.Generic;
@@ -85,6 +93,7 @@ public class OVRGLTFLoader
 	private static readonly Vector3 GLTFToUnityTangent = new Vector4(-1, 1, 1, -1);
 
 	private Shader m_Shader = null;
+	private Shader m_AlphaBlendShader = null;
 
 	public OVRGLTFLoader(string fileName)
 	{
@@ -124,6 +133,11 @@ public class OVRGLTFLoader
 					Debug.LogWarning("A shader was not set before loading the model. Using default mobile shader.");
 					m_Shader = Shader.Find("Legacy Shaders/Diffuse");
 				}
+				if (m_AlphaBlendShader == null)
+				{
+					Debug.LogWarning("An alpha blend shader was not set before loading the model. Using default transparent shader.");
+					m_AlphaBlendShader = Shader.Find("Unlit/Transparent");
+				}
 
 				rootNodeId = LoadGLTF(loadMips);
 			}
@@ -131,7 +145,14 @@ public class OVRGLTFLoader
 		m_glbStream.Close();
 
 		scene.nodes = m_Nodes;
-		scene.root = m_Nodes[rootNodeId];
+		scene.root = new GameObject("GLB Scene Root");
+		foreach (GameObject node in m_Nodes)
+		{
+			if (node.transform.parent == null)
+			{
+				node.transform.SetParent(scene.root.transform);
+			}
+		}
 
 		scene.root.transform.Rotate(Vector3.up, 180.0f);
 
@@ -141,6 +162,11 @@ public class OVRGLTFLoader
 	public void SetModelShader(Shader shader)
 	{
 		m_Shader = shader;
+	}
+
+	public void SetModelAlphaBlendShader(Shader shader)
+	{
+		m_AlphaBlendShader = shader;
 	}
 
 	private bool ValidateGLB(Stream glbStream)
@@ -234,11 +260,14 @@ public class OVRGLTFLoader
 		var mainScene = scenes[0];
 		var rootNodes = mainScene["nodes"].AsArray;
 
-		// Limit loading to first root node in the scene
-		int rootNodeId = rootNodes[0].AsInt;
-		ProcessNode(m_jsonData["nodes"][rootNodeId], rootNodeId, loadMips);
+		// Load all nodes (some models like e.g. laptops use multiple nodes)
+		foreach (JSONNode rootNode in rootNodes)
+		{
+			int rootNodeId = rootNode.AsInt;
+			ProcessNode(m_jsonData["nodes"][rootNodeId], rootNodeId, loadMips);
+		}
 
-		return rootNodeId;
+		return rootNodes[0].AsInt;
 	}
 
 	private void ProcessNode(JSONNode node, int nodeId, bool loadMips)
@@ -539,6 +568,10 @@ public class OVRGLTFLoader
 		OVRMaterialData matData = new OVRMaterialData();
 
 		var jsonMaterial = m_jsonData["materials"][matId];
+
+		var jsonAlphaMode = jsonMaterial["alphaMode"];
+		bool alphaBlendMode = jsonAlphaMode != null && jsonAlphaMode.Value == "BLEND";
+
 		var jsonPbrDetails = jsonMaterial["pbrMetallicRoughness"];
 
 		var jsonBaseColor = jsonPbrDetails["baseColorTexture"];
@@ -557,7 +590,7 @@ public class OVRGLTFLoader
 			}
 		}
 
-		matData.shader = m_Shader;
+		matData.shader = alphaBlendMode ? m_AlphaBlendShader : m_Shader;
 		return matData;
 	}
 

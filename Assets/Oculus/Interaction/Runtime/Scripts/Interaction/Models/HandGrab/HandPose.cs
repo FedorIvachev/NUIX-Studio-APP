@@ -1,20 +1,28 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using Oculus.Interaction.Input;
-using System.Linq;
+using System;
 using UnityEngine;
 
-namespace Oculus.Interaction.HandPosing
+namespace Oculus.Interaction.HandGrab
 {
     /// <summary>
     /// Data for the pose of a hand for grabbing an object.
@@ -27,7 +35,7 @@ namespace Oculus.Interaction.HandPosing
     /// (in conjunction with the HandGrabInteractableEditor class)
     /// to edit the values in the inspector.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class HandPose
     {
         [SerializeField]
@@ -90,7 +98,8 @@ namespace Oculus.Interaction.HandPosing
         public HandPose()
         {
 #if UNITY_EDITOR
-            var jointCollection = HandSkeletonOVR.CreateSkeletonData(_handedness).Joints;
+            IReadOnlyHandSkeletonJointList jointCollection = _handedness == Handedness.Left ?
+                HandSkeleton.DefaultLeftSkeleton : HandSkeleton.DefaultRightSkeleton;
             int offset = (int)FingersMetadata.HAND_JOINT_IDS[0];
             for (int i = 0; i < FingersMetadata.HAND_JOINT_IDS.Length; i++)
             {
@@ -123,24 +132,13 @@ namespace Oculus.Interaction.HandPosing
         /// <param name="mirrorHandedness">Invert the received handedness</param>
         public void CopyFrom(HandPose from, bool mirrorHandedness = false)
         {
-            if (mirrorHandedness)
-            {
-
-            }
-            else
+            if (!mirrorHandedness)
             {
                 _handedness = from.Handedness;
             }
 
-            for (int i = 0; i < Constants.NUM_FINGERS; i++)
-            {
-                FingersFreedom[i] = from.FingersFreedom[i];
-            }
-
-            for (int i = 0; i < FingersMetadata.HAND_JOINT_IDS.Length; i++)
-            {
-                JointRotations[i] = from.JointRotations[i];
-            }
+            Array.Copy(from.FingersFreedom, FingersFreedom, Constants.NUM_FINGERS);
+            Array.Copy(from.JointRotations, JointRotations, FingersMetadata.HAND_JOINT_IDS.Length);
         }
 
         /// <summary>

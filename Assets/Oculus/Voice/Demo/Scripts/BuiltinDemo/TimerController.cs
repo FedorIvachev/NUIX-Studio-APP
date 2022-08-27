@@ -1,14 +1,22 @@
-﻿/**************************************************************************************************
- * Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
+﻿/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
  *
- * Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
  * https://developer.oculus.com/licenses/oculussdk/
  *
- * Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- **************************************************************************************************/
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System;
 using UnityEngine;
@@ -87,7 +95,7 @@ namespace Oculus.Voice.Demo.BuiltInDemo
         {
             if (_timerExist)
             {
-                Log("A timer already exist.");
+                Debug.LogWarning("A timer already exist.");
                 return;
             }
 
@@ -96,10 +104,6 @@ namespace Oculus.Voice.Demo.BuiltInDemo
                 _timerExist = true;
                 _timerRunning = true;
                 Log($"Countdown Timer is set for {entityValues[0]} {entityValues[1]}(s).");
-            }
-            else
-            {
-                Log("Error in CreateTimer(): Could not parse wit reply.");
             }
         }
 
@@ -110,7 +114,7 @@ namespace Oculus.Voice.Demo.BuiltInDemo
         {
             // Show the remaining time of the countdown timer.
             var msg = GetFormattedTimeFromSeconds();
-            Log(msg);
+            //Log(msg);
         }
 
         /// <summary>

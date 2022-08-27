@@ -1,5 +1,6 @@
 ﻿/*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
@@ -51,6 +52,28 @@ namespace Facebook.WitAi
         public static void LayoutKeyLabel(string key, string text)
         {
             EditorGUILayout.LabelField(key, text, WitStyles.TextField);
+        }
+        public static void LayoutKeyObjectLabels(string key, object obj)
+        {
+            // Null
+            if (obj == null)
+            {
+                LayoutKeyLabel(key, "NULL");
+                return;
+            }
+            // Foldout
+            bool foldoutVoice = WitEditorUI.LayoutFoldout(new GUIContent(key), obj);
+            if (!foldoutVoice)
+            {
+                return;
+            }
+            // Iterate fields
+            EditorGUI.indentLevel++;
+            foreach (var field in obj.GetType().GetFields())
+            {
+                LayoutKeyLabel(field.Name, field.GetValue(obj).ToString());
+            }
+            EditorGUI.indentLevel--;
         }
         #endregion
 
@@ -307,8 +330,26 @@ namespace Facebook.WitAi
         }
         public static void LayoutPopup(string key, string[] options, ref int selectionValue, ref bool isUpdated)
         {
-            // Simple layout
-            int newSelectionValue = EditorGUILayout.Popup(key, selectionValue, options, WitStyles.Popup);
+            // Default
+            int newSelectionValue = selectionValue;
+
+            // No options
+            if (options == null || options.Length == 0)
+            {
+                newSelectionValue = -1;
+                EditorGUILayout.LabelField(key, "<color=FF0000>No Options</color>", WitStyles.Label);
+            }
+            // Single Option
+            else if (options.Length == 1)
+            {
+                newSelectionValue = 0;
+                EditorGUILayout.LabelField(key, options[0], WitStyles.Label);
+            }
+            // Popup Options
+            else
+            {
+                newSelectionValue = EditorGUILayout.Popup(key, selectionValue, options, WitStyles.Popup);
+            }
 
             // Update
             if (selectionValue != newSelectionValue)

@@ -1,19 +1,27 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Oculus.Interaction.HandPosing.Visuals
+namespace Oculus.Interaction.HandGrab.Visuals
 {
     /// <summary>
     /// A static (non-user controlled) representation of a hand. This script is used
@@ -29,46 +37,38 @@ namespace Oculus.Interaction.HandPosing.Visuals
         private HandPuppet _puppet;
 
         /// <summary>
-        /// The GripPoint of the hand. Needs to be
-        /// at the same position/rotation as the gripPoint used
-        /// by the visual HandPuppet controlled by the user.
-        /// </summary>
-        [SerializeField]
-        private Transform _gripPoint;
-
-        /// <summary>
         /// The HandGrab point can be set so the ghost automatically
         /// adopts the desired pose of said point.
         /// </summary>
         [SerializeField, Optional]
-        private HandGrabPoint _handGrabPoint;
+        [UnityEngine.Serialization.FormerlySerializedAs("_handGrabPoint")]
+        private HandGrabPose _handGrabPose;
 
         #region editor events
         protected virtual void Reset()
         {
             _puppet = this.GetComponent<HandPuppet>();
-            _handGrabPoint = this.GetComponentInParent<HandGrabPoint>();
+            _handGrabPose = this.GetComponentInParent<HandGrabPose>();
         }
 
         protected virtual void OnValidate()
         {
-            if (_puppet == null
-                || _gripPoint == null)
+            if (_puppet == null)
             {
                 return;
             }
 
-            if (_handGrabPoint == null)
+            if (_handGrabPose == null)
             {
-                HandGrabPoint point = this.GetComponentInParent<HandGrabPoint>();
+                HandGrabPose point = this.GetComponentInParent<HandGrabPose>();
                 if (point != null)
                 {
                     SetPose(point);
                 }
             }
-            else if (_handGrabPoint != null)
+            else if (_handGrabPose != null)
             {
-                SetPose(_handGrabPoint);
+                SetPose(_handGrabPose);
             }
         }
         #endregion
@@ -76,58 +76,50 @@ namespace Oculus.Interaction.HandPosing.Visuals
         protected virtual void Start()
         {
             Assert.IsNotNull(_puppet);
-            Assert.IsNotNull(_gripPoint);
         }
 
         /// <summary>
         /// Relay to the Puppet to set the ghost hand to the desired static pose
         /// </summary>
-        /// <param name="handGrabPoint">The point to read the HandPose from</param>
-        public void SetPose(HandGrabPoint handGrabPoint)
+        /// <param name="handGrabPose">The point to read the HandPose from</param>
+        public void SetPose(HandGrabPose handGrabPose)
         {
-            HandPose userPose = handGrabPoint.HandPose;
+            HandPose userPose = handGrabPose.HandPose;
             if (userPose == null)
             {
                 return;
             }
 
-            Transform relativeTo = handGrabPoint.RelativeTo;
+            Transform relativeTo = handGrabPose.RelativeTo;
             _puppet.SetJointRotations(userPose.JointRotations);
-            SetGripPose(handGrabPoint.RelativeGrip, relativeTo);
+            SetRootPose(handGrabPose.RelativeGrip, relativeTo);
         }
 
         /// <summary>
-        /// Moves the underlying puppet so the grip point aligns with the given parameters
+        /// Moves the underlying puppet so the wrist point aligns with the given parameters
         /// </summary>
-        /// <param name="gripPose">The relative grip pose to align the hand to</param>
+        /// <param name="rootPose">The relative wrist pose to align the hand to</param>
         /// <param name="relativeTo">The object to use as anchor</param>
-        public void SetGripPose(Pose gripPose, Transform relativeTo)
+        public void SetRootPose(Pose rootPose, Transform relativeTo)
         {
-            Pose inverseGrip = _gripPoint.RelativeOffset(this.transform);
-            gripPose.Premultiply(inverseGrip);
-            gripPose.Postmultiply(relativeTo.GetPose());
-            _puppet.SetRootPose(gripPose);
+            rootPose.Postmultiply(relativeTo.GetPose());
+            _puppet.SetRootPose(rootPose);
         }
 
         #region Inject
+        public void InjectAllHandGhost(HandPuppet puppet, Transform gripPoint)
+        {
+            InjectHandPuppet(puppet);
+        }
         public void InjectHandPuppet(HandPuppet puppet)
         {
             _puppet = puppet;
         }
-        public void InjectGripPoint(Transform gripPoint)
+        public void InjectOptionalHandGrabPose(HandGrabPose handGrabPose)
         {
-            _gripPoint = gripPoint;
-        }
-        public void InjectOptionalHandGrabPoint(HandGrabPoint handGrabPoint)
-        {
-            _handGrabPoint = handGrabPoint;
+            _handGrabPose = handGrabPose;
         }
 
-        public void InjectAllHandGhost(HandPuppet puppet, Transform gripPoint)
-        {
-            InjectHandPuppet(puppet);
-            InjectGripPoint(gripPoint);
-        }
         #endregion
     }
 }

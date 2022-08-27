@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using Oculus.Interaction.Editor;
 using Oculus.Interaction.Input;
@@ -16,23 +24,28 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Oculus.Interaction.HandPosing.Editor
+namespace Oculus.Interaction.HandGrab.Editor
 {
     [CustomPropertyDrawer(typeof(HandPose))]
     public class HandPoseEditor : PropertyDrawer
     {
         private bool _foldedFreedom = true;
+        private bool _foldedRotations = false;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            float multiplier = 4;
+
             if (_foldedFreedom)
             {
-                return EditorConstants.ROW_HEIGHT * (Constants.NUM_FINGERS + 3);
+                multiplier += Constants.NUM_FINGERS;
             }
-            else
+            if (_foldedRotations)
             {
-                return EditorConstants.ROW_HEIGHT * 3;
+                multiplier += FingersMetadata.HAND_JOINT_IDS.Length;
             }
+
+            return EditorConstants.ROW_HEIGHT * multiplier;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -44,8 +57,8 @@ namespace Oculus.Interaction.HandPosing.Editor
             Rect rowRect = new Rect(position.x, labelPos.y + EditorConstants.ROW_HEIGHT, position.width, EditorConstants.ROW_HEIGHT);
             DrawFlagProperty<Handedness>(property, rowRect, "Handedness:", "_handedness", false);
             rowRect.y += EditorConstants.ROW_HEIGHT;
-            DrawFingersFreedomMenu(property, rowRect);
-
+            rowRect = DrawFingersFreedomMenu(property, rowRect);
+            rowRect = DrawJointAngles(property, rowRect);
             EditorGUI.indentLevel--;
             EditorGUI.EndProperty();
         }
@@ -63,8 +76,30 @@ namespace Oculus.Interaction.HandPosing.Editor
                     SerializedProperty finger = fingersFreedom.GetArrayElementAtIndex(i);
                     HandFinger fingerID = (HandFinger)i;
                     JointFreedom current = (JointFreedom)finger.intValue;
-                    JointFreedom selected = (JointFreedom)EditorGUI.EnumPopup(position, $"{fingerID}: ", current);
+                    JointFreedom selected = (JointFreedom)EditorGUI.EnumPopup(position, $"{fingerID}", current);
                     finger.intValue = (int)selected;
+                    position.y += EditorConstants.ROW_HEIGHT;
+                }
+                EditorGUI.indentLevel--;
+            }
+            return position;
+        }
+
+        private Rect DrawJointAngles(SerializedProperty property, Rect position)
+        {
+            _foldedRotations = EditorGUI.Foldout(position, _foldedRotations, "Joint Angles", true);
+            position.y += EditorConstants.ROW_HEIGHT;
+            if (_foldedRotations)
+            {
+                SerializedProperty jointRotations = property.FindPropertyRelative("_jointRotations");
+                EditorGUI.indentLevel++;
+                for (int i = 0; i < FingersMetadata.HAND_JOINT_IDS.Length; i++)
+                {
+                    SerializedProperty finger = jointRotations.GetArrayElementAtIndex(i);
+                    HandJointId jointID = FingersMetadata.HAND_JOINT_IDS[i];
+                    Vector3 current = finger.quaternionValue.eulerAngles;
+                    Vector3 rotation = EditorGUI.Vector3Field(position, $"{jointID}", current);
+                    finger.quaternionValue = Quaternion.Euler(rotation);
                     position.y += EditorConstants.ROW_HEIGHT;
                 }
                 EditorGUI.indentLevel--;

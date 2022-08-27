@@ -1,5 +1,6 @@
 ﻿/*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
@@ -36,6 +37,11 @@ namespace Facebook.WitAi.Windows
                 witInspector.drawHeader = false;
                 witInspector.Initialize();
             }
+            else if (witInspector != null)
+            {
+                DestroyImmediate(witInspector);
+                witInspector = null;
+            }
         }
 
         protected override void LayoutContent()
@@ -66,7 +72,7 @@ namespace Facebook.WitAi.Windows
             // Configuration select
             base.LayoutContent();
             // Update inspector if needed
-            if (witInspector == null || witInspector.configuration != witConfiguration)
+            if (witInspector == null || witConfiguration == null || witInspector.configuration != witConfiguration)
             {
                 SetWitEditor();
             }

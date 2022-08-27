@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using UnityEngine;
 
@@ -24,14 +32,6 @@ namespace Oculus.Interaction.Surfaces
         /// <param name="worldPoint1">World point on surface</param>
         /// <returns>Vector2(Horizontal delta, Vertical delta)</returns>
         Vector2 GetSurfaceDistanceBetween(Vector3 worldPoint0, Vector3 worldPoint1);
-
-        /// <summary>
-        /// Check if a point is on the normal-side of the collider
-        /// (is raycast hit possible from this origin point)
-        /// </summary>
-        /// <param name="point">The point to check</param>
-        /// <returns>True when above the surface</returns>
-        bool IsPointAboveSurface(Vector3 point);
 
         /// <summary>
         /// Raycast to the surface with an optional maximum distance value
@@ -50,6 +50,8 @@ namespace Oculus.Interaction.Surfaces
         /// <param name="maxDistance">If greater than zero, maximum distance of check</param>
         /// <returns>true if nearest point was found</returns>
         bool ClosestSurfacePoint(in Vector3 point, out SurfaceHit hit, float maxDistance = 0);
+
+        Pose Origin { get; }
     }
 
     public struct SurfaceHit

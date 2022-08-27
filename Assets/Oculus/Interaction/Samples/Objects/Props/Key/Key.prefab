@@ -24,10 +24,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203119982695505678}
-  m_LocalRotation: {x: -0.000000007450577, y: -0.000000044703462, z: 0.000000022351731,
+  m_LocalRotation: {x: -0.000000059604638, y: -0.00000004470348, z: -0.0000000745058,
     w: 1}
-  m_LocalPosition: {x: 0.0063, y: 0.0036, z: 0.0016}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalPosition: {x: 0.01852827, y: 0.009484922, z: 0.0068461346}
+  m_LocalScale: {x: 1.1999997, y: 1.2000002, z: 1.2}
   m_Children: []
   m_Father: {fileID: 3951197249352716144}
   m_RootOrder: 1
@@ -125,8 +125,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 364017227700693694}
-  m_LocalRotation: {x: -0.15759955, y: 0.2123774, z: -0.8483472, w: 0.45865613}
-  m_LocalPosition: {x: 0.0058, y: -0.0334, z: -0.0475}
+  m_LocalRotation: {x: 0.39923695, y: 0.5498386, z: -0.71426904, w: 0.1676523}
+  m_LocalPosition: {x: -0.032952007, y: -0.02531651, z: -0.14577484}
   m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
   m_Children:
   - {fileID: 1091796210745227890}
@@ -149,7 +149,6 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _pointableElement: {fileID: 2127621401763312286}
-  _relativeTo: {fileID: 2720035132689322368}
   _rigidbody: {fileID: 9159541282209887598}
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 0}
@@ -172,8 +171,8 @@ MonoBehaviour:
     _pinkyRequirement: 1
     _unselectMode: 0
   _movementProvider: {fileID: 0}
-  _handAligment: 0
-  _handGrabPoints:
+  _handAligment: 1
+  _handGrabPoses:
   - {fileID: 2197695584552375309}
   - {fileID: 479213130975019291}
   - {fileID: 653765415749954349}
@@ -237,10 +236,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 574704295543909804}
-  m_LocalRotation: {x: -0.0000000074505797, y: -0.00000004470348, z: -0.0000000037252899,
-    w: 1}
-  m_LocalPosition: {x: -0.0063000377, y: 0.003599973, z: 0.0015999902}
-  m_LocalScale: {x: 1.2000006, y: 1.2000006, z: 1.2000006}
+  m_LocalRotation: {x: -0.00000008940696, y: 0.000000029802319, z: -0, w: 1}
+  m_LocalPosition: {x: -0.01852832, y: -0.009484911, z: -0.0068461467}
+  m_LocalScale: {x: 1.2000009, y: 1.2000008, z: 1.2000008}
   m_Children: []
   m_Father: {fileID: 4999373265428298132}
   m_RootOrder: 1
@@ -305,10 +303,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1836455805998394337}
-  m_LocalRotation: {x: -0.000000007450577, y: -0.000000044703462, z: 0.000000022351731,
+  m_LocalRotation: {x: -0.000000059604638, y: -0.00000004470348, z: -0.0000000745058,
     w: 1}
-  m_LocalPosition: {x: -0.005, y: -0.0029, z: -0.0013}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalPosition: {x: -0.018795457, y: -0.0090088295, z: -0.0054418254}
+  m_LocalScale: {x: 0.7999998, y: 0.8000002, z: 0.7999999}
   m_Children: []
   m_Father: {fileID: 3951197249352716144}
   m_RootOrder: 0
@@ -803,10 +801,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5708690722159009103}
-  m_LocalRotation: {x: -0.0000000074505797, y: -0.00000004470348, z: -0.0000000037252899,
-    w: 1}
-  m_LocalPosition: {x: 0.004999981, y: -0.0029000032, z: -0.0012999785}
-  m_LocalScale: {x: 0.8000004, y: 0.8000004, z: 0.8000004}
+  m_LocalRotation: {x: -0.00000008940696, y: 0.000000029802319, z: -0, w: 1}
+  m_LocalPosition: {x: 0.018795427, y: 0.009008819, z: 0.005441839}
+  m_LocalScale: {x: 0.8000005, y: 0.8000005, z: 0.8000005}
   m_Children: []
   m_Father: {fileID: 4999373265428298132}
   m_RootOrder: 0
@@ -872,8 +869,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7264946655354644734}
-  m_LocalRotation: {x: 0.21237683, y: -0.15760015, z: 0.45865816, w: -0.848346}
-  m_LocalPosition: {x: 0.0058, y: 0.035, z: -0.047500014}
+  m_LocalRotation: {x: 0.7142687, y: -0.1676541, z: 0.3992355, w: 0.54983944}
+  m_LocalPosition: {x: -0.03295204, y: 0.026916739, z: -0.14577484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3146351094044410370}
@@ -896,7 +893,6 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _pointableElement: {fileID: 2127621401763312286}
-  _relativeTo: {fileID: 2720035132689322368}
   _rigidbody: {fileID: 9159541282209887598}
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 0}
@@ -919,8 +915,8 @@ MonoBehaviour:
     _pinkyRequirement: 1
     _unselectMode: 0
   _movementProvider: {fileID: 0}
-  _handAligment: 0
-  _handGrabPoints:
+  _handAligment: 1
+  _handGrabPoses:
   - {fileID: 242429851055783372}
   - {fileID: 7363006606789177232}
   - {fileID: 270722879348679839}

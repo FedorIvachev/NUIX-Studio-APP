@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointable: {fileID: 4600924925477997591}
+  _whenRelease:
+    m_PersistentCalls:
+      m_Calls: []
   _whenHover:
     m_PersistentCalls:
       m_Calls: []
@@ -135,7 +138,6 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _pointableElement: {fileID: 4600924925477997591}
-  _relativeTo: {fileID: 4600924926217495276}
   _rigidbody: {fileID: 4600924926217495278}
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 0}
@@ -157,37 +159,9 @@ MonoBehaviour:
     _ringRequirement: 2
     _pinkyRequirement: 1
     _unselectMode: 0
-  _snapType: 1
-  _customAligner: {fileID: 0}
-  _travellingData:
-    _travelSpeed: 1
-    _useFixedTravelTime: 0
-    _travelCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+  _movementProvider: {fileID: 0}
   _handAligment: 0
-  _handGrabPoints: []
+  _handGrabPoses: []
 --- !u!1 &2064171393354144665
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _transferOnSecondSelection: 0
+  _transferOnSecondSelection: 1
   _addNewPointsToFront: 0
   _forwardElement: {fileID: 0}
   _oneGrabTransformer: {fileID: 4600924925477997590}

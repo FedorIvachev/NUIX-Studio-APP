@@ -26,8 +26,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 180223809}
-  m_LocalRotation: {x: -0.3712125, y: -0.22935612, z: 0.68892926, w: 0.57876897}
-  m_LocalPosition: {x: -0.012183189, y: -0.042700022, z: 0.006000012}
+  m_LocalRotation: {x: -0.22454368, y: -0.73937297, z: -0.622812, w: 0.12252772}
+  m_LocalPosition: {x: 0.057766907, y: -0.06495996, z: -0.07039685}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2096017341}
@@ -50,7 +50,6 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _pointableElement: {fileID: 7780865689132456738}
-  _relativeTo: {fileID: 6035498533402622012}
   _rigidbody: {fileID: 675784305044643026}
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 0}
@@ -72,37 +71,9 @@ MonoBehaviour:
     _ringRequirement: 1
     _pinkyRequirement: 1
     _unselectMode: 0
-  _snapType: 0
-  _customAligner: {fileID: 0}
-  _travellingData:
-    _travelSpeed: 1
-    _useFixedTravelTime: 0
-    _travelCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  _handAligment: 0
-  _handGrabPoints:
+  _movementProvider: {fileID: 0}
+  _handAligment: 1
+  _handGrabPoses:
   - {fileID: 180223812}
   - {fileID: 2096017343}
   - {fileID: 1686012441}
@@ -155,8 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    startPoint: {x: 0, y: -0.042345315, z: 0}
-    endPoint: {x: 0, y: -0.04, z: 0}
+    startPoint: {x: 0, y: -0.056993693, z: 0}
+    endPoint: {x: 0, y: -0.055684596, z: 0}
     angle: 360
   _relativeTo: {fileID: 6035498533402622012}
   _gripPoint: {fileID: 180223810}
@@ -186,8 +157,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186871198}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000000019292514, y: 0.000000016548828, z: 3.4606096e-10}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalPosition: {x: -0.020000001, y: -0.0069999928, z: 0.000000028405339}
+  m_LocalScale: {x: 0.8, y: 0.7999999, z: 0.8}
   m_Children: []
   m_Father: {fileID: 1272538754}
   m_RootOrder: 0
@@ -241,8 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    startPoint: {x: 0, y: -0.042345315, z: 0}
-    endPoint: {x: 0, y: -0.04, z: 0}
+    startPoint: {x: 0, y: -0.056993693, z: 0}
+    endPoint: {x: 0, y: -0.055684596, z: 0}
     angle: 360
   _relativeTo: {fileID: 6035498533402622012}
   _gripPoint: {fileID: 186871199}
@@ -272,8 +243,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 362489112}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000000019292514, y: 0.000000016548828, z: 3.4606096e-10}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalPosition: {x: 0.020000007, y: 0.0070000105, z: 0.000000029336661}
+  m_LocalScale: {x: 1.2, y: 1.1999998, z: 1.1999999}
   m_Children: []
   m_Father: {fileID: 1272538754}
   m_RootOrder: 1
@@ -327,8 +298,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    startPoint: {x: 0, y: -0.042345315, z: 0}
-    endPoint: {x: 0, y: -0.04, z: 0}
+    startPoint: {x: 0, y: -0.056993693, z: 0}
+    endPoint: {x: 0, y: -0.055684596, z: 0}
     angle: 360
   _relativeTo: {fileID: 6035498533402622012}
   _gripPoint: {fileID: 362489113}
@@ -358,8 +329,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1272538753}
-  m_LocalRotation: {x: -0.4540386, y: 0.41788653, z: 0.63739413, w: -0.4614635}
-  m_LocalPosition: {x: -0.012183189, y: -0.0427, z: 0.006}
+  m_LocalRotation: {x: -0.7174317, y: -0.07372486, z: 0.21674216, w: -0.65793556}
+  m_LocalPosition: {x: 0.09101896, y: -0.06495994, z: -0.0028776582}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 186871199}
@@ -382,7 +353,6 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _pointableElement: {fileID: 7780865689132456738}
-  _relativeTo: {fileID: 6035498533402622012}
   _rigidbody: {fileID: 675784305044643026}
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 0}
@@ -404,37 +374,9 @@ MonoBehaviour:
     _ringRequirement: 1
     _pinkyRequirement: 1
     _unselectMode: 0
-  _snapType: 0
-  _customAligner: {fileID: 0}
-  _travellingData:
-    _travelSpeed: 1
-    _useFixedTravelTime: 0
-    _travelCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  _handAligment: 0
-  _handGrabPoints:
+  _movementProvider: {fileID: 0}
+  _handAligment: 1
+  _handGrabPoses:
   - {fileID: 1272538756}
   - {fileID: 186871201}
   - {fileID: 362489115}
@@ -451,8 +393,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    startPoint: {x: 0, y: -0.042345315, z: 0}
-    endPoint: {x: 0, y: -0.04, z: 0}
+    startPoint: {x: 0, y: -0.056993693, z: 0}
+    endPoint: {x: 0, y: -0.055684596, z: 0}
     angle: 360
   _relativeTo: {fileID: 6035498533402622012}
   _gripPoint: {fileID: 1272538754}
@@ -517,9 +459,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686012438}
-  m_LocalRotation: {x: -0, y: -0, z: 0.000000007450581, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.019999996, y: -0.0070000114, z: -0.000000015832484}
+  m_LocalScale: {x: 1.1999999, y: 1.2, z: 1.2}
   m_Children: []
   m_Father: {fileID: 180223810}
   m_RootOrder: 1
@@ -573,8 +515,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    startPoint: {x: 0, y: -0.042345315, z: 0}
-    endPoint: {x: 0, y: -0.04, z: 0}
+    startPoint: {x: 0, y: -0.056993693, z: 0}
+    endPoint: {x: 0, y: -0.055684596, z: 0}
     angle: 360
   _relativeTo: {fileID: 6035498533402622012}
   _gripPoint: {fileID: 1686012439}
@@ -603,9 +545,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096017340}
-  m_LocalRotation: {x: -0, y: -0, z: 0.000000007450581, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.02000001, y: 0.0070000137, z: -0.000000015832484}
+  m_LocalScale: {x: 0.7999999, y: 0.8000001, z: 0.8}
   m_Children: []
   m_Father: {fileID: 180223810}
   m_RootOrder: 0
@@ -659,8 +601,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    startPoint: {x: 0, y: -0.042345315, z: 0}
-    endPoint: {x: 0, y: -0.04, z: 0}
+    startPoint: {x: 0, y: -0.056993693, z: 0}
+    endPoint: {x: 0, y: -0.055684596, z: 0}
     angle: 360
   _relativeTo: {fileID: 6035498533402622012}
   _gripPoint: {fileID: 2096017341}

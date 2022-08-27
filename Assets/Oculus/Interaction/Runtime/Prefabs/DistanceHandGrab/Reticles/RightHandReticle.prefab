@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6aa09f2d128af4d93fb9fc29ecec33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distanceInteractor: {fileID: 0}
+  _handGrabSource: {fileID: 0}
   _syntheticHand: {fileID: 8352625307792070587}
-  _visualHand: {fileID: 529827287438686629}
+  _visualHand: {fileID: 0}
 --- !u!114 &6682429639214924993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +158,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RightHandSynthetic
       objectReference: {fileID: 0}
+    - target: {fileID: 8662184560477892144, guid: 94313e563929cb3499e3989be338a213,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 697d9a99ae3c7784bbef700ed300a1ca, type: 2}
     - target: {fileID: 8961047545368350123, guid: 94313e563929cb3499e3989be338a213,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -188,17 +193,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c67033f580359c4581dff1ccffcca91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &529827287438686629 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8961047544114658047, guid: 94313e563929cb3499e3989be338a213,
-    type: 3}
-  m_PrefabInstance: {fileID: 8864872284322546522}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af9ea683544b184083cef283557012d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -1,21 +1,29 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using Oculus.Interaction.Editor;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-namespace Oculus.Interaction.HandPosing.SnapSurfaces.Editor
+namespace Oculus.Interaction.HandGrab.SnapSurfaces.Editor
 {
     [CustomEditor(typeof(CylinderSurface))]
     [CanEditMultipleObjects]
@@ -23,21 +31,34 @@ namespace Oculus.Interaction.HandPosing.SnapSurfaces.Editor
     {
         private const float DRAW_SURFACE_ANGULAR_RESOLUTION = 5f;
 
-        private ArcHandle _arcHandle = new ArcHandle();
+        private ArcHandle _arcEndHandle = new ArcHandle();
+        private ArcHandle _arcStartHandle = new ArcHandle();
+
         private Vector3[] _surfaceEdges;
 
         CylinderSurface _surface;
 
         private void OnEnable()
         {
-            _arcHandle.SetColorWithRadiusHandle(EditorConstants.PRIMARY_COLOR, 0f);
+            _arcStartHandle.SetColorWithRadiusHandle(EditorConstants.PRIMARY_COLOR_DISABLED, 0f);
+            _arcEndHandle.SetColorWithRadiusHandle(EditorConstants.PRIMARY_COLOR, 0f);
             _surface = (target as CylinderSurface);
         }
 
         public void OnSceneGUI()
         {
             DrawEndsCaps(_surface);
-            DrawArcEditor(_surface);
+
+            float oldArcStart = _surface.ArcOffset;
+            float newArcStart = DrawArcEditor(_surface, _arcStartHandle,
+                oldArcStart, Quaternion.LookRotation(_surface.OriginalDir, _surface.Direction));
+
+            _surface.ArcOffset = newArcStart;
+            _surface.ArcLength -= newArcStart - oldArcStart;
+
+            _surface.ArcLength = DrawArcEditor(_surface, _arcEndHandle,
+                _surface.ArcLength, Quaternion.LookRotation(_surface.StartArcDir, _surface.Direction));
+
             if (Event.current.type == EventType.Repaint)
             {
                 DrawSurfaceVolume(_surface);
@@ -74,17 +95,17 @@ namespace Oculus.Interaction.HandPosing.SnapSurfaces.Editor
             Handles.color = EditorConstants.PRIMARY_COLOR;
             Handles.DrawWireArc(end,
                 surface.Direction,
-                surface.StartAngleDir,
-                surface.Angle,
+                surface.StartArcDir,
+                surface.ArcLength,
                 radius);
 
             Handles.DrawLine(start, end);
-            Handles.DrawLine(start, start + surface.StartAngleDir * radius);
-            Handles.DrawLine(start, start + surface.EndAngleDir * radius);
-            Handles.DrawLine(end, end + surface.StartAngleDir * radius);
-            Handles.DrawLine(end, end + surface.EndAngleDir * radius);
+            Handles.DrawLine(start, start + surface.StartArcDir * radius);
+            Handles.DrawLine(start, start + surface.EndArcDir * radius);
+            Handles.DrawLine(end, end + surface.StartArcDir * radius);
+            Handles.DrawLine(end, end + surface.EndArcDir * radius);
 
-            int edgePoints = Mathf.CeilToInt((2 * surface.Angle) / DRAW_SURFACE_ANGULAR_RESOLUTION) + 3;
+            int edgePoints = Mathf.CeilToInt((2 * surface.ArcLength) / DRAW_SURFACE_ANGULAR_RESOLUTION) + 3;
             if (_surfaceEdges == null
                 || _surfaceEdges.Length != edgePoints)
             {
@@ -93,39 +114,39 @@ namespace Oculus.Interaction.HandPosing.SnapSurfaces.Editor
 
             Handles.color = EditorConstants.PRIMARY_COLOR_DISABLED;
             int i = 0;
-            for (float angle = 0f; angle < surface.Angle; angle += DRAW_SURFACE_ANGULAR_RESOLUTION)
+            for (float angle = 0f; angle < surface.ArcLength; angle += DRAW_SURFACE_ANGULAR_RESOLUTION)
             {
-                Vector3 direction = Quaternion.AngleAxis(angle, surface.Direction) * surface.StartAngleDir;
+                Vector3 direction = Quaternion.AngleAxis(angle, surface.Direction) * surface.StartArcDir;
                 _surfaceEdges[i++] = start + direction * radius;
                 _surfaceEdges[i++] = end + direction * radius;
             }
-            _surfaceEdges[i++] = start + surface.EndAngleDir * radius;
-            _surfaceEdges[i++] = end + surface.EndAngleDir * radius;
+            _surfaceEdges[i++] = start + surface.EndArcDir * radius;
+            _surfaceEdges[i++] = end + surface.EndArcDir * radius;
             Handles.DrawPolyLine(_surfaceEdges);
         }
 
-        private void DrawArcEditor(CylinderSurface surface)
+        private float DrawArcEditor(CylinderSurface surface, ArcHandle handle, float inputAngle, Quaternion rotation)
         {
-            float radius = surface.Radius;
-            _arcHandle.angle = surface.Angle;
-            _arcHandle.radius = radius;
+            handle.radius = surface.Radius;
+            handle.angle = inputAngle;
 
             Matrix4x4 handleMatrix = Matrix4x4.TRS(
                 surface.StartPoint,
-                Quaternion.LookRotation(surface.StartAngleDir, surface.Direction),
+                rotation,
                 Vector3.one
             );
+
             using (new Handles.DrawingScope(handleMatrix))
             {
                 EditorGUI.BeginChangeCheck();
-                _arcHandle.DrawHandle();
+                handle.DrawHandle();
                 if (EditorGUI.EndChangeCheck())
                 {
                     Undo.RecordObject(surface, "Change Cylinder Properties");
-                    surface.Angle = _arcHandle.angle;
-                    radius = _arcHandle.radius;
+                    return handle.angle;
                 }
             }
+            return inputAngle;
         }
     }
 }

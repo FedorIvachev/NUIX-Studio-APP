@@ -1,16 +1,24 @@
-﻿/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
+﻿/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
-
-using Oculus.Interaction.HandPosing;
+using Oculus.Interaction.HandGrab;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -20,14 +28,7 @@ namespace Oculus.Interaction.DistanceReticles
     {
         [SerializeField]
         private DistanceHandGrabInteractor _distanceInteractor;
-        protected override IDistanceInteractor DistanceInteractor
-        {
-            get
-            {
-                return _distanceInteractor;
-            }
-            set { }
-        }
+        protected override IInteractorView Interactor => _distanceInteractor;
 
         [SerializeField]
         private MeshFilter _filter;
@@ -59,7 +60,8 @@ namespace Oculus.Interaction.DistanceReticles
 
         protected override void Start()
         {
-            this.BeginStart(ref _started, base.Start);
+            this.BeginStart(ref _started, () => base.Start());
+            Assert.IsNotNull(_distanceInteractor);
             Assert.IsNotNull(_filter);
             Assert.IsNotNull(_renderer);
             this.EndStart(ref _started);
@@ -81,13 +83,13 @@ namespace Oculus.Interaction.DistanceReticles
             _renderer.enabled = false;
         }
 
-        protected override void Align(ReticleDataMesh data, ConicalFrustum frustum)
+        protected override void Align(ReticleDataMesh data)
         {
-            ISnapData snap = _distanceInteractor.SnapData;
+            HandGrabTarget grabTarget = _distanceInteractor.HandGrabTarget;
 
-            if (snap != null && _distanceInteractor.HasInteractable)
+            if (grabTarget != null && _distanceInteractor.HasInteractable)
             {
-                Pose pose = DestinationPose(data, snap.WorldSnapPose);
+                Pose pose = DestinationPose(data, grabTarget.WorldGrabPose);
                 _tween.UpdateTarget(pose);
             }
 
@@ -97,9 +99,9 @@ namespace Oculus.Interaction.DistanceReticles
 
         private Pose DestinationPose(IReticleData data, Pose worldSnapPose)
         {
-            Pose targetOffset = PoseUtils.RelativeOffset(data.Target.GetPose(), worldSnapPose);
+            Pose targetOffset = PoseUtils.Delta(worldSnapPose, data.Target.GetPose());
             _distanceInteractor.Hand.GetRootPose(out Pose pose);
-            pose.Premultiply(_distanceInteractor.WristToSnapOffset);
+            pose.Premultiply(_distanceInteractor.WristToGrabPoseOffset);
             pose.Premultiply(targetOffset);
 
             return pose;

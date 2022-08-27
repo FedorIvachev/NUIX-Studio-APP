@@ -1,5 +1,6 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
@@ -38,7 +39,9 @@ namespace Facebook.WitAi
             [Header("Understanding Viewer Texts")]
             public string UnderstandingViewerLabel;
             public string UnderstandingViewerMissingConfigLabel;
-            public string UnderstandingViewerNoAppLabel;
+            public string UnderstandingViewerMissingClientTokenLabel;
+            public string UnderstandingViewerServicesLabel;
+            public string UnderstandingViewerMissingServicesLabel;
             public string UnderstandingViewerSettingsButtonLabel;
             public string UnderstandingViewerUtteranceLabel;
             public string UnderstandingViewerPromptLabel;

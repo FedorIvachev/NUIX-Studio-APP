@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6aa09f2d128af4d93fb9fc29ecec33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distanceInteractor: {fileID: 0}
+  _handGrabSource: {fileID: 0}
   _syntheticHand: {fileID: 5712968463922221159}
-  _visualHand: {fileID: 7379830709848256091}
+  _visualHand: {fileID: 0}
 --- !u!114 &6106127509108096422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +133,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2143258140177466423, guid: e7fbb376593cff24f9db4ecf8d465aaf,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 697d9a99ae3c7784bbef700ed300a1ca, type: 2}
     - target: {fileID: 6781686664567148064, guid: e7fbb376593cff24f9db4ecf8d465aaf,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -183,17 +188,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c67033f580359c4581dff1ccffcca91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7379830709848256091 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6781686663965806220, guid: e7fbb376593cff24f9db4ecf8d465aaf,
-    type: 3}
-  m_PrefabInstance: {fileID: 4068730654910161111}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af9ea683544b184083cef283557012d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

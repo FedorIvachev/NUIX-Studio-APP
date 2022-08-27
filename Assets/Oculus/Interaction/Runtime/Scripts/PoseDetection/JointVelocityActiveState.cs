@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System;
 using Oculus.Interaction.Input;
@@ -24,6 +32,7 @@ namespace Oculus.Interaction.PoseDetection
         {
             Hand = 0,
             World = 1,
+            Head = 2,
         }
 
         public enum WorldAxis
@@ -34,6 +43,16 @@ namespace Oculus.Interaction.PoseDetection
             NegativeY = 3,
             PositiveZ = 4,
             NegativeZ = 5,
+        }
+
+        public enum HeadAxis
+        {
+            HeadForward = 0,
+            HeadBackward = 1,
+            HeadUp = 2,
+            HeadDown = 3,
+            HeadLeft = 4,
+            HeadRight = 5,
         }
 
         public enum HandAxis
@@ -89,14 +108,23 @@ namespace Oculus.Interaction.PoseDetection
             [SerializeField]
             private HandAxis _handAxis = HandAxis.WristForward;
 
+            [SerializeField]
+            private HeadAxis _headAxis = HeadAxis.HeadForward;
+
             public RelativeTo RelativeTo => _relativeTo;
             public WorldAxis WorldAxis => _worldAxis;
             public HandAxis HandAxis => _handAxis;
+            public HeadAxis HeadAxis => _headAxis;
+
         }
 
         [SerializeField, Interface(typeof(IHand))]
         private MonoBehaviour _hand;
         public IHand Hand { get; private set; }
+
+        [SerializeField, Optional, Interface(typeof(IHmd))]
+        private MonoBehaviour _hmd;
+        public IHmd Hmd { get; private set; }
 
         [SerializeField]
         private JointVelocityFeatureConfigList _featureConfigs;
@@ -149,6 +177,11 @@ namespace Oculus.Interaction.PoseDetection
         {
             Hand = _hand as IHand;
             _timeProvider = () => Time.time;
+
+            if (_hmd != null)
+            {
+                Hmd = _hmd as IHmd;
+            }
         }
 
         protected virtual void Start()
@@ -164,6 +197,8 @@ namespace Oculus.Interaction.PoseDetection
             {
                 allTrackedJoints.Add(config.Feature);
                 _featureStates.Add(config, new JointVelocityFeatureState());
+
+                Assert.IsTrue(config.RelativeTo != RelativeTo.Head || Hmd != null);
             }
             _jointDeltaConfig = new JointDeltaConfig(GetInstanceID(), allTrackedJoints);
 
@@ -268,6 +303,8 @@ namespace Oculus.Interaction.PoseDetection
                     return GetHandAxisVector(config.HandAxis, rootPose);
                 case RelativeTo.World:
                     return GetWorldAxisVector(config.WorldAxis);
+                case RelativeTo.Head:
+                    return GetHeadAxisVector(config.HeadAxis);
             }
         }
 
@@ -327,6 +364,38 @@ namespace Oculus.Interaction.PoseDetection
             return result;
         }
 
+        private Vector3 GetHeadAxisVector(HeadAxis axis)
+        {
+            Hmd.GetRootPose(out Pose headPose);
+
+            Vector3 result;
+            switch (axis)
+            {
+                case HeadAxis.HeadForward:
+                    result = headPose.forward;
+                    break;
+                case HeadAxis.HeadBackward:
+                    result = -headPose.forward;
+                    break;
+                case HeadAxis.HeadUp:
+                    result = headPose.up;
+                    break;
+                case HeadAxis.HeadDown:
+                    result = -headPose.up;
+                    break;
+                case HeadAxis.HeadRight:
+                    result = headPose.right;
+                    break;
+                case HeadAxis.HeadLeft:
+                    result = -headPose.right;
+                    break;
+                default:
+                    result = Vector3.zero;
+                    break;
+            }
+            return result;
+        }
+
         #region Inject
 
         public void InjectAllJointVelocityActiveState(JointVelocityFeatureConfigList featureConfigs,
@@ -350,6 +419,13 @@ namespace Oculus.Interaction.PoseDetection
         public void InjectOptionalTimeProvider(Func<float> timeProvider)
         {
             _timeProvider = timeProvider;
+        }
+
+
+        public void InjectOptionalHmd(IHmd hmd)
+        {
+            _hmd = hmd as MonoBehaviour;
+            Hmd = hmd;
         }
 
         #endregion

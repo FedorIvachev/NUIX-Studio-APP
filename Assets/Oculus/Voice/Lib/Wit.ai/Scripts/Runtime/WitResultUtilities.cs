@@ -1,10 +1,12 @@
 ﻿/*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
+using System;
 using Facebook.WitAi.Data.Entities;
 using Facebook.WitAi.Data.Intents;
 using Facebook.WitAi.Lib;
@@ -13,6 +15,73 @@ namespace Facebook.WitAi
 {
     public static class WitResultUtilities
     {
+        // Keys
+        public const string WIT_KEY_TRANSCRIPTION = "text";
+        public const string WIT_KEY_FINAL = "is_final";
+
+        /// <summary>
+        /// Handle a wit response by returning callbacks when applicable and returning true if final response
+        /// </summary>
+        /// <param name="witResponse">The parsed response</param>
+        /// <param name="onResponse">The response data callback that returns a WitResponseNode & a boolean representing whether it is a final response</param>
+        /// <param name="onTranscription">The transcription string callback that returns text & a boolean representing whether it is a final transcription</param>
+        public static bool HandleResponse(this WitResponseNode witResponse, Action<string, bool> onTranscription, Action<WitResponseNode, bool> onResponse)
+        {
+            // Failed if null
+            if (witResponse == null)
+            {
+                return false;
+            }
+
+            // Decode transcription
+            string transcription = witResponse.GetTranscription();
+
+            // Partial Transcription has no intents
+            if (!witResponse.AsObject.HasChild("intents"))
+            {
+                if (!string.IsNullOrEmpty(transcription))
+                {
+                    onTranscription?.Invoke(transcription, false);
+                }
+                return false;
+            }
+
+            // Check for final
+            bool final = witResponse.GetIsFinal();
+            if (final)
+            {
+                if (!string.IsNullOrEmpty(transcription))
+                {
+                    onTranscription?.Invoke(transcription, true);
+                }
+                onResponse?.Invoke(witResponse, true);
+                return true;
+            }
+
+            // Partial Response
+            onResponse?.Invoke(witResponse, false);
+            return false;
+        }
+
+        /// <summary>
+        /// Get the transcription from a wit response node
+        /// </summary>
+        public static string GetTranscription(this WitResponseNode witResponse) =>
+            null != witResponse
+            && witResponse.AsObject != null
+            && witResponse.AsObject.HasChild(WIT_KEY_TRANSCRIPTION)
+            ? witResponse[WIT_KEY_TRANSCRIPTION].Value
+            : string.Empty;
+
+        /// <summary>
+        /// Get whether this response is a 'final' response
+        /// </summary>
+        public static bool GetIsFinal(this WitResponseNode witResponse) =>
+            null != witResponse
+            && witResponse.AsObject != null
+            && witResponse.AsObject.HasChild(WIT_KEY_FINAL)
+            && witResponse[WIT_KEY_FINAL].AsBool;
+
         /// <summary>
         /// Gets the string value of the first entity
         /// </summary>
@@ -22,6 +91,23 @@ namespace Facebook.WitAi
         public static string GetFirstEntityValue(this WitResponseNode witResponse, string name)
         {
             return witResponse?["entities"]?[name]?[0]?["value"]?.Value;
+        }
+
+        /// <summary>
+        /// Gets a collection of string value containing the selected value from
+        /// each entity in the response.
+        /// </summary>
+        /// <param name="witResponse"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string[] GetAllEntityValues(this WitResponseNode witResponse, string name)
+        {
+            var values = new string[witResponse?["entities"]?[name]?.Count ?? 0];
+            for (var i = 0; i < witResponse?["entities"]?[name]?.Count; i++)
+            {
+                values[i] = witResponse?["entities"]?[name]?[i]?["value"]?.Value;
+            }
+            return values;
         }
 
         /// <summary>

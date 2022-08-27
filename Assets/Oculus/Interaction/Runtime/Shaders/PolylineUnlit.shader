@@ -35,6 +35,11 @@ Shader "Custom/PolylineUnlit" {
             StructuredBuffer<float4> _ColorBuffer;
             #endif
 
+            struct appdata_full_instance : appdata_full
+            {
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
             struct v2f {
                 float4 pos : SV_POSITION;
                 sample float3 worldPos : TEXCOORD0;
@@ -42,13 +47,20 @@ Shader "Custom/PolylineUnlit" {
                 float4 p1 : TEXCOORD2;
                 float4 col0 : TEXCOORD3;
                 float4 col1 : TEXCOORD4;
+                UNITY_VERTEX_OUTPUT_STEREO
             };
 
             float _Scale;
             float4x4 _LocalToWorld;
 
-            v2f vert(appdata_full v, uint instanceID : SV_InstanceID)
+            v2f vert(appdata_full_instance v, uint instanceID : SV_InstanceID)
             {
+                v2f o;
+
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_OUTPUT(v2f, o);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+
                 #if SHADER_TARGET >= 45
                     float4 p0 = _PositionBuffer[instanceID * 2];
                     float4 p1 = _PositionBuffer[instanceID * 2 + 1];
@@ -61,12 +73,10 @@ Shader "Custom/PolylineUnlit" {
                     float4 col1 = 0;
                 #endif
 
-                v2f o;
-
                 float3 localPos = orientCubePointToSegmentWithWidth(v.vertex.xyz, p0.xyz, p1.xyz, p0.w, p0.w);
                 float3 worldPos = mul(_LocalToWorld, float4(localPos, 1.0)).xyz;
 
-                // Apply MVP matrix to model
+                // Apply VP matrix to model
                 o.pos = mul(UNITY_MATRIX_VP, float4(worldPos, 1.0));
                 o.worldPos = worldPos;
                 o.p0 = float4(mul(_LocalToWorld, float4(p0.xyz, 1.0)).xyz, p0.w);
@@ -79,6 +89,7 @@ Shader "Custom/PolylineUnlit" {
 
             fixed4 frag (v2f i, out float out_depth : SV_Depth) : SV_Target
             {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 float3 rayDir = normalize(i.worldPos - _WorldSpaceCameraPos.xyz);
                 float dist = capIntersect(_WorldSpaceCameraPos.xyz, rayDir, i.p0, i.p1,
                                         i.p0.w/2.0f * _Scale); // hardcoded sphere at 0,0,0 radius .5

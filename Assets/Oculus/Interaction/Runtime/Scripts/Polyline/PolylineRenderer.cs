@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +35,15 @@ namespace Oculus.Interaction
 
         private Mesh _baseMesh;
         private Material _material;
+
+        // Indicate whether using single pass rendering
+        private bool _renderSinglePass;
+
+        // If single pass rendering, duplicate buffer data
+        private int Copies => _renderSinglePass ? 2 : 1;
+
+        // Each line instance requires 2 float4, double that if also single pass
+        private int BufferSize => _maxLineCount * 2 * Copies;
 
         private ComputeBuffer _positionBuffer;
         private ComputeBuffer _colorBuffer;
@@ -54,8 +71,10 @@ namespace Oculus.Interaction
             }
         }
 
-        public PolylineRenderer(Material material = null)
+        public PolylineRenderer(Material material = null, bool renderSinglePass = true)
         {
+            _renderSinglePass = renderSinglePass;
+
             if (material == null)
             {
                 material = new Material(Shader.Find("Custom/PolylineUnlit"));
@@ -68,14 +87,14 @@ namespace Oculus.Interaction
             GameObject.DestroyImmediate(baseCube);
 
             // Start with one of these is one Polyline
-            _positions = new Vector4[_maxLineCount * 2];
-            _colors = new Color[_maxLineCount * 2];
+            _positions = new Vector4[BufferSize];
+            _colors = new Color[BufferSize];
 
             // _maxLineCount * 2 as we use two points per segment
             // 16 for Vector4: 4*sizeof(float) = 4*4
-            _positionBuffer = new ComputeBuffer(_maxLineCount * 2, 16);
+            _positionBuffer = new ComputeBuffer(BufferSize, 16);
             _positionBuffer.SetData(_positions);
-            _colorBuffer = new ComputeBuffer(_maxLineCount * 2, 16);
+            _colorBuffer = new ComputeBuffer(BufferSize, 16);
             _colorBuffer.SetData(_colors);
 
             _material.SetBuffer(_positionBufferShaderID, _positionBuffer);
@@ -83,7 +102,7 @@ namespace Oculus.Interaction
 
             _argsData = new uint[5] {0, 0, 0, 0, 0};
             _argsData[0] = (uint)_baseMesh.GetIndexCount(0);
-            _argsData[1] = (uint)_maxLineCount;
+            _argsData[1] = (uint)(_maxLineCount * Copies);
 
             _argsBuffer = new ComputeBuffer(1, _argsData.Length * sizeof(uint),
                 ComputeBufferType.IndirectArguments);
@@ -122,58 +141,78 @@ namespace Oculus.Interaction
         public void SetLines(List<Vector4> positions, List<Color> colors, int maxCount = -1)
         {
             int count = maxCount < 0 ? positions.Count : maxCount;
-            if (count > _positions.Length)
+            if (count * Copies > _positions.Length)
             {
                 _maxLineCount = count / 2;
-                _positions = new Vector4[_maxLineCount * 2];
+                _positions = new Vector4[BufferSize];
                 _positionBuffer.Release();
-                _positionBuffer = new ComputeBuffer(_maxLineCount * 2, 16);
+                _positionBuffer = new ComputeBuffer(BufferSize, 16);
                 _positionBuffer.SetData(_positions);
             }
 
             _bounds = new Bounds();
             Vector3 min = Vector3.zero;
             Vector3 max = Vector3.zero;
-            for (int i = 0; i < count; i++)
-            {
-                Vector4 position = positions[i];
-                _positions[i] = position;
 
-                Vector3 width = position.w * Vector3.one;
-                Vector3 p = (Vector3)position;
-                Vector3 pmin = p - width / 2f;
-                Vector3 pmax = p + width / 2f;
-                if (i == 0)
+            // Given position data p0,p1,p2,p3
+            // For double pass -> [p0,p1, p2,p3]
+            // For single pass -> [p0,p1, p0,p1, p2,p3, p2,p3]
+            for (int i = 0; i < count; i += 2)
+            {
+                for (int j = 0; j < 2; j++)
                 {
-                    min = pmin;
-                    max = pmax;
-                }
-                else
-                {
-                    min.x = Mathf.Min(pmin.x, min.x);
-                    min.y = Mathf.Min(pmin.y, min.y);
-                    min.z = Mathf.Min(pmin.z, min.z);
-                    max.x = Mathf.Max(pmax.x, max.x);
-                    max.y = Mathf.Max(pmax.y, max.y);
-                    max.z = Mathf.Max(pmax.z, max.z);
+                    Vector4 position = positions[i + j];
+                    for (int k = 0; k < Copies; k++)
+                    {
+                        _positions[(i + k) * Copies + j] = position;
+                    }
+
+                    Vector3 width = position.w * Vector3.one;
+                    Vector3 p = (Vector3)position;
+                    Vector3 pmin = p - width / 2f;
+                    Vector3 pmax = p + width / 2f;
+                    if (i == 0)
+                    {
+                        min = pmin;
+                        max = pmax;
+                    }
+                    else
+                    {
+                        min.x = Mathf.Min(pmin.x, min.x);
+                        min.y = Mathf.Min(pmin.y, min.y);
+                        min.z = Mathf.Min(pmin.z, min.z);
+                        max.x = Mathf.Max(pmax.x, max.x);
+                        max.y = Mathf.Max(pmax.y, max.y);
+                        max.z = Mathf.Max(pmax.z, max.z);
+                    }
                 }
             }
             _bounds.SetMinMax(min, max);
 
             _positionsNeedUpdate = true;
 
-            if (count > _colors.Length)
+            if (count * Copies > _colors.Length)
             {
                 _maxLineCount = count / 2;
-                _colors = new Color[_maxLineCount * 2];
+                _colors = new Color[BufferSize];
                 _colorBuffer.Release();
-                _colorBuffer = new ComputeBuffer(_maxLineCount * 2, 16);
+                _colorBuffer = new ComputeBuffer(BufferSize, 16);
                 _colorBuffer.SetData(_colors);
             }
 
-            for (int i = 0; i < count; i++)
+            // Given color data c0,c1,c2,c3
+            // For double pass -> [c0,c1, c2,c3]
+            // For single pass -> [c0,c1, c0,c1, c2,c3, c2,c3]
+            for (int i = 0; i < count; i += 2)
             {
-                _colors[i] = colors[i];
+                for (int j = 0; j < 2; j++)
+                {
+                    for (int k = 0; k < Copies; k++)
+                    {
+                        Vector4 color = colors[i + j];
+                        _colors[(i + k)*Copies + j] = color;
+                    }
+                }
             }
 
             _colorsNeedUpdate = true;
@@ -184,7 +223,7 @@ namespace Oculus.Interaction
         private void SetDrawCount(int c)
         {
             int drawCount = c;
-            _argsData[1] = (uint)drawCount;
+            _argsData[1] = (uint)(drawCount * Copies);
             _argsBuffer.SetData(_argsData);
         }
 

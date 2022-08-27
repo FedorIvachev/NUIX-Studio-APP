@@ -1,21 +1,35 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
-
-using Oculus.Interaction.HandPosing;
+using Oculus.Interaction.HandGrab;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Oculus.Interaction
 {
+    /// <summary>
+    /// This interactable is used for grabbing items at a distance.
+    /// Upon selection the Movement Provider specifies how the grabber and the grabbable will be aligned, by
+    /// default this can be moving the object towards a controller, but it could also enable other scenarios such as
+    /// moving it with deltas in its own place or allowing a pull motion, etc.
+    /// </summary>
     public class DistanceGrabInteractable : PointerInteractable<DistanceGrabInteractor, DistanceGrabInteractable>,
         IRigidbodyRef, IDistanceInteractable
     {
@@ -35,6 +49,10 @@ namespace Oculus.Interaction
         [SerializeField, Optional]
         private PhysicsGrabbable _physicsGrabbable = null;
 
+        /// <summary>
+        /// The movement provider specifies how the selected interactable will
+        /// align with the grabber.
+        /// </summary>
         [Header("Snap")]
         [SerializeField, Optional, Interface(typeof(IMovementProvider))]
         private MonoBehaviour _movementProvider;
@@ -75,7 +93,7 @@ namespace Oculus.Interaction
 
         protected override void Start()
         {
-            this.BeginStart(ref _started, base.Start);
+            this.BeginStart(ref _started, () => base.Start());
             Assert.IsNotNull(Rigidbody);
             _colliders = Rigidbody.GetComponentsInChildren<Collider>();
             if (MovementProvider == null)
@@ -90,7 +108,7 @@ namespace Oculus.Interaction
             this.EndStart(ref _started);
         }
 
-        public IMovement GenerateAligner(in Pose to)
+        public IMovement GenerateMovement(in Pose to)
         {
             Pose source = RelativeTo.GetPose();
             IMovement movement = MovementProvider.CreateMovement();

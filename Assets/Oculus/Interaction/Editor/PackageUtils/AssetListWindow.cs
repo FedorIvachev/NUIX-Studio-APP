@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,9 +29,21 @@ namespace Oculus.Interaction.Editor
 {
     public class AssetListWindow : EditorWindow
     {
-        public IReadOnlyList<string> AssetPaths => _assetPaths;
+        public class AssetInfo
+        {
+            public readonly string AssetPath;
+            public readonly string DisplayName;
 
-        private List<string> _assetPaths;
+            public AssetInfo(string assetPath) : this(assetPath, assetPath) { }
+
+            public AssetInfo(string assetPath, string displayName)
+            {
+                AssetPath = assetPath;
+                DisplayName = displayName;
+            }
+        }
+
+        private List<AssetInfo> _assetInfos;
         private Vector2 _scrollPos;
 
         private Action<AssetListWindow> _headerDrawer;
@@ -36,8 +56,23 @@ namespace Oculus.Interaction.Editor
             Action<AssetListWindow> headerDrawer = null,
             Action<AssetListWindow> footerDrawer = null)
         {
+            List<AssetInfo> assetInfos = new List<AssetInfo>();
+            foreach (var path in assetPaths)
+            {
+                assetInfos.Add(new AssetInfo(path));
+            }
+            return Show(title, assetInfos, modal, headerDrawer, footerDrawer);
+        }
+
+        public static AssetListWindow Show(
+            string title,
+            IEnumerable<AssetInfo> assetInfos,
+            bool modal = false,
+            Action<AssetListWindow> headerDrawer = null,
+            Action<AssetListWindow> footerDrawer = null)
+        {
             AssetListWindow window = GetWindow<AssetListWindow>(true);
-            window._assetPaths = new List<string>(assetPaths);
+            window._assetInfos = new List<AssetInfo>(assetInfos);
             window.SetTitle(title);
             window.SetHeader(headerDrawer);
             window.SetFooter(footerDrawer);
@@ -113,14 +148,16 @@ namespace Oculus.Interaction.Editor
         {
             EditorGUILayout.BeginVertical();
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
-            foreach (var assetName in _assetPaths)
+            foreach (var assetInfo in _assetInfos)
             {
                 var rect = EditorGUILayout.BeginHorizontal();
                 if (GUI.Button(rect, "", GUIStyle.none))
                 {
-                    PingObject(assetName);
+                    PingObject(assetInfo.AssetPath);
                 }
-                EditorGUILayout.LabelField(assetName);
+                GUIStyle style = new GUIStyle(GUI.skin.label);
+                style.richText = true;
+                EditorGUILayout.LabelField(assetInfo.DisplayName, style);
                 EditorGUILayout.EndHorizontal();
             }
             GUILayout.FlexibleSpace();

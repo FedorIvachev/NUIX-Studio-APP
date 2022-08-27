@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using UnityEngine.Assertions;
 using UnityEngine;
@@ -54,6 +62,8 @@ namespace Oculus.Interaction.Surfaces
         public float Radius => _cylinder.Radius;
 
         public Cylinder Cylinder => _cylinder;
+
+        public Pose Origin => _cylinder.transform.GetPose();
 
         public NormalFacing Facing
         {
@@ -110,25 +120,6 @@ namespace Oculus.Interaction.Surfaces
             float axisDelta = Mathf.Abs(TransformScale(localPoint1.y - localPoint0.y));
             return _surfaceOrientation == CylinderOrientation.Vertical ? new Vector2(arcDelta, axisDelta) :
                                                                          new Vector2(axisDelta, arcDelta);
-        }
-
-        public bool IsPointAboveSurface(Vector3 point)
-        {
-            if (!IsValid)
-            {
-                return false;
-            }
-
-            if (_facing == NormalFacing.In || _facing == NormalFacing.Any)
-            {
-                return true;
-            }
-            else
-            {
-                Vector3 nearestPointOnCenterAxis = _cylinder.transform.position +
-                    Vector3.Project(point - _cylinder.transform.position, _cylinder.transform.up);
-                return Vector3.Distance(point, nearestPointOnCenterAxis) > Radius;
-            }
         }
 
         public bool ClosestSurfacePoint(in Vector3 point, out SurfaceHit hit, float maxDistance)

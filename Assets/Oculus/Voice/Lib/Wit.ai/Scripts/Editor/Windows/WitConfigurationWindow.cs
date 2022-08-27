@@ -1,5 +1,6 @@
 ﻿/*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
  *
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
@@ -13,6 +14,7 @@ namespace Facebook.WitAi.Windows
 {
     public abstract class WitConfigurationWindow : BaseWitWindow
     {
+        // Configuration data
         protected int witConfigIndex = -1;
         protected WitConfiguration witConfiguration;
 
@@ -45,6 +47,13 @@ namespace Facebook.WitAi.Windows
         }
         protected override void LayoutContent()
         {
+            // Reload if config is removed
+            if (witConfiguration == null && witConfigIndex != -1)
+            {
+                WitConfigurationUtility.ReloadConfigurationData();
+                SetConfiguration(-1);
+            }
+
             // Layout popup
             int index = witConfigIndex;
             WitConfigurationEditorUI.LayoutConfigurationSelect(ref index);

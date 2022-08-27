@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #if USING_XR_MANAGEMENT && (USING_XR_SDK_OCULUS || USING_XR_SDK_OPENXR)
 #define USING_XR_SDK
@@ -36,7 +44,7 @@ using Device = UnityEngine.XR.XRDevice;
 /// <summary>
 /// Miscellaneous extension methods that any script can use.
 /// </summary>
-public static class OVRExtensions
+public static partial class OVRExtensions
 {
 	/// <summary>
 	/// Converts the given world-space transform to an OVRPose in tracking space.
@@ -80,7 +88,7 @@ public static class OVRExtensions
 
 		return ret;
 	}
-	
+
 	/// <summary>
 	/// Converts the given pose from tracking-space to head-space.
 	/// </summary>
@@ -258,8 +266,9 @@ public static class OVRExtensions
 
 	public static Transform FindChildRecursive(this Transform parent, string name)
 	{
-		foreach (Transform child in parent)
+		for (int i = 0; i < parent.childCount; i++)
 		{
+			var child = parent.GetChild(i);
 			if (child.name.Contains(name))
 				return child;
 

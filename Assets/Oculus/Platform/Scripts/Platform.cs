@@ -566,10 +566,6 @@ namespace Oculus.Platform
     }
   }
 
-  public static partial class AbuseReport
-  {
-  }
-
   public static partial class Achievements
   {
     /// Add 'count' to the achievement with the given name. This must be a COUNT
@@ -928,10 +924,6 @@ namespace Oculus.Platform
 
   }
 
-  public static partial class Avatar
-  {
-  }
-
   public static partial class Cal
   {
   }
@@ -1269,10 +1261,6 @@ namespace Oculus.Platform
 
   }
 
-  public static partial class Colocation
-  {
-  }
-
   public static partial class Entitlements
   {
     /// Returns whether the current user is entitled to the current app.
@@ -1288,10 +1276,6 @@ namespace Oculus.Platform
       return null;
     }
 
-  }
-
-  public static partial class GraphAPI
-  {
   }
 
   public static partial class GroupPresence

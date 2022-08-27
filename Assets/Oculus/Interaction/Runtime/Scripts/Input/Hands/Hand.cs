@@ -1,14 +1,22 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System;
 using System.Collections.Generic;
@@ -46,7 +54,10 @@ namespace Oculus.Interaction.Input
         public bool IsConnected => GetData().IsDataValidAndConnected;
         public bool IsHighConfidence => GetData().IsHighConfidence;
         public bool IsDominantHand => GetData().IsDominantHand;
-        public float Scale => GetData().HandScale * TrackingToWorldTransformer.Transform.localScale.x;
+
+        public float Scale => GetData().HandScale * (TrackingToWorldTransformer != null
+            ? TrackingToWorldTransformer.Transform.localScale.x
+            : 1);
 
         private static readonly Vector3 PALM_LOCAL_OFFSET = new Vector3(0.08f, -0.01f, 0.0f);
 
@@ -201,7 +212,8 @@ namespace Oculus.Interaction.Input
         public bool GetCenterEyePose(out Pose pose)
         {
             HmdDataAsset hmd = HmdData.GetData();
-            if (!hmd.IsTracked)
+
+            if (hmd == null || !hmd.IsTracked)
             {
                 pose = Pose.identity;
                 return false;
@@ -218,6 +230,10 @@ namespace Oculus.Interaction.Input
         {
             get
             {
+                if (TrackingToWorldSpace == null)
+                {
+                    return null;
+                }
                 return TrackingToWorldTransformer.Transform;
             }
         }
@@ -229,7 +245,11 @@ namespace Oculus.Interaction.Input
                 pose = Pose.identity;
                 return false;
             }
-            pose = TrackingToWorldTransformer.ToWorldPose(sourcePose);
+
+            pose = TrackingToWorldTransformer != null
+                ? TrackingToWorldTransformer.ToWorldPose(sourcePose)
+                : sourcePose;
+
             return true;
         }
 

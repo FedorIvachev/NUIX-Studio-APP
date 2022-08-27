@@ -1,21 +1,29 @@
-/************************************************************************************
-Copyright : Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
-
-Your use of this SDK or tool is subject to the Oculus SDK License Agreement, available at
-https://developer.oculus.com/licenses/oculussdk/
-
-Unless required by applicable law or agreed to in writing, the Utilities SDK distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language governing
-permissions and limitations under the License.
-************************************************************************************/
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * Licensed under the Oculus SDK License Agreement (the "License");
+ * you may not use the Oculus SDK except in compliance with the License,
+ * which is provided at the time of installation or download, or which
+ * otherwise accompanies this software in either electronic or hard copy form.
+ *
+ * You may obtain a copy of the License at
+ *
+ * https://developer.oculus.com/licenses/oculussdk/
+ *
+ * Unless required by applicable law or agreed to in writing, the Oculus SDK
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Oculus.Interaction.HandPosing
+namespace Oculus.Interaction.HandGrab
 {
     public class AutoMoveTowardsTargetProvider : MonoBehaviour, IMovementProvider
     {
@@ -156,8 +164,8 @@ namespace Oculus.Interaction.HandPosing
             _source = pose;
             if (_tween != null && !_tween.Stopped)
             {
-                GeneratePointerEvent(PointerEvent.Hover);
-                GeneratePointerEvent(PointerEvent.Select);
+                GeneratePointerEvent(PointerEventType.Hover);
+                GeneratePointerEvent(PointerEventType.Select);
                 Aborting = true;
                 WhenAborted.Invoke(this);
             }
@@ -168,7 +176,7 @@ namespace Oculus.Interaction.HandPosing
             _tween.Tick();
             if (Aborting)
             {
-                GeneratePointerEvent(PointerEvent.Move);
+                GeneratePointerEvent(PointerEventType.Move);
                 if (_tween.Stopped)
                 {
                     AbortSelfAligment();
@@ -176,9 +184,9 @@ namespace Oculus.Interaction.HandPosing
             }
         }
 
-        private void HandlePointerEventRaised(PointerArgs args)
+        private void HandlePointerEventRaised(PointerEvent evt)
         {
-            if (args.PointerEvent == PointerEvent.Select || args.PointerEvent == PointerEvent.Unselect)
+            if (evt.Type == PointerEventType.Select || evt.Type == PointerEventType.Unselect)
             {
                 AbortSelfAligment();
             }
@@ -190,15 +198,15 @@ namespace Oculus.Interaction.HandPosing
             {
                 Aborting = false;
 
-                GeneratePointerEvent(PointerEvent.Unselect);
-                GeneratePointerEvent(PointerEvent.Unhover);
+                GeneratePointerEvent(PointerEventType.Unselect);
+                GeneratePointerEvent(PointerEventType.Unhover);
             }
         }
 
-        private void GeneratePointerEvent(PointerEvent pointerEvent)
+        private void GeneratePointerEvent(PointerEventType pointerEventType)
         {
-            PointerArgs args = new PointerArgs(Identifier, pointerEvent, Pose);
-            _pointableElement.ProcessPointerEvent(args);
+            PointerEvent evt = new PointerEvent(Identifier, pointerEventType, Pose);
+            _pointableElement.ProcessPointerEvent(evt);
         }
     }
 }

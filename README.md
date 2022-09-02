@@ -2,8 +2,6 @@
 * Obsolete code deleted for Unity version 2021.2.6 compatibility;
 * Run NUIX-Speech recognition inside Unity Editor (Windows only). Previously, the speech recognition result could not be used for changing Unity GameObjects, fixed now.
 
-# QA session Mon, Wed, Fr 20.00-20.45 (regarding Speech-To-Text service as well).
-
 # NUIX-Studio-APP
 NUIX-Studio App helps developers to create devices for VR-IoT environment.
 

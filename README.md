@@ -41,6 +41,4 @@ NUIX-Studio is a package for Unity that provides a toolkit for prototyping IoT d
 Proceed here: https://github.com/FedorIvachev/IoThingsLab-ReadmeFiles/blob/master/Tutorials/NUIXSetup.md
 
 ## Contributing to the platform
-Any contributing to the platform is highly appreciated. If you found any bugs, please contact Fedor 费杰 on WeChat.
-
-In the near future there will be created a repo where you can upload all your prototypes.
+Any contributing to the platform is highly appreciated. If you found any bugs, please create an issue or contact Fedor 费杰 on WeChat.

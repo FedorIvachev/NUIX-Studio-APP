@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 825936df134f24ac99023137781e6955, type: 3}
+  m_Name: SceneData
+  m_EditorClassIdentifier: 
+  home_Scene_Location: NUIX-Studio-APP/Environments/Environments/Living_Room
+  classroom_Scene_Location: NUIX-Studio-APP/Environments/Environments/School_Classroom
+  car_Scene_Location: NUIX-Studio-APP/Environments/Environments/Car
+  main_scene_location: NUIX-Studio-APP/Environments/Environments/Main/Main

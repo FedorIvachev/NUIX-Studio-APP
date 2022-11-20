@@ -1,4 +1,6 @@
 # NUIX-Studio-APP
+
+See https://github.com/NUIX-Studio/NUIX-Rooms, this is another version of NUIX-Studio, in which a VR UI for creating IoT automation is implemented.
 NUIX-Studio App helps developers to create devices for VR-IoT environment.
 
 Same Repository on [Tsinghua gitlab](https://git.tsinghua.edu.cn/feij21/NUIX-Studio-APP).

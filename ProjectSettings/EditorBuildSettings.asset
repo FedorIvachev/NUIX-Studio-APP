@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/NUIX-Rooms/Scenes/Main.unity
+    guid: eebe399cf052c2846adb7bc1edf10d56
+  - enabled: 1
+    path: Assets/NUIX-Rooms/Scenes/Samples/Room1-BtnCtrl.unity
+    guid: aeb2e1a5779d6e64e85ec0f03228aef8
+  - enabled: 1
+    path: Assets/NUIX-Rooms/Scenes/Samples/Room2-PoseCtrl.unity
+    guid: d0fd8bac414a7714090480d8d127e953
+  - enabled: 1
+    path: Assets/NUIX-Rooms/Scenes/Samples/Room3-STTCtrl.unity
+    guid: a0cfc700a2f71514aa2b9745cca00e19
+  - enabled: 1
+    path: Assets/NUIX-Rooms/Scenes/Samples/Room4-WeightScaler.unity
+    guid: 9bc128ed420219c4087bf5b6440128eb
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3b027f368de927143891b4e8b4af0b5d, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: dad2b7533d522ee43bf0f692064b7aa8, type: 2}

@@ -1,4 +1,3 @@
-*.vs
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
@@ -22,9 +21,6 @@
 
 # Visual Studio cache directory
 .vs/
-
-# Mac OS useless files
-*.DS_Store
 
 # Gradle cache directory
 .gradle/
@@ -57,21 +53,8 @@ sysinfo.txt
 
 # Builds
 *.apk
-*.aab
 *.unitypackage
 
 # Crashlytics generated file
 crashlytics-build.properties
 
-# Packed Addressables
-/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
-
-# Temporary auto-generated Android Assets
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
-
-# Visual Studio Config files
-*.vsconfig
-
-# macOS files
-.DS_Store
